@@ -17,6 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rv.daimhim.rvdecoration.R;
+import rv.daimhim.rvdecoration.layoutmanager.CardLayoutManager;
 
 /**
  * 项目名称：com.example.demo.leveldecorationdemo
@@ -49,6 +50,7 @@ public class LevelDecorationActivity extends FragmentActivity {
     }
 
     private void initView() {
+        mRvRecyclerview.setLayoutManager(new CardLayoutManager());
         mSrlSmartrefreshlayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {

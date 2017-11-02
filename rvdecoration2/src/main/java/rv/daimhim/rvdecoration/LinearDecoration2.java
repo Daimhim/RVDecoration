@@ -27,6 +27,6 @@ public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget ,R
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-
+        int adapterPosition = parent.getChildAdapterPosition(view);
     }
 }
