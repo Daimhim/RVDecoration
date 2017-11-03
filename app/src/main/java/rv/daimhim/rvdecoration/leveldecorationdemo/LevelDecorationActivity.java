@@ -50,7 +50,7 @@ public class LevelDecorationActivity extends FragmentActivity {
     }
 
     private void initView() {
-        mRvRecyclerview.setLayoutManager(new CardLayoutManager());
+
         mSrlSmartrefreshlayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {

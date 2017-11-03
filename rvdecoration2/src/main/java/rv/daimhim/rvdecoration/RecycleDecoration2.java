@@ -42,6 +42,18 @@ public class RecycleDecoration2 extends RecyclerView.ItemDecoration{
         }
     }
 
+    public void setDrawBeforeTarget(DrawBeforeTarget drawBeforeTarget) {
+        mDrawBeforeTarget = drawBeforeTarget;
+    }
+
+    public void setDrawAfterTarget(DrawAfterTarget drawAfterTarget) {
+        mDrawAfterTarget = drawAfterTarget;
+    }
+
+    public void setMeasureTarget(MeasureTarget measureTarget) {
+        mMeasureTarget = measureTarget;
+    }
+
     interface DrawBeforeTarget{
         /**
          * 目标绘制之前
