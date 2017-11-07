@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="rv.daimhim.rvdecoration">
+    package="rv.daimhim.rvdecorationtest">
 
     <application
         android:allowBackup="true"
@@ -9,8 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--<activity android:name=".leveldecorationdemo.LevelDecorationActivity">-->
-        <activity android:name=".MainActivity">
+        <activity android:name="rv.daimhim.rvdecorationtest.leveldecorationdemo.LevelDecorationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

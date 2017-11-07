@@ -1,4 +1,4 @@
-package rv.daimhim.rvdecoration;
+package rv.daimhim.rvdecorationtest;
 
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rv.daimhim.rvdecorationtest.R;
 
 public class MainActivity extends AppCompatActivity {
 

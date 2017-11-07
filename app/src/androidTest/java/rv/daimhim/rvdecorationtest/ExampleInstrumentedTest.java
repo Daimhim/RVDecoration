@@ -1,4 +1,4 @@
-package rv.daimhim.rvdecoration;
+package rv.daimhim.rvdecorationtest;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
