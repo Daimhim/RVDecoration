@@ -3,6 +3,9 @@ package rv.daimhim.rvdecorationtest.leveldecorationdemo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -69,10 +72,13 @@ public class LevelDecorationActivity extends Activity implements RecyclerAdapter
         mDecorationAdapter = new LevelDecorationAdapter(this);
         mDecorationAdapter.setOnItemClickListener(this);
         mRvRecyclerview.setAdapter(mDecorationAdapter);
-
         mRvRecyclerview.addItemDecoration(new DecorationBuilder2(this)
                 .linearDecoration(R.color.cl_333333, 21)
                 .builder());
+//        mRvRecyclerview.addItemDecoration(new DecorationBuilder2(this)
+//                .linearDecoration(getResources(),R.color.cl_333333, R.dimen.dimen_size_9, LinearLayoutManager.VERTICAL)
+//                .builder());
+        mRvRecyclerview.setItemAnimator(new DefaultItemAnimator());
         mDecorationAdapter.onRefresh(initData("初始化", 20));
     }
 
@@ -94,6 +100,7 @@ public class LevelDecorationActivity extends Activity implements RecyclerAdapter
                 mDecorationAdapter.deleteItem(i);
                 break;
             case R.id.tv_content:
+                mRvRecyclerview.invalidateItemDecorations();
                 break;
             default:
                 break;

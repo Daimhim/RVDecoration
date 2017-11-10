@@ -79,6 +79,7 @@ public class LevelDecorationAdapter extends RecyclerAdapterClick<LevelDecoration
     public void deleteItem(int position) {
         mStrings.remove(position);
         notifyItemRemoved(position);
+        notifyItemRangeChanged(position,getItemCount());
     }
 
     @Override

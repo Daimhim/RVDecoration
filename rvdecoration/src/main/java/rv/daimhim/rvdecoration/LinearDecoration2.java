@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,11 +20,13 @@ import android.view.WindowManager;
 /**
  * 使用方法 请看DecorationBuilder类
  * 该类用于LinearLayoutManager
- * Created by Daimhim on 2017/2/16.
+ *
+ * @author Daimhim
+ * @date 2017/2/16
  */
 
 public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget, RecycleDecoration2.DrawAfterTarget, RecycleDecoration2.MeasureTarget {
-
+    String TAG = "TAG:" + getClass().getSimpleName();
     private Context mContext;
     private DisplayMetrics mDisplayMetrics = null;
     private Paint mPaint;
@@ -33,7 +36,7 @@ public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget, R
 
     int lineWidth;
 
-    public LinearDecoration2(Context context,@ColorRes int lineColor,float lineWidth) {
+    public LinearDecoration2(Context context, @ColorRes int lineColor, float lineWidth) {
         mContext = context;
         mDisplayMetrics = new DisplayMetrics();
         ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(mDisplayMetrics);
@@ -49,24 +52,16 @@ public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget, R
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         int childCount = parent.getChildCount();
         View childAt = null;
-        int position = -1;
         Rect rect = new Rect();
         for (int i = 0; i < childCount; i++) {
             childAt = parent.getChildAt(i);
-            position = parent.getChildAdapterPosition(childAt);
-
-            //当前View是否在可视范围内
-//            if (childAt.getGlobalVisibleRect(rect)) {
-                int bottomDecorationHeight = mLinearLayoutManager.getBottomDecorationHeight(childAt);
-//                float startX, float startY, float stopX, float stopY
-
-                int left = childAt.getLeft();
-                int bottom = childAt.getBottom();
-                float startY = bottom + (bottomDecorationHeight/2);
-                float stopY = bottom + (bottomDecorationHeight/2);
-                int right = childAt.getRight();
-                c.drawLine(left, startY, right, stopY,mPaint);
-//            }
+            int bottomDecorationHeight = mLinearLayoutManager.getBottomDecorationHeight(childAt);
+            int left = childAt.getLeft();
+            int bottom = childAt.getBottom();
+            float startY = bottom + (bottomDecorationHeight / 2);
+            float stopY = bottom + (bottomDecorationHeight / 2);
+            int right = childAt.getRight();
+            c.drawLine(left, startY, right, stopY, mPaint);
             rect.setEmpty();
         }
     }
@@ -78,6 +73,7 @@ public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget, R
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        int childLayoutPosition = parent.getChildLayoutPosition(view);
         if (null == mLinearLayoutManager) {
             mLinearLayoutManager = (LinearLayoutManager) parent.getLayoutManager();
         }
@@ -85,6 +81,7 @@ public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget, R
         if (orientation == LinearLayoutManager.VERTICAL) {
             outRect.set(0, 0, 0, lineWidth);
         }
+        Log.i(TAG, "childLayoutPosition:" + childLayoutPosition + " ---outRect:" + outRect.toString());
     }
 
 }

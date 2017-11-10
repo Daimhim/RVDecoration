@@ -1,6 +1,9 @@
 package rv.daimhim.rvdecoration;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
 
 /**
  * 项目名称：com.example.used.decoration
@@ -32,6 +35,15 @@ public class DecorationBuilder2 {
         mRecycleDecoration2.setDrawBeforeTarget(linearDecoration2);
         return this;
     }
+
+    public DecorationBuilder2 linearDecoration(Resources resources, @ColorRes int color, @DimenRes int size, int orientation){
+        LinearDecoration3 linearDecoration3 = new LinearDecoration3(resources, color, size, orientation);
+        mRecycleDecoration2.setMeasureTarget(linearDecoration3);
+        mRecycleDecoration2.setDrawAfterTarget(linearDecoration3);
+        mRecycleDecoration2.setDrawBeforeTarget(linearDecoration3);
+        return this;
+    }
+
 
     public DecorationBuilder2 setDrawBeforeTarget(RecycleDecoration2.DrawBeforeTarget drawBeforeTarget) {
         mRecycleDecoration2.setDrawBeforeTarget(drawBeforeTarget);
