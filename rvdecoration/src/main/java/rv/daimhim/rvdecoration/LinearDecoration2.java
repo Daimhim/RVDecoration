@@ -1,5 +1,6 @@
 package rv.daimhim.rvdecoration;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -27,25 +28,18 @@ import android.view.WindowManager;
 
 public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget, RecycleDecoration2.DrawAfterTarget, RecycleDecoration2.MeasureTarget {
     String TAG = "TAG:" + getClass().getSimpleName();
-    private Context mContext;
-    private DisplayMetrics mDisplayMetrics = null;
+
+    protected final DecorationBuilder2.DecorationParameter mParameter;
     private Paint mPaint;
     private LinearLayoutManager mLinearLayoutManager = null;
-    @ColorRes
-    int lineColor = R.color.cl_00000000;
 
-    int lineWidth;
 
-    public LinearDecoration2(Context context, @ColorRes int lineColor, float lineWidth) {
-        mContext = context;
-        mDisplayMetrics = new DisplayMetrics();
-        ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(mDisplayMetrics);
+    public LinearDecoration2(Context context,  DecorationBuilder2.DecorationParameter parameter) {
+        mParameter = parameter;
         mPaint = new Paint();
-        this.lineColor = lineColor;
-        this.lineWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, lineWidth, mDisplayMetrics);
-        mPaint.setColor(ContextCompat.getColor(mContext, lineColor));
+        mPaint.setColor(mParameter.lineColor);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(this.lineWidth);
+        mPaint.setStrokeWidth(mParameter.lineWidth);
     }
 
     @Override
@@ -79,7 +73,7 @@ public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget, R
         }
         int orientation = mLinearLayoutManager.getOrientation();
         if (orientation == LinearLayoutManager.VERTICAL) {
-            outRect.set(0, 0, 0, lineWidth);
+            outRect.set(0, 0, 0, mParameter.lineWidth);
         }
         Log.i(TAG, "childLayoutPosition:" + childLayoutPosition + " ---outRect:" + outRect.toString());
     }
