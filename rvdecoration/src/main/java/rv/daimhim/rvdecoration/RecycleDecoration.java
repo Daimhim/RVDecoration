@@ -14,7 +14,9 @@ import android.util.SparseArray;
 import android.view.View;
 
 /**
- * Created by Daimhim on 2017/2/14.
+ *
+ * @author Daimhim
+ * @date 2017/2/14
  */
 
 public abstract class RecycleDecoration extends RecyclerView.ItemDecoration {

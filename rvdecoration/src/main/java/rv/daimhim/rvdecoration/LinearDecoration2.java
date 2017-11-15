@@ -47,14 +47,20 @@ public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget, R
         int childCount = parent.getChildCount();
         View childAt = null;
         Rect rect = new Rect();
+        int bottomDecorationHeight = 0;
+        int left = 0;
+        int bottom = 0;
+        float startY = 0;
+        float stopY = 0;
+        int right = 0;
         for (int i = 0; i < childCount; i++) {
             childAt = parent.getChildAt(i);
-            int bottomDecorationHeight = mLinearLayoutManager.getBottomDecorationHeight(childAt);
-            int left = childAt.getLeft();
-            int bottom = childAt.getBottom();
-            float startY = bottom + (bottomDecorationHeight / 2);
-            float stopY = bottom + (bottomDecorationHeight / 2);
-            int right = childAt.getRight();
+            bottomDecorationHeight = mLinearLayoutManager.getBottomDecorationHeight(childAt);
+            left = childAt.getLeft();
+            bottom = childAt.getBottom();
+            startY = bottom + (bottomDecorationHeight / 2);
+            stopY = bottom + (bottomDecorationHeight / 2);
+            right = childAt.getRight();
             c.drawLine(left, startY, right, stopY, mPaint);
             rect.setEmpty();
         }
@@ -68,14 +74,29 @@ public class LinearDecoration2 implements RecycleDecoration2.DrawBeforeTarget, R
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int childLayoutPosition = parent.getChildLayoutPosition(view);
-        if (null == mLinearLayoutManager) {
-            mLinearLayoutManager = (LinearLayoutManager) parent.getLayoutManager();
+        if (mParameter.orientation == LinearLayoutManager.VERTICAL) {
+            if (childLayoutPosition == 0) {
+                outRect.set(mParameter.getRectWidth().left, mParameter.getRectWidth().top,
+                        mParameter.getRectWidth().right, mParameter.lineWidth);
+            }else if (childLayoutPosition == parent.getChildCount()){
+                outRect.set(mParameter.getRectWidth().left, 0,
+                        mParameter.getRectWidth().right, mParameter.getRectWidth().bottom);
+            }else {
+                outRect.set(mParameter.getRectWidth().left, 0,
+                        mParameter.getRectWidth().right, mParameter.getLineWidth());
+            }
+        }else {
+//            if (childLayoutPosition == 0) {
+//                outRect.set(mParameter.getRectWidth().left, mParameter.getRectWidth().top,
+//                        mParameter.lineWidth, mParameter.lineWidth);
+//            }else if (childLayoutPosition == parent.getChildCount()){
+//                outRect.set(mParameter.getRectWidth().left, 0,
+//                        mParameter.getRectWidth().right, mParameter.getRectWidth().bottom);
+//            }else {
+//                outRect.set(mParameter.getRectWidth().left, 0,
+//                        mParameter.getRectWidth().right, mParameter.getLineWidth());
+//            }
         }
-        int orientation = mLinearLayoutManager.getOrientation();
-        if (orientation == LinearLayoutManager.VERTICAL) {
-            outRect.set(0, 0, 0, mParameter.lineWidth);
-        }
-        Log.i(TAG, "childLayoutPosition:" + childLayoutPosition + " ---outRect:" + outRect.toString());
     }
 
 }

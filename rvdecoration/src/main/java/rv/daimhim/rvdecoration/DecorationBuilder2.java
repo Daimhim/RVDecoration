@@ -1,13 +1,12 @@
 package rv.daimhim.rvdecoration;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
@@ -21,6 +20,7 @@ import android.view.WindowManager;
  * 修改时间：2017/10/26 11:23
  * 类描述：
  * 修改备注：
+ *
  * @author Daimhim
  */
 
@@ -33,20 +33,46 @@ public class DecorationBuilder2 {
 
     private Context mContext;
 
-    public DecorationBuilder2(Context context) {
-        this(context,0,-1);
+    public DecorationBuilder2(RecyclerView recyclerView) {
+        this(recyclerView, 0);
     }
-    public DecorationBuilder2(Context context,int lineWidth) {
-        this(context,lineWidth,-1);
+
+    public DecorationBuilder2(RecyclerView recyclerView, int lineWidth) {
+        this(recyclerView, lineWidth, -1);
     }
-    public DecorationBuilder2(Context context,int lineWidth,int lineColor) {
-        mContext = context;
+
+    /**
+     *
+     * @param recyclerView 仅在构造时使用 不会传入RecycleDecoration2对象
+     * @param lineWidth  宽度
+     * @param lineColor  颜色
+     */
+    public DecorationBuilder2(RecyclerView recyclerView, int lineWidth, int lineColor) {
+        mContext = recyclerView.getContext();
         mRecycleDecoration2 = new RecycleDecoration2();
-        P = new DecorationParameter();
         mDisplayMetrics = new DisplayMetrics();
         ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(mDisplayMetrics);
-        P.lineWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, lineWidth, mDisplayMetrics);
-        P.lineColor = ContextCompat.getColor(mContext, lineColor);
+        P = new DecorationParameter((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, lineWidth, mDisplayMetrics)
+                , ContextCompat.getColor(mContext, lineColor));
+        //保证赋值成功
+        initDecoration(recyclerView);
+    }
+
+    /**
+     * 初始化基本的画笔方法
+     * @param recyclerView
+     */
+    private void initDecoration(RecyclerView recyclerView) {
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof LinearLayoutManager){
+            P.orientation = ((LinearLayoutManager) layoutManager).getOrientation();
+            if (layoutManager instanceof GridLayoutManager){
+
+                return;
+            }
+        }else if (layoutManager instanceof StaggeredGridLayoutManager){
+            P.orientation = ((StaggeredGridLayoutManager) layoutManager).getOrientation();
+        }
     }
 
     public DecorationBuilder2 setDrawBeforeTarget(RecycleDecoration2.DrawBeforeTarget drawBeforeTarget) {
@@ -64,24 +90,32 @@ public class DecorationBuilder2 {
         return this;
     }
 
-    public void setParentPadding(int left, int top, int right, int bottom){
+    public void setLineWidth(int lineWidth) {
+        P.lineWidth = lineWidth;
+    }
+
+    public void setLineColor(int lineColor) {
+        P.lineColor = lineColor;
+    }
+
+    public void setParentPadding(int left, int top, int right, int bottom) {
         P.rectWidth.set(left, top, right, bottom);
     }
 
-    public void setParentPaddingColor(int left, int top, int right, int bottom){
+    public void setParentPaddingColor(int left, int top, int right, int bottom) {
         P.rectColor.set(left, top, right, bottom);
     }
 
-    public RecycleDecoration2 builder(){
+    public RecycleDecoration2 builder() {
         return mRecycleDecoration2;
     }
 
     /**
      * 单位都是Px 只在入参时添加不同的入口
      */
-    public static class DecorationParameter{
-        int lineColor = 0;
+    public static class DecorationParameter {
         int lineWidth = 0;
+        int lineColor = 0;
         /**
          * 定义四个边的边距
          */
@@ -90,6 +124,51 @@ public class DecorationBuilder2 {
          * 定义四个边的颜色
          */
         Rect rectColor = new Rect();
+        int orientation;
+        public DecorationParameter(int lineWidth, int lineColor) {
+            this.lineWidth = lineWidth;
+            this.lineColor = lineColor;
+        }
+
+        public int getLineWidth() {
+            return lineWidth;
+        }
+
+        public void setLineWidth(int lineWidth) {
+            this.lineWidth = lineWidth;
+        }
+
+        public int getLineColor() {
+            return lineColor;
+        }
+
+        public void setLineColor(int lineColor) {
+            this.lineColor = lineColor;
+        }
+
+        public Rect getRectWidth() {
+            return rectWidth;
+        }
+
+        public void setRectWidth(Rect rectWidth) {
+            this.rectWidth = rectWidth;
+        }
+
+        public Rect getRectColor() {
+            return rectColor;
+        }
+
+        public void setRectColor(Rect rectColor) {
+            this.rectColor = rectColor;
+        }
+
+        public int getOrientation() {
+            return orientation;
+        }
+
+        public void setOrientation(int orientation) {
+            this.orientation = orientation;
+        }
     }
 
 }

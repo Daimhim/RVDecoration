@@ -72,8 +72,8 @@ public class LevelDecorationActivity extends Activity implements RecyclerAdapter
         mDecorationAdapter = new LevelDecorationAdapter(this);
         mDecorationAdapter.setOnItemClickListener(this);
         mRvRecyclerview.setAdapter(mDecorationAdapter);
-        mRvRecyclerview.addItemDecoration(new DecorationBuilder2(this)
-                .linearDecoration(R.color.cl_333333, 21)
+        mRvRecyclerview.addItemDecoration(
+                new DecorationBuilder2(mRvRecyclerview)
                 .builder());
 //        mRvRecyclerview.addItemDecoration(new DecorationBuilder2(this)
 //                .linearDecoration(getResources(),R.color.cl_333333, R.dimen.dimen_size_9, LinearLayoutManager.VERTICAL)
