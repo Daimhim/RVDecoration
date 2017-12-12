@@ -1,0 +1,6 @@
+# RVDecoration
+对RecyclerView Decoration的封装，对usedlibrary中Decoration封装进行升级、优化
+
+### 特性
+在使用RecyclerView过程中，避免不了使用Decoration对RecyclerView进行间隔，但根据官方的示例中代码中只能满足一些基本的需求，并且布局的不同每次都需要定制性
+的修改代码，使得每次修改布局Decoration也要随之改变，封装后的Decoration根据配置，可以做到布局修改Decoration自动适配布局。目前支持三种基本的布局管理器
