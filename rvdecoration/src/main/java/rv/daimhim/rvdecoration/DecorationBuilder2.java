@@ -38,7 +38,7 @@ public class DecorationBuilder2 {
     }
 
     public DecorationBuilder2(RecyclerView recyclerView, int lineWidth) {
-        this(recyclerView, lineWidth, -1);
+        this(recyclerView, lineWidth, 0);
     }
 
     /**

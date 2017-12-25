@@ -7,14 +7,17 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.used.baseadapter.RecyclerAdapterClick;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.daimhim.rvadapter.RecyclerViewClick;
+import org.daimhim.rvadapter.RecyclerViewEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +40,14 @@ import rv.daimhim.rvdecorationtest.R;
  * @author Daimhim
  */
 
-public class LevelDecorationActivity extends Activity implements RecyclerAdapterClick.OnItemClickListener {
+public class LevelDecorationActivity extends Activity implements RecyclerViewClick.OnItemClickListener{
 
     @BindView(R.id.rv_recyclerview)
     RecyclerView mRvRecyclerview;
     @BindView(R.id.srl_smartrefreshlayout)
     SmartRefreshLayout mSrlSmartrefreshlayout;
-    private LevelDecorationAdapter mDecorationAdapter;
-
+    private LevelDecorationAdapter2 mDecorationAdapter;
+    RecyclerViewEmpty mRecyclerViewEmpty;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,31 +58,55 @@ public class LevelDecorationActivity extends Activity implements RecyclerAdapter
 
     private void initView() {
 
+//        mSrlSmartrefreshlayout.setOnRefreshListener(new OnRefreshListener() {
+//            @Override
+//            public void onRefresh(RefreshLayout refreshlayout) {
+//                mDecorationAdapter.onRefresh(initData("刷新", 20));
+//                refreshlayout.finishRefresh();
+//            }
+//        });
+//        mSrlSmartrefreshlayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+//            @Override
+//            public void onLoadmore(RefreshLayout refreshlayout) {
+//                mDecorationAdapter.onLoad(initData("加载", 20), mDecorationAdapter.getItemCount());
+//                refreshlayout.finishLoadmore();
+//            }
+//        });
+//        mDecorationAdapter = new LevelDecorationAdapter2(this);
+//        mDecorationAdapter.setOnItemClickListener(this);
+//        mRvRecyclerview.setAdapter(mDecorationAdapter);
+////        mRvRecyclerview.addItemDecoration(
+////                new DecorationBuilder2(mRvRecyclerview)
+////                .builder());
+//        mRvRecyclerview.addItemDecoration(new DecorationBuilder2(mRvRecyclerview,5,R.color.cl_333333).builder());
+//        mRvRecyclerview.setItemAnimator(new DefaultItemAnimator());
+//        mDecorationAdapter.onRefresh(initData("初始化", 20));
+
         mSrlSmartrefreshlayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                mDecorationAdapter.onRefresh(initData("刷新", 20));
                 refreshlayout.finishRefresh();
             }
         });
         mSrlSmartrefreshlayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
-                mDecorationAdapter.onLoad(initData("加载", 20), mDecorationAdapter.getItemCount());
                 refreshlayout.finishLoadmore();
             }
         });
-        mDecorationAdapter = new LevelDecorationAdapter(this);
-        mDecorationAdapter.setOnItemClickListener(this);
-        mRvRecyclerview.setAdapter(mDecorationAdapter);
-        mRvRecyclerview.addItemDecoration(
-                new DecorationBuilder2(mRvRecyclerview)
-                .builder());
-//        mRvRecyclerview.addItemDecoration(new DecorationBuilder2(this)
-//                .linearDecoration(getResources(),R.color.cl_333333, R.dimen.dimen_size_9, LinearLayoutManager.VERTICAL)
-//                .builder());
-        mRvRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        mDecorationAdapter.onRefresh(initData("初始化", 20));
+        mRecyclerViewEmpty = new RecyclerViewEmpty() {
+            @Override
+            public int getItemQuantity() {
+                return 0;
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            }
+        };
+        mRecyclerViewEmpty.setEmptyView(LayoutInflater.from(this).inflate(R.layout.view_empty,mRvRecyclerview,false));
+        mRvRecyclerview.setAdapter(mRecyclerViewEmpty);
     }
 
     private List<String> initData(String key, int i) {

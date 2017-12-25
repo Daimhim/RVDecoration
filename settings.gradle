@@ -1,1 +1,1 @@
-include ':app', ':rvdecoration'
+include ':app', ':rvdecoration', ':rvadapter'
