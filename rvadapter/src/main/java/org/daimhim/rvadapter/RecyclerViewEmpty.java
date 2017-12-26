@@ -38,10 +38,20 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
         }
     }
 
+    /**
+     * 是否空界面
+     * @return
+     */
+    @Override
     public boolean isEmptyView(){
         return getDataItemCount() == 0 && mEmptyView != null;
     }
 
+    /**
+     * 获取Item数量 可能会有头部和尾部 所以加上数据长度以便扩充
+     * 而是否空页面的决定在于isEmptyView
+     * @return
+     */
     @Override
     public final int getItemCount() {
         if (isEmptyView()){

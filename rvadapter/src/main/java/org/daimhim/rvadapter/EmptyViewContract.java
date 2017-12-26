@@ -15,5 +15,6 @@ import android.view.View;
  */
 
 public interface EmptyViewContract {
+    boolean isEmptyView();
     void setEmptyView(View emptyView);
 }
