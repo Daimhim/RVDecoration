@@ -16,32 +16,80 @@ import android.view.ViewGroup;
  * @author Daimhim
  */
 
-public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewClick<RecyclerViewClick.ClickViewHolder> implements EmptyViewContract {
+public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewClick<VH> implements EmptyViewContract {
 
     private View mEmptyView = null;
 
     @Override
-    public RecyclerViewClick.ClickViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ClickViewHolder(mEmptyView);
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (isEmptyView()){
+            return onCreateEmptyViewHolder(parent, viewType);
+        }else {
+            return onCreateDataViewHolder(parent, viewType);
+        }
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
+    public void onBindViewHolder(VH holder, int position) {
+        if (isEmptyView()){
+            onBindEmptyViewHolder(holder, position);
+        }else {
+            onBindDataViewHolder(holder,position);
+        }
+    }
 
+    public boolean isEmptyView(){
+        return getDataItemCount() == 0 && mEmptyView != null;
     }
 
     @Override
     public final int getItemCount() {
-        return getItemQuantity() == 0 && mEmptyView != null ? 1 : 0;
+        if (isEmptyView()){
+            return 1 + getDataItemCount();
+        }else {
+            return getDataItemCount();
+        }
     }
 
-    public abstract int getItemQuantity();
+    /**
+     * 加载空页面
+     * @param parent
+     * @param viewType
+     * @return
+     */
+    public abstract VH onCreateEmptyViewHolder(ViewGroup parent, int viewType);
+
+    /**
+     * 空页面加载数据
+     * @param holder
+     * @param position
+     */
+    public void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position){
+
+    }
+    /**
+     * 数据加载页面
+     * @param parent
+     * @param viewType
+     * @return
+     */
+    public abstract VH onCreateDataViewHolder(ViewGroup parent, int viewType);
+    /**
+     * 数据加载页面
+     * @param holder
+     * @param position
+     */
+    public abstract void onBindDataViewHolder(RecyclerViewClick.ClickViewHolder holder, int position);
+
+    /**
+     * 获取数据Item长度
+     * @return
+     */
+    public abstract int getDataItemCount();
 
     @Override
     public void setEmptyView(View emptyView) {
         mEmptyView = emptyView;
     }
-
-
 
 }
