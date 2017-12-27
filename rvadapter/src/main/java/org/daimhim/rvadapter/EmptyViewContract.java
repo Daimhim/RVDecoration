@@ -15,6 +15,15 @@ import android.view.View;
  */
 
 public interface EmptyViewContract {
+    /**
+     * 是否空页面
+     * @return
+     */
     boolean isEmptyView();
+
+    /**
+     * 设置空页面
+     * @param emptyView
+     */
     void setEmptyView(View emptyView);
 }
