@@ -1,10 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion rootProject.ext.COMPILE_SDK_VERSION
+    buildToolsVersion rootProject.ext.BUILD_TOOLS_VERSION
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 21
+        minSdkVersion rootProject.ext.MIN_SDK_VERSION
+        targetSdkVersion rootProject.ext.TARGET_SDK_VERSION
         versionCode 100
         versionName "1.0.0"
     }
@@ -12,5 +13,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.LIB_VERSION"
 }
