@@ -1,1 +1,1 @@
-include ':app', ':rvdecoration', ':rvadapter'
+include ':app', ':rvdecoration', ':rvadapter', ':carousellib'
