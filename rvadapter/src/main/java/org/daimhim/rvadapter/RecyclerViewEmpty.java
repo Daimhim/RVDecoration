@@ -1,6 +1,5 @@
 package org.daimhim.rvadapter;
 
-import android.view.View;
 import android.view.ViewGroup;
 
 /**
@@ -16,7 +15,7 @@ import android.view.ViewGroup;
  * @author Daimhim
  */
 
-public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewClick<VH> implements EmptyViewContract {
+public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewClick<VH> implements RecyclerContract.EmptyContract<VH> {
 
     @Override
     public final VH onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -75,6 +74,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * @param holder
      * @param position
      */
+    @Override
     public void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
 
     }
@@ -86,6 +86,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * @param viewType
      * @return
      */
+    @Override
     public abstract VH onCreateEmptyViewHolder(ViewGroup parent, int viewType);
 
     /**

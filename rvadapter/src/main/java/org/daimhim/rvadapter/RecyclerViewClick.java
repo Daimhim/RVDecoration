@@ -20,17 +20,27 @@ import android.view.View;
  */
 
 public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerView.Adapter<VH> {
-    private OnItemClickListener mOnItemClickListener;
-    private OnItemLongClickListener mOnItemLongClickListener;
+    private RecyclerContract.OnItemClickListener mOnItemClickListener;
+    private RecyclerContract.OnItemLongClickListener mOnItemLongClickListener;
 
-    public void setOnItemClickListener(@NonNull OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(@NonNull RecyclerContract.OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
     }
 
-    public void setOnItemLongClickListener(@NonNull OnItemLongClickListener onItemLongClickListener) {
+    public void setOnItemLongClickListener(@NonNull RecyclerContract.OnItemLongClickListener onItemLongClickListener) {
         mOnItemLongClickListener = onItemLongClickListener;
     }
 
+    public void onItemClick(View view, int position){
+        if (null!=mOnItemClickListener) {
+            mOnItemClickListener.onItemClick(view, position);
+        }
+    }
+    public void onItemLongClick(View view, int position){
+        if (null!=mOnItemLongClickListener) {
+            mOnItemLongClickListener.onItemLongClick(view, position);
+        }
+    }
     public static class ClickViewHolder extends RecyclerView.ViewHolder {
         View.OnClickListener mOnClickListener;
         View.OnLongClickListener mOnLongClickListener;
@@ -52,7 +62,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
                 mOnClickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mRecyclerViewClick.mOnItemClickListener.onItemClick(v,getLayoutPosition());
+                        mRecyclerViewClick.onItemClick(v,getLayoutPosition());
                     }
                 };
             }else {
@@ -67,7 +77,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
                 mOnLongClickListener = new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        mRecyclerViewClick.mOnItemLongClickListener.onItemLongClick(v,getLayoutPosition());
+                        mRecyclerViewClick.onItemLongClick(v,getLayoutPosition());
                         return false;
                     }
                 };
@@ -78,64 +88,4 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         }
     }
 
-    /**
-     * 提供给外部的 接口  传入此接口 监听点击事件
-     */
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    /**
-     * 长点击事件
-     */
-    public interface OnItemLongClickListener {
-        void onItemLongClick(View view, int position);
-    }
-
-    /**
-     * Adapter规范
-     * @param <Ts>
-     * @param <T>
-     */
-    public interface RecyclerAdapterContract<Ts,T> {
-        /**
-         * 刷新
-         * @param ts 数据类型
-         */
-        void onRefresh(Ts ts);
-
-        /**
-         * 添加多条
-         * @param ts 数据类型
-         */
-        void onLoad(Ts ts, int position);
-
-        /**
-         * 插入
-         * @param t  数据类型
-         * @param position 位置
-         *                 该方法可以和add合并
-         */
-        void insertItem(T t, int position);
-
-        /**
-         * 删除
-         * @param position 位置
-         */
-        void deleteItem(int position);
-
-        /**
-         * 替换
-         * @param t 数据类型
-         * @param position
-         */
-        void replaceItem(T t, int position);
-
-        /**
-         * 获取数据
-         * @param position  位置
-         * @return 数据类型
-         */
-        T getItem(int position);
-    }
 }
