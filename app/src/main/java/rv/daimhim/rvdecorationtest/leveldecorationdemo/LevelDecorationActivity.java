@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -40,7 +41,7 @@ import rv.daimhim.rvdecorationtest.R;
  * @author Daimhim
  */
 
-public class LevelDecorationActivity extends Activity implements RecyclerViewClick.OnItemClickListener{
+public class LevelDecorationActivity extends Activity {
 
     @BindView(R.id.rv_recyclerview)
     RecyclerView mRvRecyclerview;
@@ -95,17 +96,33 @@ public class LevelDecorationActivity extends Activity implements RecyclerViewCli
             }
         });
         mRecyclerViewEmpty = new RecyclerViewEmpty() {
-            @Override
-            public int getItemQuantity() {
-                return 0;
-            }
+
 
             @Override
             public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
             }
+
+            @Override
+            public ClickViewHolder onCreateEmptyViewHolder(ViewGroup parent, int viewType) {
+                return new ClickViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_empty,mRvRecyclerview,false));
+            }
+
+            @Override
+            public ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+                return null;
+            }
+
+            @Override
+            public void onBindDataViewHolder(ClickViewHolder holder, int position) {
+
+            }
+
+            @Override
+            public int getDataItemCount() {
+                return 0;
+            }
         };
-        mRecyclerViewEmpty.setEmptyView(LayoutInflater.from(this).inflate(R.layout.view_empty,mRvRecyclerview,false));
         mRvRecyclerview.setAdapter(mRecyclerViewEmpty);
     }
 
@@ -117,20 +134,20 @@ public class LevelDecorationActivity extends Activity implements RecyclerViewCli
         return list;
     }
 
-    @Override
-    public void onItemClick(View view, int i) {
-        switch (view.getId()) {
-            case R.id.tv_add:
-                mDecorationAdapter.insertItem("插入："+(i+1),i);
-                break;
-            case R.id.tv_delete:
-                mDecorationAdapter.deleteItem(i);
-                break;
-            case R.id.tv_content:
-                mRvRecyclerview.invalidateItemDecorations();
-                break;
-            default:
-                break;
-        }
-    }
+//    @Override
+//    public void onItemClick(View view, int i) {
+//        switch (view.getId()) {
+//            case R.id.tv_add:
+//                mDecorationAdapter.insertItem("插入："+(i+1),i);
+//                break;
+//            case R.id.tv_delete:
+//                mDecorationAdapter.deleteItem(i);
+//                break;
+//            case R.id.tv_content:
+//                mRvRecyclerview.invalidateItemDecorations();
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 }

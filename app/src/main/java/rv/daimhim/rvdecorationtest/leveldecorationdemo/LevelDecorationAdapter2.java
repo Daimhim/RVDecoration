@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewClick;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import rv.daimhim.rvdecorationtest.R;
  * 修改备注：
  */
 
-public class LevelDecorationAdapter2  extends RecyclerViewClick<LevelDecorationAdapter2.LevelDecorationViewHolder2> implements RecyclerViewClick.RecyclerAdapterContract<List<String>, String>{
+public class LevelDecorationAdapter2  extends RecyclerViewClick<LevelDecorationAdapter2.LevelDecorationViewHolder2> implements RecyclerContract.SpecificationContract<List<String>, String>{
     Context mContext;
     List<String> mStrings;
 

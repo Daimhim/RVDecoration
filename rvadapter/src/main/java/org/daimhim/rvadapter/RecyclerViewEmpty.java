@@ -87,7 +87,9 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * @return
      */
     @Override
-    public abstract VH onCreateEmptyViewHolder(ViewGroup parent, int viewType);
+    public VH onCreateEmptyViewHolder(ViewGroup parent, int viewType) {
+        return null;
+    }
 
     /**
      * 数据加载页面

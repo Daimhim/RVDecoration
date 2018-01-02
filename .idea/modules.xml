@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RVDecoration.iml" filepath="$PROJECT_DIR$/RVDecoration.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/carousellib/carousellib.iml" filepath="$PROJECT_DIR$/carousellib/carousellib.iml" />
       <module fileurl="file://$PROJECT_DIR$/rvadapter/rvadapter.iml" filepath="$PROJECT_DIR$/rvadapter/rvadapter.iml" />
       <module fileurl="file://$PROJECT_DIR$/rvdecoration/rvdecoration.iml" filepath="$PROJECT_DIR$/rvdecoration/rvdecoration.iml" />
       <module fileurl="file://H:\Third_Party_Project\RVDecoration\rvdecoration2\rvdecoration2.iml" filepath="H:\Third_Party_Project\RVDecoration\rvdecoration2\rvdecoration2.iml" />

@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.daimhim.rvadapter.RecyclerViewClick;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 
 import java.util.ArrayList;
@@ -60,14 +63,20 @@ public class EmptyActivity extends Activity {
             }
         });
         mRecyclerViewEmpty = new RecyclerViewEmpty() {
+
             @Override
-            public int getItemQuantity() {
-                return 0;
+            public ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+                return null;
             }
 
             @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            public void onBindDataViewHolder(ClickViewHolder holder, int position) {
 
+            }
+
+            @Override
+            public int getDataItemCount() {
+                return 0;
             }
         };
         mRvRecyclerview.setAdapter(mRecyclerViewEmpty);
@@ -79,6 +88,30 @@ public class EmptyActivity extends Activity {
             list.add(key + ":" + j);
         }
         return list;
+    }
+
+    class Test extends RecyclerViewEmpty<Test.TestViewHolder>{
+        @Override
+        public TestViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+            return null;
+        }
+
+        @Override
+        public void onBindDataViewHolder(ClickViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getDataItemCount() {
+            return 0;
+        }
+
+        class TestViewHolder extends RecyclerViewClick.ClickViewHolder{
+
+            public TestViewHolder(View itemView) {
+                super(itemView);
+            }
+        }
     }
 
 }
