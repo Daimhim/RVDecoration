@@ -50,7 +50,7 @@ public class EmptyActivity extends Activity {
     }
     private void initView() {
 
-        mSrlSmartrefreshlayout.setOnRefreshListener(new OnRefreshListener() {
+        mSrlSmartrefreshlayout.setOnRefreshListener( new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh();
@@ -97,7 +97,7 @@ public class EmptyActivity extends Activity {
         }
 
         @Override
-        public void onBindDataViewHolder(ClickViewHolder holder, int position) {
+        public void onBindDataViewHolder(TestViewHolder holder, int position) {
 
         }
 

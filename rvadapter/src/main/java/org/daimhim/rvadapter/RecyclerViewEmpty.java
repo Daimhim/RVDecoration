@@ -57,7 +57,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      */
     @Override
     public boolean isEmptyView() {
-        return getDataItemCount() == 0;
+        return false;
     }
 
     public boolean isEmptyView(VH holder, int position) {
@@ -106,7 +106,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * @param holder
      * @param position
      */
-    public abstract void onBindDataViewHolder(RecyclerViewClick.ClickViewHolder holder, int position);
+    public abstract void onBindDataViewHolder(VH holder, int position);
 
     /**
      * 获取数据Item长度

@@ -194,9 +194,9 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
      * @param viewType
      * @return
      */
-    public abstract ClickViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType);
+    public abstract VHG onCreateGroupViewHolder(ViewGroup parent, int viewType);
 
-    public abstract ClickViewHolder onCreateChildViewHolder(ViewGroup parent, int viewType);
+    public abstract VHC onCreateChildViewHolder(ViewGroup parent, int viewType);
 
     /**
      * 设置数据
@@ -205,19 +205,9 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
      * @param groupPosition
      * @return
      */
-    public abstract ClickViewHolder onBindGroupViewHolder(ClickViewHolder holder, int groupPosition);
+    public abstract void onBindGroupViewHolder(VHG holder, int groupPosition);
 
-    public abstract ClickViewHolder onBindChildViewHolder(ClickViewHolder holder, int groupPosition, int childPosition);
-
-    /**
-     * 空页面
-     *
-     * @param parent
-     * @param viewType
-     * @return
-     */
-    @Override
-    public abstract ClickViewHolder onCreateEmptyViewHolder(ViewGroup parent, int viewType);
+    public abstract void onBindChildViewHolder(VHC holder, int groupPosition, int childPosition);
 
     public RecyclerContract.OnChildItemClickListener getOnChildItemClickListeners() {
         return mOnChildItemClickListeners;

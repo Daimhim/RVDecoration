@@ -17,6 +17,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewClick;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 
@@ -41,7 +42,7 @@ import rv.daimhim.rvdecorationtest.R;
  * @author Daimhim
  */
 
-public class LevelDecorationActivity extends Activity {
+public class LevelDecorationActivity extends Activity implements RecyclerContract.OnItemClickListener {
 
     @BindView(R.id.rv_recyclerview)
     RecyclerView mRvRecyclerview;
@@ -59,29 +60,29 @@ public class LevelDecorationActivity extends Activity {
 
     private void initView() {
 
-//        mSrlSmartrefreshlayout.setOnRefreshListener(new OnRefreshListener() {
-//            @Override
-//            public void onRefresh(RefreshLayout refreshlayout) {
-//                mDecorationAdapter.onRefresh(initData("刷新", 20));
-//                refreshlayout.finishRefresh();
-//            }
-//        });
-//        mSrlSmartrefreshlayout.setOnLoadmoreListener(new OnLoadmoreListener() {
-//            @Override
-//            public void onLoadmore(RefreshLayout refreshlayout) {
-//                mDecorationAdapter.onLoad(initData("加载", 20), mDecorationAdapter.getItemCount());
-//                refreshlayout.finishLoadmore();
-//            }
-//        });
-//        mDecorationAdapter = new LevelDecorationAdapter2(this);
-//        mDecorationAdapter.setOnItemClickListener(this);
-//        mRvRecyclerview.setAdapter(mDecorationAdapter);
-////        mRvRecyclerview.addItemDecoration(
-////                new DecorationBuilder2(mRvRecyclerview)
-////                .builder());
-//        mRvRecyclerview.addItemDecoration(new DecorationBuilder2(mRvRecyclerview,5,R.color.cl_333333).builder());
-//        mRvRecyclerview.setItemAnimator(new DefaultItemAnimator());
-//        mDecorationAdapter.onRefresh(initData("初始化", 20));
+        mSrlSmartrefreshlayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                mDecorationAdapter.onRefresh(initData("刷新", 20));
+                refreshlayout.finishRefresh();
+            }
+        });
+        mSrlSmartrefreshlayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                mDecorationAdapter.onLoad(initData("加载", 20), mDecorationAdapter.getItemCount());
+                refreshlayout.finishLoadmore();
+            }
+        });
+        mDecorationAdapter = new LevelDecorationAdapter2(this);
+        mDecorationAdapter.setOnItemClickListener(this);
+        mRvRecyclerview.setAdapter(mDecorationAdapter);
+//        mRvRecyclerview.addItemDecoration(
+//                new DecorationBuilder2(mRvRecyclerview)
+//                .builder());
+        mRvRecyclerview.addItemDecoration(new DecorationBuilder2(mRvRecyclerview,5,R.color.cl_333333).builder());
+        mRvRecyclerview.setItemAnimator(new DefaultItemAnimator());
+        mDecorationAdapter.onRefresh(initData("初始化", 20));
 
         mSrlSmartrefreshlayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -95,34 +96,7 @@ public class LevelDecorationActivity extends Activity {
                 refreshlayout.finishLoadmore();
             }
         });
-        mRecyclerViewEmpty = new RecyclerViewEmpty() {
-
-
-            @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-            }
-
-            @Override
-            public ClickViewHolder onCreateEmptyViewHolder(ViewGroup parent, int viewType) {
-                return new ClickViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_empty,mRvRecyclerview,false));
-            }
-
-            @Override
-            public ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
-                return null;
-            }
-
-            @Override
-            public void onBindDataViewHolder(ClickViewHolder holder, int position) {
-
-            }
-
-            @Override
-            public int getDataItemCount() {
-                return 0;
-            }
-        };
+        mRecyclerViewEmpty.setOnItemClickListener(this);
         mRvRecyclerview.setAdapter(mRecyclerViewEmpty);
     }
 
@@ -134,20 +108,20 @@ public class LevelDecorationActivity extends Activity {
         return list;
     }
 
-//    @Override
-//    public void onItemClick(View view, int i) {
-//        switch (view.getId()) {
-//            case R.id.tv_add:
-//                mDecorationAdapter.insertItem("插入："+(i+1),i);
-//                break;
-//            case R.id.tv_delete:
-//                mDecorationAdapter.deleteItem(i);
-//                break;
-//            case R.id.tv_content:
-//                mRvRecyclerview.invalidateItemDecorations();
-//                break;
-//            default:
-//                break;
-//        }
-//    }
+    @Override
+    public void onItemClick(View view, int i) {
+        switch (view.getId()) {
+            case R.id.tv_add:
+                mDecorationAdapter.insertItem("插入："+(i+1),i);
+                break;
+            case R.id.tv_delete:
+                mDecorationAdapter.deleteItem(i);
+                break;
+            case R.id.tv_content:
+                mRvRecyclerview.invalidateItemDecorations();
+                break;
+            default:
+                break;
+        }
+    }
 }
