@@ -1,14 +1,21 @@
 package rv.daimhim.rvdecorationtest;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,22 +32,40 @@ import butterknife.ButterKnife;
  * @author：Daimhim
  */
 
-public class StaggeredGridLayoutActivity extends FragmentActivity implements OnRefreshListener, OnLoadmoreListener {
+public class StaggeredGridLayoutActivity extends AppCompatActivity implements OnRefreshListener, OnLoadmoreListener {
 
     @BindView(R.id.rv_recyclerview)
     RecyclerView mRvRecyclerview;
     @BindView(R.id.srl_smartrefreshlayout)
     SmartRefreshLayout mSrlSmartrefreshlayout;
-
+    StaggeredGridLayoutAdapter mStaggeredGridLayoutAdapter;
+    Context mContext;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_decoration);
+        mContext = this;
         ButterKnife.bind(this);
         mSrlSmartrefreshlayout.setOnRefreshListener(this);
         mSrlSmartrefreshlayout.setOnLoadmoreListener(this);
+
+        initView();
+    }
+    private void initView() {
+        mStaggeredGridLayoutAdapter = new StaggeredGridLayoutAdapter();
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(5,StaggeredGridLayoutManager.VERTICAL);
+        mRvRecyclerview.setLayoutManager(staggeredGridLayoutManager);
+        mRvRecyclerview.setAdapter(mStaggeredGridLayoutAdapter);
+        mStaggeredGridLayoutAdapter.onRefresh(initData(50));
     }
 
+    private List<String> initData(int i) {
+        List<String> strings = new ArrayList<>();
+        for (int j = 0; j < i; j++) {
+            strings.add(j+"");
+        }
+        return strings;
+    }
     @Override
     public void onRefresh(RefreshLayout refreshlayout) {
         refreshlayout.finishRefresh();

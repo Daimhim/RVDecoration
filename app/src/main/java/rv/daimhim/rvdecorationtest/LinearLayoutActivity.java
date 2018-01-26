@@ -4,8 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.WindowManager;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -30,7 +32,7 @@ import butterknife.ButterKnife;
  * @author：Daimhim
  */
 
-public class LinearLayoutActivity extends FragmentActivity implements OnRefreshListener, OnLoadmoreListener {
+public class LinearLayoutActivity extends AppCompatActivity implements OnRefreshListener, OnLoadmoreListener {
 
     @BindView(R.id.rv_recyclerview)
     RecyclerView mRvRecyclerview;
@@ -41,6 +43,7 @@ public class LinearLayoutActivity extends FragmentActivity implements OnRefreshL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //显示状态栏
         setContentView(R.layout.activity_level_decoration);
         mContext = this;
         ButterKnife.bind(this);
