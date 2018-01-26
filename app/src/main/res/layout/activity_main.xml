@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_ConstraintLayout"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="rv.daimhim.rvdecorationtest.MainActivity">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/rl_RelativeLayout"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:background="@color/cl_333333"
+    <TextView
+        android:id="@+id/tv_linearlayout"
+        android:text="LinearLayoutActivity"
         android:gravity="center"
-        android:clipChildren="true">
-
-
-        <TextView
-            android:id="@+id/tv_content"
-            android:background="#ffffff"
-            android:layout_marginLeft="79dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!" />
-    </LinearLayout>
-</RelativeLayout>
+        android:textSize="16sp"
+        android:onClick="onViewClicked"
+        android:background="#ff8839"
+        android:textColor="@color/cl_333333"
+        android:padding="@dimen/dimen_size_5"
+        android:layout_width="match_parent"
+        android:layout_margin="12dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_gridlayout"
+        android:text="GridLayoutActivity"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:background="#ff8839"
+        android:onClick="onViewClicked"
+        android:textColor="@color/cl_333333"
+        android:padding="@dimen/dimen_size_5"
+        android:layout_width="match_parent"
+        android:layout_margin="12dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_staggeredgridlayout"
+        android:text="StaggeredGridLayoutActivity"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:background="#ff8839"
+        android:onClick="onViewClicked"
+        android:textColor="@color/cl_333333"
+        android:padding="@dimen/dimen_size_5"
+        android:layout_width="match_parent"
+        android:layout_margin="12dp"
+        android:layout_height="wrap_content" />
+</LinearLayout>

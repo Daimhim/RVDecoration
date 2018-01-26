@@ -30,7 +30,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     public final void onBindViewHolder(VH holder, int position) {
         if (isEmptyView(holder, position)) {
             onBindEmptyViewHolder(holder, position);
-        } else {
+        } {
             onBindDataViewHolder(holder, position);
         }
     }
@@ -75,7 +75,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * @param position
      */
     @Override
-    public void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
+    public void onBindEmptyViewHolder(VH holder, int position) {
 
     }
 
@@ -87,7 +87,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * @return
      */
     @Override
-    public VH onCreateEmptyViewHolder(ViewGroup parent, int viewType) {
+    public VH onCreateEmptyViewHolder(ViewGroup parent, int viewType){
         return null;
     }
 

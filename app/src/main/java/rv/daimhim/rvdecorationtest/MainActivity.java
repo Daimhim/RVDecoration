@@ -1,5 +1,7 @@
 package rv.daimhim.rvdecorationtest;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -15,27 +17,28 @@ import rv.daimhim.rvdecorationtest.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.tv_content)
-    TextView mTvContent;
-    @BindView(R.id.rl_RelativeLayout)
-    View mRlRelativeLayout;
-
+    private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-
+        mContext = this;
     }
 
-    @OnClick({R.id.rl_RelativeLayout, R.id.cl_ConstraintLayout,R.id.tv_content})
-    public void onViewClicked() {
-        Rect rect = new Rect();
-        Rect rect2 = new Rect();
-        mTvContent.getGlobalVisibleRect(rect);
-        mRlRelativeLayout.getGlobalVisibleRect(rect2);
-        Log.i("TAG", rect.toString() + ":" + rect2.toString() + ":" + rect2.contains(rect)+":"+mTvContent.getGlobalVisibleRect(rect));
-        Snackbar.make(mTvContent, rect.toString() + ":" + rect2.toString(), Snackbar.LENGTH_SHORT).show();
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_linearlayout:
+                startActivity(new Intent(mContext,LinearLayoutActivity.class));
+                break;
+            case R.id.tv_gridlayout:
+                startActivity(new Intent(mContext,GridLayoutActivity.class));
+                break;
+            case R.id.tv_staggeredgridlayout:
+                startActivity(new Intent(mContext,StaggeredGridLayoutActivity.class));
+                break;
+            default:
+                break;
+        }
 
     }
 

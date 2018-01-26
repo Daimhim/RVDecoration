@@ -55,7 +55,7 @@ public interface RecyclerContract {
          * @param holder
          * @param position
          */
-        void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position);
+        void onBindEmptyViewHolder(VH holder, int position);
 
         /**
          * 设置空页面
@@ -159,40 +159,41 @@ public interface RecyclerContract {
      * @param <Ts>
      * @param <T>
      */
-    interface ExpandableContract<Ts,T> {
+    interface ExpandableContract<G,C,T> {
         /**
          * 刷新
          * @param ts 数据类型
          */
-        void onRefresh(Ts ts);
+        void onRefresh(G ts);
 
         /**
          * 添加多条
          * @param ts 数据类型
          * @param position
          */
-        void onLoad(Ts ts, int position);
+        void onLoad(G ts, int groupPosition, int position);
 
         /**
-         * 插入
-         * @param t  数据类型
-         * @param position 位置
-         *                 该方法可以和add合并
+         * 获取数据
+         * @param groupPosition
+         * @param childPosition
+         * @return
          */
-        void insertItem(T t, int position);
+        T getChildItem(int groupPosition, int childPosition);
+        C getChild(int groupPosition);
+    }
 
+    /**
+     * Adapter规范
+     * @param <Ts>
+     * @param <T>
+     */
+    interface ShortSpecificationContract<Ts,T> {
         /**
-         * 删除
-         * @param position 位置
+         * 刷新
+         * @param ts 数据类型
          */
-        void deleteItem(int position);
-
-        /**
-         * 替换
-         * @param t 数据类型
-         * @param position
-         */
-        void replaceItem(T t, int position);
+        void onRefresh(Ts ts);
 
         /**
          * 获取数据

@@ -36,7 +36,6 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$rootProject.ext.LIB_VERSION"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-alpha-9'
-    compile 'com.github.Daimhim.usedlibrary:used:1.0.5-alpha-2'
-    implementation project(':rvadapter')
     implementation project(':rvdecoration')
+    implementation project(':rvadapter')
 }

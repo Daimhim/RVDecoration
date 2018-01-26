@@ -1,6 +1,7 @@
 package rv.daimhim.rvdecoration;
 
 
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -8,5 +9,15 @@ package rv.daimhim.rvdecoration;
  */
 public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
+        String a = "ab";
+        final String bb = "b";
+        String b = "a"+bb;
+        System.out.println(a == b);
+    }
+    public static void main(String[] s){
+        String a = "ab";
+        final String bb = "b";
+        String b = "a"+bb;
+        System.out.println(a == b);
     }
 }

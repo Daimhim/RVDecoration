@@ -2,7 +2,6 @@ package org.daimhim.rvadapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 
 
@@ -20,6 +19,9 @@ import android.view.View;
  */
 
 public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerView.Adapter<VH> {
+
+    public String TAG = String.format("TAG:%s",getClass().getSimpleName());
+
     private RecyclerContract.OnItemClickListener mOnItemClickListener;
     private RecyclerContract.OnItemLongClickListener mOnItemLongClickListener;
 
@@ -41,6 +43,15 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
             mOnItemLongClickListener.onItemLongClick(view, position);
         }
     }
+
+    @Override
+    public void onViewRecycled(VH holder) {
+        super.onViewRecycled(holder);
+        holder.mOnClickListener = null;
+        holder.mOnLongClickListener = null;
+        holder.mRecyclerViewClick = null;
+    }
+
     public static class ClickViewHolder extends RecyclerView.ViewHolder {
         View.OnClickListener mOnClickListener;
         View.OnLongClickListener mOnLongClickListener;
@@ -62,12 +73,14 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
                 mOnClickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mRecyclerViewClick.onItemClick(v,getLayoutPosition());
+                        if (getLayoutPosition() < mRecyclerViewClick.getItemCount()
+                                && getLayoutPosition() >= 0 && null!=mRecyclerViewClick) {
+                            mRecyclerViewClick.onItemClick(v,getLayoutPosition());
+                        }
                     }
                 };
-            }else {
-                view.setOnClickListener(mOnClickListener);
             }
+            view.setOnClickListener(mOnClickListener);
             return true;
         }
 
@@ -77,13 +90,15 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
                 mOnLongClickListener = new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        mRecyclerViewClick.onItemLongClick(v,getLayoutPosition());
+                        if (getLayoutPosition() < mRecyclerViewClick.getItemCount()
+                                && getLayoutPosition() >= 0 && null!=mRecyclerViewClick) {
+                            mRecyclerViewClick.onItemLongClick(v, getLayoutPosition());
+                        }
                         return false;
                     }
                 };
-            }else {
-                view.setOnLongClickListener(mOnLongClickListener);
             }
+            view.setOnLongClickListener(mOnLongClickListener);
             return true;
         }
     }

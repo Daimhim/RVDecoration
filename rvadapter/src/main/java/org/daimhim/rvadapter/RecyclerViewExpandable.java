@@ -16,6 +16,7 @@ import static android.support.v7.widget.RecyclerView.NO_ID;
  * 修改时间：2017/12/28 10:03
  * 类描述：
  * 修改备注：
+ * @author Daimhim
  */
 
 public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.ClickViewHolder, VHC extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewEmpty<RecyclerViewClick.ClickViewHolder> {
@@ -133,9 +134,9 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
         int ofValue = mSparseArray.indexOfValue(position);
         if (ofValue < 0) {
             Pair<Integer, Integer> integerPair = indexOfPosition(position);
-            return getChildItemViewType(integerPair.first, integerPair.second);
+            return checkParameters(getChildItemViewType(integerPair.first, integerPair.second));
         } else {
-            return -getGroupItemViewType(ofValue);
+            return checkParameters(-getGroupItemViewType(ofValue));
         }
     }
 
@@ -209,6 +210,11 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
     public abstract void onBindChildViewHolder(VHC holder, int groupPosition, int childPosition);
 
+    @Override
+    public void onBindEmptyViewHolder(ClickViewHolder holder, int position) {
+
+    }
+
     public RecyclerContract.OnChildItemClickListener getOnChildItemClickListeners() {
         return mOnChildItemClickListeners;
     }
@@ -255,5 +261,12 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
     public void setOnChildItemLongClickListener(RecyclerContract.OnChildItemLongClickListener onChildItemLongClickListener) {
         mOnChildItemLongClickListener = onChildItemLongClickListener;
+    }
+
+    public int checkParameters(int viewType){
+        if (viewType == 0){
+            throw new NullPointerException("返回的ViewType参数不能为0。\n-----我是一条异常小尾巴");
+        }
+        return viewType;
     }
 }

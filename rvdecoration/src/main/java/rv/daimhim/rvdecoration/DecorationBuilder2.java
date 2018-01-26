@@ -113,7 +113,7 @@ public class DecorationBuilder2 {
     /**
      * 单位都是Px 只在入参时添加不同的入口
      */
-    public static class DecorationParameter {
+    public class DecorationParameter {
         int lineWidth = 0;
         int lineColor = 0;
         /**
