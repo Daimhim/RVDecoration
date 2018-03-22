@@ -20,7 +20,7 @@ import android.view.View;
 
 public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerView.Adapter<VH> {
 
-    public String TAG = String.format("TAG:%s",getClass().getSimpleName());
+    protected String TAG = String.format("TAG:%s",getClass().getSimpleName());
 
     private RecyclerContract.OnItemClickListener mOnItemClickListener;
     private RecyclerContract.OnItemLongClickListener mOnItemLongClickListener;
