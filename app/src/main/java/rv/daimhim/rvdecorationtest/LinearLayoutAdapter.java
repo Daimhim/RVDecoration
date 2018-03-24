@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  */
 
 public class LinearLayoutAdapter extends RecyclerViewClick<LinearLayoutAdapter.LinearLayoutViewholder>
-        implements RecyclerContract.ShortSpecificationContract<List<String>,String>{
+        implements RecyclerContract.SimpleContract<List<String>,String>{
     private List<String> mStrings;
 
     public LinearLayoutAdapter() {
@@ -42,6 +42,7 @@ public class LinearLayoutAdapter extends RecyclerViewClick<LinearLayoutAdapter.L
     @Override
     public void onBindViewHolder(LinearLayoutViewholder holder, int position) {
         holder.mTvContent.setText(getItem(position));
+        holder.performItemClick(holder.mTvContent,this);
     }
 
     @Override

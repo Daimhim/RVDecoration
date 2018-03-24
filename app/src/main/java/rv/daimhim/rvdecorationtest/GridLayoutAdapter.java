@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
  * @author：Daimhim
  */
 
-public class GridLayoutAdapter extends RecyclerViewClick<GridLayoutAdapter.GridLayoutViewHolder> implements RecyclerContract.ShortSpecificationContract<List<String>, String> {
+public class GridLayoutAdapter extends RecyclerViewClick<GridLayoutAdapter.GridLayoutViewHolder> implements RecyclerContract.SimpleContract<List<String>, String> {
     List<String> mStrings;
 
     public GridLayoutAdapter() {

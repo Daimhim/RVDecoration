@@ -188,7 +188,7 @@ public interface RecyclerContract {
      * @param <Ts>
      * @param <T>
      */
-    interface ShortSpecificationContract<Ts,T> {
+    interface SimpleContract<Ts,T> {
         /**
          * 刷新
          * @param ts 数据类型

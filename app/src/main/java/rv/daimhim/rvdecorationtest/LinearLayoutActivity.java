@@ -7,12 +7,16 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.daimhim.rvadapter.RecyclerContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +36,7 @@ import butterknife.ButterKnife;
  * @author：Daimhim
  */
 
-public class LinearLayoutActivity extends AppCompatActivity implements OnRefreshListener, OnLoadmoreListener {
+public class LinearLayoutActivity extends AppCompatActivity implements OnRefreshListener, OnLoadmoreListener, RecyclerContract.OnItemClickListener {
 
     @BindView(R.id.rv_recyclerview)
     RecyclerView mRvRecyclerview;
@@ -57,6 +61,8 @@ public class LinearLayoutActivity extends AppCompatActivity implements OnRefresh
         mRvRecyclerview.setLayoutManager(linearLayoutManager);
         mRvRecyclerview.setAdapter(mLinearLayoutAdapter);
         mLinearLayoutAdapter.onRefresh(initData(50));
+        mLinearLayoutAdapter.setOnItemClickListener(this);
+        mRvRecyclerview.addItemDecoration();
     }
 
     private List<String> initData(int i) {
@@ -76,5 +82,10 @@ public class LinearLayoutActivity extends AppCompatActivity implements OnRefresh
     @Override
     public void onLoadmore(RefreshLayout refreshlayout) {
         refreshlayout.finishLoadmore();
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(mContext,"position:"+position,Toast.LENGTH_SHORT).show();
     }
 }

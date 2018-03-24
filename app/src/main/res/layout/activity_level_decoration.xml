@@ -4,7 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+    <ListView
+        android:divider="@color/cl_333333"
+        android:dividerHeight="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <GridView
+        android:verticalSpacing="@dimen/dimen_size_2"
+        android:horizontalSpacing="@dimen/dimen_size_1"
 
+        android:numColumns="3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/srl_smartrefreshlayout"
         android:layout_width="match_parent"

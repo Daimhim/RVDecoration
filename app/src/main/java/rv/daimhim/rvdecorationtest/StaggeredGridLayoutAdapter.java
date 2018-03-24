@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  */
 
 public class StaggeredGridLayoutAdapter extends RecyclerViewClick<StaggeredGridLayoutAdapter.StaggeredGridLayoutViewHolder>
-        implements RecyclerContract.ShortSpecificationContract<List<String>, String> {
+        implements RecyclerContract.SimpleContract<List<String>, String> {
     private List<String> mStrings;
 
     public StaggeredGridLayoutAdapter() {
