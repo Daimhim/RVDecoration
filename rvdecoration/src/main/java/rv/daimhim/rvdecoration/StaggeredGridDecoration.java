@@ -1,144 +1,109 @@
 package rv.daimhim.rvdecoration;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
-/**
- * 使用方法 请看DecorationBuilder类
- * 该类用于StaggeredGridLayoutManager
- * Created by Daimhim on 2017/2/16.
- */
+public class StaggeredGridDecoration implements RecycleDecoration.DrawBeforeTarget {
+    /**
+     * 画笔
+     */
+    private Paint mPaint;
+    private Rect mRect;
+    private RecycleDecoration.MeasureTarget mMeasureTarget;
 
-public class StaggeredGridDecoration extends RecycleDecoration {
+    protected StaggeredGridDecoration(Context pContext, @ColorRes int color,
+                                      @DimenRes int size, int orientation,int spanCount) {
+        int mSize = pContext.getResources().getDimensionPixelSize(size);
+        this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.mPaint.setColor(ContextCompat.getColor(pContext, color));
+        this.mPaint.setStyle(Paint.Style.STROKE);
+        this.mPaint.setStrokeWidth(mSize);
 
-    @Deprecated
-    public StaggeredGridDecoration() {
+        mRect = new Rect();
+        if (orientation == StaggeredGridLayoutManager.VERTICAL){
+            mMeasureTarget = new VerticalItemOffsets(spanCount,mSize);
+        }else {
+            mMeasureTarget = new HorizontalItemOffsets(spanCount,mSize);
+        }
     }
-
-    public StaggeredGridDecoration(Context context) {
-        super(context);
-    }
-
-    private int mPosition;
-    private int mCount;
-    private int mSpanCount;
 
     @Override
-    protected void getDefaultOffsets(Rect outRect, Rect itemColor, View view, RecyclerView parent,
-                                     RecyclerView.State state) {
-        mCount = state.getItemCount(); //总长度
-        mPosition = parent.getChildAdapterPosition(view); //当前位置
-        mSpanCount = getSpanCount(parent);
-
-        switch (getOrientation()) {
-            case VERTICAL:
-                arrangementVertical(outRect, itemColor, parent);
-                break;
-            case HORIZONTAL:
-                arrangementHorizontal(outRect, itemColor, parent);
-                break;
-        }
-
-    }
-
-    private void arrangementVertical(Rect outRect, Rect itemColor, RecyclerView parent) {
-        //除了第一行，其他行都画顶部线
-        if (!isTopLine()) {
-            drawTop(outRect, itemColor);
-        }
-
-        if (isLeftLine()) {
-            //不是第一列
-            if (mPosition % mSpanCount != 0) {
-                drawLeft(outRect, itemColor);
-            }
-        }
-
-        if (isRightLine()) {
-            if (!isLastColum(parent, mPosition, mSpanCount, mCount)) {
-                drawRight(outRect, itemColor);
-            }
-        }
-
-        if (isBottomLine()) {
-            if (!isLastRaw(parent, mPosition, mSpanCount, mCount)) {
-                drawBottom(outRect, itemColor);
-            }
+    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        int childCount = parent.getChildCount();
+        View childAt;
+        for (int i = 0; i < childCount; i++) {
+            mRect.set(0,0,0,0);
+            childAt = parent.getChildAt(i);
+            mMeasureTarget.getItemOffsets(mRect,childAt,parent,state);
+            DrawHelp.drawLine(c,mRect, mPaint, childAt);
         }
     }
 
-    private void arrangementHorizontal(Rect outRect, Rect itemColor, RecyclerView parent) {
-        //除了第一行，其他行都画顶部线
-        if (!isTopLine()) {
-            drawTop(outRect, itemColor);
-        }
-
-        if (isLeftLine()) {
-            //不是第一列
-            if (mPosition >= mSpanCount) {
-                drawLeft(outRect, itemColor);
-            }
-        }
-
-        if (isRightLine()) {
-//            if (mPosition <= mCount - mSpanCount - (mSpanCount - 1 - (mCount - 1) % mSpanCount)) {
-//                drawRight(outRect, itemColor);
-//            }
-            if (!isLastColum(parent, mPosition, mSpanCount, mCount)) {
-                drawRight(outRect, itemColor);
-            }
-        }
-
-        if (isBottomLine()) {
-            if (!isLastRaw(parent, mPosition, mSpanCount, mCount)) {
-                drawBottom(outRect, itemColor);
-            }
-        }
+    protected RecycleDecoration.MeasureTarget getMeasureTarget() {
+        return mMeasureTarget;
     }
 
+    class VerticalItemOffsets implements RecycleDecoration.MeasureTarget{
 
-    private boolean isLastColum(RecyclerView parent, int pos, int spanCount,
-                                int childCount) {
-        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-        if (layoutManager instanceof StaggeredGridLayoutManager) {
-            int orientation = ((StaggeredGridLayoutManager) layoutManager)
-                    .getOrientation();
-            if (orientation == StaggeredGridLayoutManager.VERTICAL) {
-                // 如果是最后一列，则不需要绘制右边
-                if ((pos + 1) % spanCount == 0) {
-                    return true;
+        int mSpanCount;
+        int mSize;
+
+        protected VerticalItemOffsets(int pSpanCount, int pSize) {
+            mSpanCount = pSpanCount;
+            mSize = pSize;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if (mSpanCount > 1) {
+                int lPosition = parent.getChildAdapterPosition(view);
+                int lPaddingLeft = parent.getPaddingLeft();
+                int lPaddingRight = parent.getPaddingRight();
+                float lX = parent.getX();
+                float lX1 = view.getX();
+                if (lPosition % mSpanCount == 0) {
+                    outRect.set(0,0,mSize,mSize);
+                } else if (((lPosition - (mSpanCount - 1)) % mSpanCount) == 0) {
+                    outRect.set(0,0,0,mSize);
+                }else {
+                    outRect.set(0,0,mSize,mSize);
                 }
-            } else {
-                childCount = childCount - childCount % spanCount;
-                // 如果是最后一列，则不需要绘制右边
-                if (pos >= childCount - mSpanCount)
-                    return true;
+            }else {
+                outRect.set(0,0,0,mSize);
             }
         }
-        return false;
     }
+    class HorizontalItemOffsets implements RecycleDecoration.MeasureTarget{
+        int mSpanCount;
+        int mSize;
 
-    private boolean isLastRaw(RecyclerView parent, int pos, int spanCount,
-                              int childCount) {
-        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-        if (layoutManager instanceof StaggeredGridLayoutManager) {
-            int orientation = ((StaggeredGridLayoutManager) layoutManager)
-                    .getOrientation();
-            if (orientation == StaggeredGridLayoutManager.VERTICAL) {
-                childCount = childCount - childCount % spanCount;
-                // 如果是最后一行，则不需要绘制底部
-                if (pos >= childCount - mSpanCount)
-                    return true;
-            } else {
-                // 如果是最后一行，则不需要绘制底部
-                if ((pos + 1) % spanCount == 0) {
-                    return true;
+        protected HorizontalItemOffsets(int pSpanCount, int pSize) {
+            mSpanCount = pSpanCount;
+            mSize = pSize;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if (mSpanCount > 1) {
+                int lPosition = parent.getChildAdapterPosition(view);
+                if (lPosition % mSpanCount == 0) {
+                    outRect.set(0,0,mSize,mSize);
+                } else if (((lPosition - (mSpanCount - 1)) % mSpanCount) == 0) {
+                    outRect.set(0,0,0,mSize);
+                }else {
+                    outRect.set(0,0,mSize,mSize);
                 }
+            }else {
+                outRect.set(0,0,mSize,0);
             }
         }
-        return false;
     }
 }

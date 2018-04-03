@@ -2,15 +2,15 @@ package rv.daimhim.rvdecorationtest;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
  * @author：Daimhim
  */
 
-public class GridLayoutActivity extends AppCompatActivity implements OnRefreshListener, OnLoadmoreListener {
+public class GridLayoutActivity extends AppCompatActivity implements OnRefreshListener, OnLoadMoreListener {
 
     @BindView(R.id.rv_recyclerview)
     RecyclerView mRvRecyclerview;
@@ -46,7 +46,7 @@ public class GridLayoutActivity extends AppCompatActivity implements OnRefreshLi
         mContext = this;
         ButterKnife.bind(this);
         mSrlSmartrefreshlayout.setOnRefreshListener(this);
-        mSrlSmartrefreshlayout.setOnLoadmoreListener(this);
+        mSrlSmartrefreshlayout.setOnLoadMoreListener(this);
         initView();
     }
 
@@ -72,7 +72,7 @@ public class GridLayoutActivity extends AppCompatActivity implements OnRefreshLi
     }
 
     @Override
-    public void onLoadmore(RefreshLayout refreshlayout) {
-        refreshlayout.finishLoadmore();
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+        refreshLayout.finishLoadMore();
     }
 }

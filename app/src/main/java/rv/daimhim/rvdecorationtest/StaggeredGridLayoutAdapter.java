@@ -42,6 +42,8 @@ public class StaggeredGridLayoutAdapter extends RecyclerViewClick<StaggeredGridL
     @Override
     public void onBindViewHolder(StaggeredGridLayoutViewHolder holder, int position) {
         holder.mTvContent.setText(getItem(position));
+        //手动更改高度，不同位置的高度有所不同
+        holder.mTvContent.setHeight(100 + (position % 3) * 30);
     }
 
     @Override

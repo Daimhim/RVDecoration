@@ -27,6 +27,7 @@
 		<activity
 			android:name=".StaggeredGridLayoutActivity"
 			android:label="StaggeredGridLayoutActivity" />
+
 	</application>
 
 </manifest>

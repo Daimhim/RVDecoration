@@ -2,6 +2,7 @@ package rv.daimhim.rvdecorationtest;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 
@@ -57,10 +58,11 @@ public class EmptyActivity extends Activity {
                 refreshlayout.finishRefresh();
             }
         });
-        mSrlSmartrefreshlayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+        mSrlSmartrefreshlayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+
             @Override
-            public void onLoadmore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadmore();
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                refreshLayout.finishLoadMore();
             }
         });
         mRecyclerViewEmpty = new RecyclerViewEmpty() {

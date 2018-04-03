@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.ext.COMPILE_SDK_VERSION
-    buildToolsVersion rootProject.ext.BUILD_TOOLS_VERSION
 
 
     defaultConfig {
@@ -19,9 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    repositories {
-        maven { url 'https://jitpack.io' }
-    }
+
 }
 
 dependencies {
@@ -29,13 +26,28 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation "com.android.support:appcompat-v7:$rootProject.ext.LIB_VERSION"
     implementation "com.android.support:design:$rootProject.ext.LIB_VERSION"
     implementation "com.android.support:recyclerview-v7:$rootProject.ext.LIB_VERSION"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-alpha-9'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-3'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.google.dagger:dagger:2.15'
     implementation project(':rvdecoration')
     implementation project(':rvadapter')
+
+}
+
+configurations.all {
+
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("design")) {
+                details.useVersion '25.4.0'//默认使用的版本
+            }
+        }
+    }
 }

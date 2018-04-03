@@ -8,8 +8,6 @@
 		android:textSize="16sp"
 		android:gravity="center"
 		android:background="#8a8a8a"
-		android:paddingTop="40dp"
-		android:paddingBottom="40dp"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content" />
+		android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>
