@@ -52,6 +52,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
     /**
      * 在数据改变之后调用
+     * @param groupPosition
      */
     public final void notifyGroupPositionChanged(int groupPosition) {
         int num = 0;
@@ -62,6 +63,11 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
         mSparseArray.put(getGroupCount(), num);
     }
 
+    /**
+     *
+     * @param position
+     * @return
+     */
     public final Pair<Integer, Integer> indexOfPosition(int position) {
         int num = 0;
         for (int i = 0; i < getGroupCount(); i++) {
@@ -81,6 +87,11 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
         return new Pair<>(-1, -1);
     }
 
+    /**
+     *
+     * @param groupPosition
+     * @return
+     */
     public final Pair<Integer, Integer> indexOfGroupPosition(int groupPosition) {
         int num = 0;
         for (int i = 0; i < groupPosition; i++) {
@@ -90,6 +101,12 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
         return new Pair<>(groupPosition, num);
     }
 
+    /**
+     *
+     * @param groupPosition
+     * @param position
+     * @return
+     */
     public final int indexOfItemInPosition(int groupPosition, int position) {
         int num = 0;
         for (int i = 0; i < groupPosition - 1; i++) {
@@ -152,7 +169,6 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     /**
-     * 获取ID
      *
      * @param groupPosition
      * @return
@@ -161,6 +177,12 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
         return NO_ID;
     }
 
+    /**
+     *
+     * @param groupPosition
+     * @param childPosition
+     * @return
+     */
     public long getChildItemId(int groupPosition, int childPosition) {
         return NO_ID;
     }
@@ -265,7 +287,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
     public int checkParameters(int viewType){
         if (viewType == 0){
-            throw new NullPointerException("返回的ViewType参数不能为0。\n-----我是一条异常小尾巴");
+            throw new NullPointerException("viewType!=0!");
         }
         return viewType;
     }
