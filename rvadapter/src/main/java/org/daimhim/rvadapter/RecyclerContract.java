@@ -220,5 +220,11 @@ public interface RecyclerContract {
          * @return 数据类型
          */
         T getItem(int position);
+
+        /**
+         * 加载
+         * @param ts 数据
+         */
+        void onLoad(Ts ts);
     }
 }
