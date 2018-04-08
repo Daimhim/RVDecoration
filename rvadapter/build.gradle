@@ -97,7 +97,7 @@ install {
         pom {
             project {
                 packaging 'aar'
-                name "RecyclerView辅助，规范Adapater"
+                name "RecyclerView holp class，specification its adapater"
                 url siteUrl
                 licenses {
                     license {
