@@ -32,7 +32,7 @@ ext{
     LIB_VERSION = '25.4.0'
 
     RVADAPTER_VERSIONCODE = 100
-    RVADAPTER_VERSIONNAME = "1.0.0"
+    RVADAPTER_VERSIONNAME = "1.0.1"
 }
 
 task clean(type: Delete) {
