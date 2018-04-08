@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion rootProject.ext.COMPILE_SDK_VERSION
@@ -9,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.MIN_SDK_VERSION
         targetSdkVersion rootProject.ext.TARGET_SDK_VERSION
-        versionCode 100
-        versionName "1.0.0"
+        versionCode rootProject.ext.RVADAPTER_VERSIONCODE
+        versionName rootProject.ext.RVADAPTER_VERSIONNAME
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -34,101 +33,110 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation "com.android.support:recyclerview-v7:$rootProject.ext.LIB_VERSION"
 }
-publish {
-    userOrg = 'daimhim'
-    groupId = 'org.daimhim.rvdecoration'
-    artifactId = 'RvAdapter'
-    publishVersion = '1.0.0'//版本号
-    desc = 'RecyclerView辅助，规范Adapater'//描述，不重要
-    website = "https://github.com/Daimhim/RVDecoration"
+
+
+/** 以下开始是将Android Library上传到jcenter的相关配置**/
+
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+//项目主页
+def siteUrl = 'https://github.com/Daimhim/RVDecoration'    // project homepage
+//项目的版本控制地址
+def gitUrl = 'https://github.com/Daimhim/RVDecoration.git' // project git
+//项目讨论区
+def gitissues = 'https://github.com/Daimhim/RVDecoration/issues' // project issues
+//包名
+group = "org.daimhim.rvdecoration"
+//仓库名
+def maven_repo = "RVDecoration"
+//发布到JCenter上的项目名字，必须填写
+def libName = "rvadapter"            //依赖名
+// 版本号，下次更新是只需要更改版本号即可
+version = rootProject.ext.RVADAPTER_VERSIONNAME
+/**  上面配置后上传至jcenter后的编译路径是这样的： compile 'org.daimhim.rvdecoration:rvadapter:1.0.0'  **/
+
+//生成源文件
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+//生成文档
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    options.encoding "UTF-8"
+    options.charSet 'UTF-8'
+    options.author true
+    options.version true
+    options.links "https://github.com/Daimhim/RVDecoration/tree/master/rvadapter/docs/javadoc"
+    failOnError false
 }
 
-///** 以下开始是将Android Library上传到jcenter的相关配置**/
-//// 定义两个链接，下面会用到。
-//def siteUrl = 'https://github.com/Daimhim/RVDecoration' // 项目主页。
-//def gitUrl = 'https://github.com/Daimhim/RVDecoration.git' // Git仓库的url。
-//
-//group = "org.daimhim.rvdecoration"// 唯一包名,比如compile 'com.ansen.http:okhttpencapsulation:1.0.1'中的com.ansen.http就是这里配置的。
-//version = "1.0.0"//项目引用的版本号，比如compile 'com.ansen.http:okhttpencapsulation:1.0.1'中的1.0.1就是这里配置的。
-//
-//    install {
-//    repositories.mavenInstaller {
-//        // 生成pom.xml和参数
-//        pom {
-//            project {
-//                packaging 'aar'
-//                // 项目描述，复制我的话，这里需要修改。
-//                name 'rvadapter'// 可选，项目名称。
-//                description 'RecyclerView辅助，规范Adapater'// 可选，项目描述。
-//                url siteUrl // 项目主页，这里是引用上面定义好。
-//
-//                // 软件开源协议，现在一般都是Apache License2.0吧，复制我的，这里不需要修改。
-//                licenses {
-//                    license {
-//                        name 'The Apache Software License, Version 2.0'
-//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-//
-//                //填写开发者基本信息，复制我的，这里需要修改。
-//                developers {
-//                    developer {
-//                        id 'daimhim' // 开发者的id。
-//                        name 'daimhim' // 开发者名字。
-//                        email 'daimhim@163.com' // 开发者邮箱。
-//                    }
-//                }
-//
-//                // SCM，复制我的，这里不需要修改。
-//                scm {
-//                    connection gitUrl // Git仓库地址。
-//                    developerConnection gitUrl // Git仓库地址。
-//                    url siteUrl // 项目主页。
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//// 生成jar包的task，不需要修改。
-//task sourcesJar(type: Jar) {
-//    from android.sourceSets.main.java.srcDirs
-//    classifier = 'sources'
-//}
-//
-//// 生成jarDoc的task，不需要修改。
-//task javadoc(type: Javadoc) {
-//    source = android.sourceSets.main.java.srcDirs
-//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//    // destinationDir = file("../javadoc/")
-//    failOnError false // 忽略注释语法错误，如果用jdk1.8你的注释写的不规范就编译不过。
-//}
-//
-//// 生成javaDoc的jar，不需要修改。
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    classifier = 'javadoc'
-//    from javadoc.destinationDir
-//}
-//artifacts {
-//    archives javadocJar
-//    archives sourcesJar
-//}
-//
-//// 这里是读取Bintray相关的信息，我们上传项目到github上的时候会把gradle文件传上去，所以不要把帐号密码的信息直接写在这里，写在local.properties中，这里动态读取。
-//Properties properties = new Properties()
-//properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//bintray {
-//    user = properties.getProperty("bintray.user") // Bintray的用户名。
-//    key = properties.getProperty("bintray.apikey") // Bintray刚才保存的ApiKey。
-//
-//    configurations = ['archives']
-//    pkg {
-//        repo = "RVDecoration"  //Repository名字 需要自己在bintray网站上先添加
-//        name = "rvadapter"// 发布到Bintray上的项目名字，这里的名字不是compile 'com.ansen.library:circleimage:1.0.1'中的circleimage。
-//        userOrg = 'daimhim'//Bintray的组织id
-//        websiteUrl = siteUrl
-//        vcsUrl = gitUrl
-//        licenses = ["Apache-2.0"]
-//        publish = true // 是否是公开项目。
-//    }
-//}
+//文档打包成jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+//拷贝javadoc文件
+task copyDoc(type: Copy) {
+    from "${buildDir}/docs/"
+    into "docs"
+}
+
+//上传到jcenter所需要的源码文件
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// 配置maven库，生成POM.xml文件
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name "RecyclerView辅助，规范Adapater"
+                url siteUrl
+                licenses {
+                    license {
+                        name "The Apache Software License, Version 2.0"
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'Daimhim'
+                        name 'Daimhim'
+                        email 'Daimhim@163.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+//上传到jcenter
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")    //读取 local.properties 文件里面的 bintray.user
+    key = properties.getProperty("bintray.apikey")   //读取 local.properties 文件里面的 bintray.apikey
+    configurations = ['archives']
+    pkg {
+        repo = maven_repo
+        name = libName    //发布到JCenter上的项目名字，必须填写
+        desc =  "RecyclerView辅助，规范Adapater"   //项目描述
+        websiteUrl = siteUrl
+        issueTrackerUrl = gitissues
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}

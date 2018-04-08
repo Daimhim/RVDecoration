@@ -1,7 +1,5 @@
 package org.daimhim.rvadapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 
@@ -18,26 +16,52 @@ import android.view.View;
  * @author Daimhim
  */
 
-public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerView.Adapter<VH> {
-
+public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHolder> extends android.support.v7.widget.RecyclerView.Adapter<VH> {
+    /**
+     * 日志
+     */
     protected String TAG = String.format("TAG:%s",getClass().getSimpleName());
-
+    /**
+     * 点击事件
+     */
     private RecyclerContract.OnItemClickListener mOnItemClickListener;
+    /**
+     * 长点击事件
+     */
     private RecyclerContract.OnItemLongClickListener mOnItemLongClickListener;
 
-    public void setOnItemClickListener(@NonNull RecyclerContract.OnItemClickListener onItemClickListener) {
+    /**
+     * set点击事件
+     * @param onItemClickListener 点击事件监听对象
+     */
+    public void setOnItemClickListener(RecyclerContract.OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
     }
 
-    public void setOnItemLongClickListener(@NonNull RecyclerContract.OnItemLongClickListener onItemLongClickListener) {
+    /**
+     * 长点击事件
+     * @param onItemLongClickListener 点击事件监听对象
+     */
+    public void setOnItemLongClickListener(RecyclerContract.OnItemLongClickListener onItemLongClickListener) {
         mOnItemLongClickListener = onItemLongClickListener;
     }
 
+    /**
+     * 点击事件 执行过程
+     * @param view 视图
+     * @param position 位置
+     */
     public void onItemClick(View view, int position){
         if (null!=mOnItemClickListener) {
             mOnItemClickListener.onItemClick(view, position);
         }
     }
+
+    /**
+     * Long Click process
+     * @param view View
+     * @param position 位置
+     */
     public void onItemLongClick(View view, int position){
         if (null!=mOnItemLongClickListener) {
             mOnItemLongClickListener.onItemLongClick(view, position);
@@ -52,7 +76,10 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         holder.mRecyclerViewClick = null;
     }
 
-    public static class ClickViewHolder extends RecyclerView.ViewHolder {
+    /**
+     * 实现了点击事件
+     */
+    public static class ClickViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
         View.OnClickListener mOnClickListener;
         View.OnLongClickListener mOnLongClickListener;
         RecyclerViewClick mRecyclerViewClick;
@@ -64,9 +91,9 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * 执行点击事件
          * @param view   需要设置点击事件的View
          * @param recyclerViewClick Adapter对象
-         * @return
+         * @return 是否set成功
          */
-        public boolean performItemClick(@NonNull View view,@NonNull RecyclerViewClick recyclerViewClick){
+        public boolean performItemClick(View view,RecyclerViewClick recyclerViewClick){
             //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
             if (mOnClickListener == null){
                 mRecyclerViewClick = recyclerViewClick;
@@ -84,7 +111,13 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
             return true;
         }
 
-        public boolean performLongItemClick(@NonNull View view,@NonNull RecyclerViewClick recyclerViewClick){
+        /**
+         * 执行点击事件
+         * @param view 需要设置点击事件的View
+         * @param recyclerViewClick Adapter对象
+         * @return is set success
+         */
+        public boolean performLongItemClick(View view,RecyclerViewClick recyclerViewClick){
             if (mOnLongClickListener == null){
                 mRecyclerViewClick = recyclerViewClick;
                 mOnLongClickListener = new View.OnLongClickListener() {

@@ -5,7 +5,6 @@ import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import static android.support.v7.widget.RecyclerView.NO_ID;
 
 /**
  * 项目名称：org.daimhim.rvadapter
@@ -52,7 +51,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
     /**
      * 在数据改变之后调用
-     * @param groupPosition
+     * @param groupPosition Group位置
      */
     public final void notifyGroupPositionChanged(int groupPosition) {
         int num = 0;
@@ -64,9 +63,9 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     /**
-     *
-     * @param position
-     * @return
+     * 逆序 通过一维向量 查找二维数组
+     * @param position 一维位置
+     * @return 二维对象
      */
     public final Pair<Integer, Integer> indexOfPosition(int position) {
         int num = 0;
@@ -88,9 +87,9 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     /**
-     *
-     * @param groupPosition
-     * @return
+     * 通过起始点查找 二维数组的起始位置
+     * @param groupPosition  起始点
+     * @return 二维数组对象
      */
     public final Pair<Integer, Integer> indexOfGroupPosition(int groupPosition) {
         int num = 0;
@@ -102,10 +101,10 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     /**
-     *
-     * @param groupPosition
-     * @param position
-     * @return
+     * 顺序 通过二维数组 查找一维向量
+     * @param groupPosition 二维起始点
+     * @param position 位置
+     * @return 一维位置
      */
     public final int indexOfItemInPosition(int groupPosition, int position) {
         int num = 0;
@@ -129,6 +128,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     @Override
     public final void onBindDataViewHolder(ClickViewHolder holder, int position) {
         int ofValue = mSparseArray.indexOfValue(position);
+        if (holder == null) {return;}
         if (ofValue < 0) {
             Pair<Integer, Integer> integerPair = indexOfPosition(position);
             onBindChildViewHolder((VHC) holder, integerPair.first, integerPair.second);
@@ -169,67 +169,89 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     /**
-     *
-     * @param groupPosition
-     * @return
+     * 获取Id
+     * @param groupPosition Group位置
+     * @return ID
      */
     public long getGroupItemId(int groupPosition) {
-        return NO_ID;
+        return -1;
     }
 
     /**
-     *
-     * @param groupPosition
-     * @param childPosition
-     * @return
+     * 获取Id
+     * @param groupPosition Group位置
+     * @param childPosition Child位置
+     * @return ID
      */
     public long getChildItemId(int groupPosition, int childPosition) {
-        return NO_ID;
+        return -1;
     }
 
     /**
      * 获取视图类型
      *
-     * @param groupPosition
-     * @return
+     * @param groupPosition Group Position
+     * @return Type Value
      */
     public int getGroupItemViewType(int groupPosition) {
         return 1;
     }
 
+    /**
+     * 获取视图类型
+     * @param groupPosition Group Position
+     * @param childPosition Child Position
+     * @return Type Value
+     */
     public int getChildItemViewType(int groupPosition, int childPosition) {
         return 1;
     }
 
     /**
-     * 获取视图数量
+     * 获取Group视图数量
      *
-     * @return
+     * @return total
      */
     public abstract int getGroupCount();
 
+    /**
+     * 获取Child视图数量
+     * @param groupPosition Group Position
+     * @return total
+     */
     public abstract int getChildrenCount(int groupPosition);
 
     /**
      * 创建视图
      *
-     * @param parent
-     * @param viewType
-     * @return
+     * @param parent 父布局
+     * @param viewType 视图类型
+     * @return 视图
      */
     public abstract VHG onCreateGroupViewHolder(ViewGroup parent, int viewType);
 
+    /**
+     * 创建 Child View
+     * @param parent Group View
+     * @param viewType View Type Value
+     * @return Child View
+     */
     public abstract VHC onCreateChildViewHolder(ViewGroup parent, int viewType);
 
     /**
      * 设置数据
      *
-     * @param holder
-     * @param groupPosition
-     * @return
+     * @param holder View
+     * @param groupPosition Group Position
      */
     public abstract void onBindGroupViewHolder(VHG holder, int groupPosition);
 
+    /**
+     * set Data
+     * @param holder View
+     * @param groupPosition Group position
+     * @param childPosition Chile position
+     */
     public abstract void onBindChildViewHolder(VHC holder, int groupPosition, int childPosition);
 
     @Override
@@ -237,6 +259,10 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
     }
 
+    /**
+     * get Child click
+     * @return child click
+     */
     public RecyclerContract.OnChildItemClickListener getOnChildItemClickListeners() {
         return mOnChildItemClickListeners;
     }
@@ -244,8 +270,8 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     /**
      * 点击事件
      *
-     * @param view
-     * @param position
+     * @param view View
+     * @param position 位置
      */
     @Override
     public void onItemClick(View view, int position) {
@@ -269,22 +295,43 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
         }
     }
 
+    /**
+     * set group click
+     * @param onGroupItemClickListeners external obj
+     */
     public void setOnGroupItemClickListeners(RecyclerContract.OnGroupItemClickListener onGroupItemClickListeners) {
         mOnGroupItemClickListeners = onGroupItemClickListeners;
     }
 
+    /**
+     * set group long click
+     * @param onGroupItemLongClickListener external obj
+     */
     public void setOnGroupItemLongClickListener(RecyclerContract.OnGroupItemLongClickListener onGroupItemLongClickListener) {
         mOnGroupItemLongClickListener = onGroupItemLongClickListener;
     }
 
+    /**
+     * set child click
+     * @param onChildItemClickListeners external obj
+     */
     public void setOnChildItemClickListeners(RecyclerContract.OnChildItemClickListener onChildItemClickListeners) {
         mOnChildItemClickListeners = onChildItemClickListeners;
     }
 
+    /**
+     * set child long click
+     * @param onChildItemLongClickListener external obj
+     */
     public void setOnChildItemLongClickListener(RecyclerContract.OnChildItemLongClickListener onChildItemLongClickListener) {
         mOnChildItemLongClickListener = onChildItemLongClickListener;
     }
 
+    /**
+     * check View Type
+     * @param viewType Vaue
+     * @return value
+     */
     public int checkParameters(int viewType){
         if (viewType == 0){
             throw new NullPointerException("viewType!=0!");

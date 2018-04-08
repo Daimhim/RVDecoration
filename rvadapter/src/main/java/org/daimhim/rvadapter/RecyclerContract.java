@@ -22,94 +22,105 @@ public interface RecyclerContract {
     interface OnItemClickListener {
         /**
          * 点击事件
-         * @param view
-         * @param position
+         * @param view View
+         * @param position position
          */
         void onItemClick(View view, int position);
     }
 
+    /**
+     *  提供给外部的 接口  传入此接口 监听点击事件
+     */
     interface OnItemLongClickListener {
         /**
          * 长点击事件
-         * @param view
-         * @param position
+         * @param view  view
+         * @param position position
          */
         void onItemLongClick(View view, int position);
     }
 
     /**
      * 空界面
-     * @param <VH>
+     * @param <VH> p
      */
     interface EmptyContract<VH extends RecyclerViewClick.ClickViewHolder> {
         /**
          * 是否空页面
-         *
-         * @return
+         * @return true Y false N
          */
         boolean isEmptyView();
 
         /**
          * 设置空页面
-         *
-         * @param holder
-         * @param position
+         * @param holder  一个Item单元
+         * @param position  位置
          */
         void onBindEmptyViewHolder(VH holder, int position);
 
         /**
          * 设置空页面
-         *
-         * @param parent
-         * @param viewType
-         * @return
+         * @param parent 父布局
+         * @param viewType 类型
+         * @return 视图
          */
         VH onCreateEmptyViewHolder(ViewGroup parent, int viewType);
     }
 
-
+    /**
+     * Group 点击事件
+     */
     interface OnGroupItemClickListener {
         /**
-         *
-         * @param view
-         * @param groupPosition
+         * 点击事件
+         * @param view 视图
+         * @param groupPosition group位置
          */
         void onGroupItemClick(View view, int groupPosition);
     }
 
+    /**
+     * Group Loong OnClick
+     */
     interface OnGroupItemLongClickListener {
         /**
-         *
-         * @param view
-         * @param groupPosition
+         *  Group Loong OnClick
+         * @param view View
+         * @param groupPosition Group Positiong
          */
         void onGroupItemLongClick(View view, int groupPosition);
     }
 
+    /**
+     * Child OnClick
+     */
     interface OnChildItemClickListener {
         /**
-         *
-         * @param view
-         * @param groupPosition
-         * @param childPosition
+         * Child OnClick fun
+         * @param view View
+         * @param groupPosition Group Position
+         * @param childPosition Child Position
          */
         void onChildItemClick(View view, int groupPosition, int childPosition);
     }
 
+    /**
+     * Child Long OnClick
+     */
     interface OnChildItemLongClickListener {
         /**
-         *
-         * @param view
-         * @param groupPosition
-         * @param childPosition
+         *  Child Long Onclick
+         * @param view View
+         * @param groupPosition group position
+         * @param childPosition child position
          */
         void onChildItemLongClick(View view, int groupPosition, int childPosition);
     }
 
     /**
      * Adapter规范
-     * @param <Ts>
-     * @param <T>
+     * @param <Ts> List
+     * @param <T> Item
      */
     interface SpecificationContract<Ts,T> {
         /**
@@ -121,7 +132,7 @@ public interface RecyclerContract {
         /**
          * 添加多条
          * @param ts 数据类型
-         * @param position
+         * @param position 位置
          */
         void onLoad(Ts ts, int position);
 
@@ -142,7 +153,7 @@ public interface RecyclerContract {
         /**
          * 替换
          * @param t 数据类型
-         * @param position
+         * @param position 位置
          */
         void replaceItem(T t, int position);
 
@@ -155,38 +166,46 @@ public interface RecyclerContract {
     }
 
     /**
-     * Adapter规范
-     * @param <Ts>
-     * @param <T>
+     *  Adapter规范
+     * @param <G> Group Type
+     * @param <C> Child Type
+     * @param <T> Child Item Type
      */
     interface ExpandableContract<G,C,T> {
         /**
          * 刷新
-         * @param ts 数据类型
+         * @param ts ts 数据类型
          */
         void onRefresh(G ts);
 
         /**
          * 添加多条
-         * @param ts 数据类型
-         * @param position
+         * @param ts ts 数据类型
+         * @param groupPosition Group Position
+         * @param position Group position
          */
         void onLoad(G ts, int groupPosition, int position);
 
         /**
          * 获取数据
-         * @param groupPosition
-         * @param childPosition
-         * @return
+         * @param groupPosition group Position
+         * @param childPosition child Position
+         * @return Child Data
          */
         T getChildItem(int groupPosition, int childPosition);
+
+        /**
+         * 获取数据
+         * @param groupPosition group Position
+         * @return Child List Data
+         */
         C getChild(int groupPosition);
     }
 
     /**
      * Adapter规范
-     * @param <Ts>
-     * @param <T>
+     * @param <Ts> List Type
+     * @param <T> Item Type
      */
     interface SimpleContract<Ts,T> {
         /**

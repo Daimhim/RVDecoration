@@ -39,7 +39,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * 获取Item数量 可能会有头部和尾部 所以加上数据长度以便扩充
      * 而是否空页面的决定在于isEmptyView
      *
-     * @return
+     * @return 总数
      */
     @Override
     public final int getItemCount() {
@@ -53,7 +53,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     /**
      * 是否空界面
      *
-     * @return
+     * @return 是否为空
      */
     @Override
     public boolean isEmptyView() {
@@ -71,8 +71,8 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     /**
      * 空页面加载数据
      *
-     * @param holder
-     * @param position
+     * @param holder item
+     * @param position 位置
      */
     @Override
     public void onBindEmptyViewHolder(VH holder, int position) {
@@ -82,9 +82,9 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     /**
      * 加载空页面
      *
-     * @param parent
-     * @param viewType
-     * @return
+     * @param parent 父容器
+     * @param viewType type value
+     * @return View
      */
     @Override
     public VH onCreateEmptyViewHolder(ViewGroup parent, int viewType){
@@ -94,24 +94,24 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     /**
      * 数据加载页面
      *
-     * @param parent
-     * @param viewType
-     * @return
+     * @param parent 父布局
+     * @param viewType value
+     * @return View
      */
     public abstract VH onCreateDataViewHolder(ViewGroup parent, int viewType);
 
     /**
      * 数据加载页面
      *
-     * @param holder
-     * @param position
+     * @param holder item
+     * @param position 位置
      */
     public abstract void onBindDataViewHolder(VH holder, int position);
 
     /**
      * 获取数据Item长度
      *
-     * @return
+     * @return total
      */
     public abstract int getDataItemCount();
 
