@@ -35,7 +35,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     /**
      * 在数据改变之后调用
      */
-    public void notifyPositionChanged() {
+    public final void notifyPositionChanged() {
         if (null == mSparseArray) {
             mSparseArray = new SparseIntArray();
         } else {
@@ -54,7 +54,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
      * 在数据改变之后调用
      * @param groupPosition Group位置
      */
-    public void notifyGroupPositionChanged(int groupPosition) {
+    public final void notifyGroupPositionChanged(int groupPosition) {
         int num = 0;
         for (int i = 0; i < groupPosition; i++) {
             num += getChildrenCount(i);
@@ -118,7 +118,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
 
     @Override
-    public ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+    public final ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
         if (viewType < 0) {
             return onCreateGroupViewHolder(parent, viewType);
         } else {
@@ -127,7 +127,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     @Override
-    public void onBindDataViewHolder(ClickViewHolder holder, int position) {
+    public final void onBindDataViewHolder(ClickViewHolder holder, int position) {
         int ofValue = mSparseArray.indexOfValue(position);
         if (holder == null) {return;}
         if (ofValue < 0) {
@@ -139,7 +139,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     @Override
-    public int getDataItemCount() {
+    public final int getDataItemCount() {
         int num = 0;
         for (int i = 0; i < getGroupCount(); i++) {
             num += getChildrenCount(i);
@@ -148,7 +148,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public final int getItemViewType(int position) {
         int ofValue = mSparseArray.indexOfValue(position);
         if (ofValue < 0) {
             Pair<Integer, Integer> integerPair = indexOfPosition(position);
