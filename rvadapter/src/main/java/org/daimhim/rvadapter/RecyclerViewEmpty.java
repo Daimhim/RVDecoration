@@ -15,10 +15,11 @@ import android.view.ViewGroup;
  * @author Daimhim
  */
 
-public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewClick<VH> implements RecyclerContract.EmptyContract<VH> {
+public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewClick<RecyclerViewClick.ClickViewHolder>
+        implements RecyclerContract.EmptyContract<VH> {
 
     @Override
-    public final VH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final RecyclerViewClick.ClickViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isEmptyView(parent, viewType)) {
             return onCreateEmptyViewHolder(parent, viewType);
         } else {
@@ -27,11 +28,11 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     }
 
     @Override
-    public final void onBindViewHolder(VH holder, int position) {
+    public final void onBindViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
         if (isEmptyView(holder, position)) {
-            onBindEmptyViewHolder(holder, position);
+            onBindEmptyViewHolder((VH) holder, position);
         } else {
-            onBindDataViewHolder(holder, position);
+            onBindDataViewHolder((VH) holder, position);
         }
     }
 
@@ -60,7 +61,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
         return false;
     }
 
-    public boolean isEmptyView(VH holder, int position) {
+    public boolean isEmptyView(RecyclerViewClick.ClickViewHolder holder, int position) {
         return isEmptyView();
     }
 

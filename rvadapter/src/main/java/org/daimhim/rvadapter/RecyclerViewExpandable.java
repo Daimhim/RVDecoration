@@ -118,7 +118,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
 
     @Override
-    public final ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+    public final RecyclerViewClick.ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
         if (viewType < 0) {
             return onCreateGroupViewHolder(parent, viewType);
         } else {
@@ -127,7 +127,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     @Override
-    public final void onBindDataViewHolder(ClickViewHolder holder, int position) {
+    public final void onBindDataViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
         int ofValue = mSparseArray.indexOfValue(position);
         if (holder == null) {return;}
         if (ofValue < 0) {
