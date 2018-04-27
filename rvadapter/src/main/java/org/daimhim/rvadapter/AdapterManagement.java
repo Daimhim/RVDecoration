@@ -1,8 +1,5 @@
 package org.daimhim.rvadapter;
 
-import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -19,8 +16,17 @@ import java.util.ArrayList;
  */
 
 public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.ClickViewHolder> {
+    /**
+     * adapter manage
+     */
     private ArrayList<RecyclerViewClick> mRecyclerViewClicks;
+    /**
+     * adapter 订阅
+     */
     private ArrayList<HomeAdapterDataObserver> mHomeAdapterDataObservers;
+    /**
+     * 当前位置
+     */
     private int mCurrentPosition = -1;
     public AdapterManagement() {
         mRecyclerViewClicks = new ArrayList<>();
@@ -28,17 +34,23 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
     }
 
     @Override
-    public ClickViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Pair<Integer, Integer> integerIntegerPair = findViewType(viewType);
+    public ClickViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
+        android.util.Pair<Integer, Integer> integerIntegerPair = indexOfPosition(mCurrentPosition);
         return (ClickViewHolder) mRecyclerViewClicks.get(integerIntegerPair.first).onCreateViewHolder(parent, viewType);
     }
 
     @Override
     public void onBindViewHolder(ClickViewHolder holder, int position) {
-        Pair<Integer, Integer> integerIntegerPair = indexOfPosition(position);
+        android.util.Pair<Integer, Integer> integerIntegerPair = indexOfPosition(position);
         mRecyclerViewClicks.get(integerIntegerPair.first).onBindViewHolder(holder,integerIntegerPair.second);
     }
-    private Pair<Integer, Integer> findViewType(int viewType){
+
+    /**
+     * 应急
+     * @param viewType 查找类型
+     * @return 位置
+     */
+    private android.util.Pair<Integer, Integer> findViewType(int viewType){
         for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
             for (int j = 0; j < mRecyclerViewClicks.get(i).getItemCount(); j++) {
                 int itemViewType = mRecyclerViewClicks.get(i).getItemViewType(j);
@@ -48,11 +60,11 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
                     itemViewType += (0 - i);
                 }
                 if (viewType == itemViewType){
-                    return new Pair<>(i,j);
+                    return new android.util.Pair<>(i,j);
                 }
             }
         }
-        return new Pair<>(-1,-1);
+        return new android.util.Pair<>(-1,-1);
     }
     @Override
     public int getItemCount() {
@@ -62,13 +74,19 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
         }
         return total;
     }
+
+    /**
+     * 添加adapter
+     * @param recyclerViewClick adapter
+     */
     public void addAdapter(RecyclerViewClick recyclerViewClick){
         mRecyclerViewClicks.add(recyclerViewClick);
         notifyDataSetChanged();
     }
     @Override
     public int getItemViewType(int position) {
-        Pair<Integer, Integer> integerIntegerPair = indexOfPosition(position);
+        mCurrentPosition = position;
+        android.util.Pair<Integer, Integer> integerIntegerPair = indexOfPosition(position);
         int itemViewType = mRecyclerViewClicks.get(integerIntegerPair.first).getItemViewType(integerIntegerPair.second);
         if (itemViewType > 0){
             itemViewType += integerIntegerPair.first;
@@ -82,7 +100,7 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
      * @param position 一维位置
      * @return 二维对象
      */
-    public final Pair<Integer, Integer> indexOfPosition(int position) {
+    public final android.util.Pair<Integer, Integer> indexOfPosition(int position) {
         int num = 0;
         int itemCount = -1;
         for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
@@ -92,16 +110,16 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
                 num -= itemCount;
                 for (int j = 0; j < itemCount; j++) {
                     if (num == position) {
-                        return new Pair<>(i, j);
+                        return new android.util.Pair<>(i, j);
                     }
                     num++;
                 }
             }
         }
-        return new Pair<>(-1, -1);
+        return new android.util.Pair<>(-1, -1);
     }
     @Override
-    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+    public void registerAdapterDataObserver(android.support.v7.widget.RecyclerView.AdapterDataObserver observer) {
         super.registerAdapterDataObserver(observer);
         HomeAdapterDataObserver homeAdapterDataObserver = null;
         int total = 0;
@@ -114,14 +132,17 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
     }
 
     @Override
-    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+    public void unregisterAdapterDataObserver(android.support.v7.widget.RecyclerView.AdapterDataObserver observer) {
         super.unregisterAdapterDataObserver(observer);
         for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
             mRecyclerViewClicks.get(i).unregisterAdapterDataObserver(mHomeAdapterDataObservers.get(i));
         }
     }
 
-    static class HomeAdapterDataObserver extends RecyclerView.AdapterDataObserver{
+    /**
+     * 私有订阅
+     */
+    static class HomeAdapterDataObserver extends android.support.v7.widget.RecyclerView.AdapterDataObserver{
         private RecyclerViewClick mRecyclerViewClick;
         private int mPositionStart = -1;
         public HomeAdapterDataObserver(RecyclerViewClick recyclerViewClick, int position) {

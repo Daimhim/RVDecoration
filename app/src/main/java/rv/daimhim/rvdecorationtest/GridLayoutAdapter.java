@@ -60,6 +60,11 @@ public class GridLayoutAdapter extends RecyclerViewClick<GridLayoutAdapter.GridL
         return mStrings.get(position);
     }
 
+    @Override
+    public void onLoad(List<String> strings) {
+
+    }
+
     class GridLayoutViewHolder extends RecyclerViewClick.ClickViewHolder {
         @BindView(R.id.tv_content)
         TextView mTvContent;

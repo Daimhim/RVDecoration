@@ -63,6 +63,11 @@ public class StaggeredGridLayoutAdapter extends RecyclerViewClick<StaggeredGridL
         return mStrings.get(position);
     }
 
+    @Override
+    public void onLoad(List<String> strings) {
+
+    }
+
     class StaggeredGridLayoutViewHolder extends RecyclerViewClick.ClickViewHolder {
         @BindView(R.id.tv_content)
         TextView mTvContent;

@@ -62,6 +62,11 @@ public class LinearLayoutAdapter extends RecyclerViewClick<LinearLayoutAdapter.L
         return mStrings.get(position);
     }
 
+    @Override
+    public void onLoad(List<String> strings) {
+
+    }
+
     class LinearLayoutViewholder extends RecyclerViewClick.ClickViewHolder {
         @BindView(R.id.tv_content)
         TextView mTvContent;

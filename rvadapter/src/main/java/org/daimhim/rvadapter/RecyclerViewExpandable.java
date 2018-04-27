@@ -18,7 +18,8 @@ import android.view.ViewGroup;
  * @author Daimhim
  */
 
-public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.ClickViewHolder, VHC extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewEmpty<RecyclerViewClick.ClickViewHolder> {
+public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.ClickViewHolder, VHC extends RecyclerViewClick.ClickViewHolder>
+        extends RecyclerViewEmpty<RecyclerViewClick.ClickViewHolder> {
     private RecyclerContract.OnGroupItemClickListener mOnGroupItemClickListeners;
     private RecyclerContract.OnGroupItemLongClickListener mOnGroupItemLongClickListener;
 
