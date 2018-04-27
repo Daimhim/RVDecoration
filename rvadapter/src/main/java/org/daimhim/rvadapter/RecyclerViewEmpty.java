@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewClick<VH> implements RecyclerContract.EmptyContract<VH> {
 
     @Override
-    public final VH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isEmptyView(parent, viewType)) {
             return onCreateEmptyViewHolder(parent, viewType);
         } else {
@@ -27,7 +27,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     }
 
     @Override
-    public final void onBindViewHolder(VH holder, int position) {
+    public void onBindViewHolder(VH holder, int position) {
         if (isEmptyView(holder, position)) {
             onBindEmptyViewHolder(holder, position);
         } {
@@ -42,7 +42,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * @return 总数
      */
     @Override
-    public final int getItemCount() {
+    public int getItemCount() {
         if (isEmptyView()) {
             return 1 + getDataItemCount();
         } else {
