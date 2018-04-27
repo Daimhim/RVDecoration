@@ -24,11 +24,11 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     /**
      * 点击事件
      */
-    private RecyclerContract.OnItemClickListener mOnItemClickListener;
+    protected RecyclerContract.OnItemClickListener mOnItemClickListener;
     /**
      * 长点击事件
      */
-    private RecyclerContract.OnItemLongClickListener mOnItemLongClickListener;
+    protected RecyclerContract.OnItemLongClickListener mOnItemLongClickListener;
 
     /**
      * set点击事件
