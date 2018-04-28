@@ -42,9 +42,8 @@ public interface RecyclerContract {
 
     /**
      * 空界面
-     * @param <VH> p
      */
-    interface EmptyContract<VH extends RecyclerViewClick.ClickViewHolder> {
+    interface EmptyContract {
         /**
          * 是否空页面
          * @return true Y false N
@@ -56,7 +55,7 @@ public interface RecyclerContract {
          * @param holder  一个Item单元
          * @param position  位置
          */
-        void onBindEmptyViewHolder(VH holder, int position);
+        void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position);
 
         /**
          * 设置空页面
@@ -64,7 +63,7 @@ public interface RecyclerContract {
          * @param viewType 类型
          * @return 视图
          */
-        VH onCreateEmptyViewHolder(ViewGroup parent, int viewType);
+        RecyclerViewClick.ClickViewHolder onCreateEmptyViewHolder(ViewGroup parent, int viewType);
     }
 
     /**
