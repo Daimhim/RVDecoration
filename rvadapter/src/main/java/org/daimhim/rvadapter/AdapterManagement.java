@@ -98,6 +98,14 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
     }
 
     /**
+     * 查找
+     * @param recyclerViewClick 被查找对象
+     * @return 位置 或者 -1
+     */
+    public int indexOf(RecyclerViewClick recyclerViewClick){
+        return mRecyclerViewClicks.indexOf(recyclerViewClick);
+    }
+    /**
      * 移除
      * @param recyclerViewClick adapter
      */
