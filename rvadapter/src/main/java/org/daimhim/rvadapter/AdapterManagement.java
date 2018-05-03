@@ -1,6 +1,10 @@
 package org.daimhim.rvadapter;
 
 
+import android.support.v4.util.ArraySet;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
+
 import java.util.ArrayList;
 
 /**
@@ -16,15 +20,16 @@ import java.util.ArrayList;
  */
 
 public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.ClickViewHolder>
-        implements RecyclerContract.SimpleContract<ArrayList<RecyclerViewClick>, RecyclerViewClick> {
+        implements RecyclerContract.SimpleContract<ArrayList<RecyclerViewClick<RecyclerViewClick.ClickViewHolder>>, RecyclerViewClick> {
+
     /**
      * adapter manage
      */
-    private ArrayList<RecyclerViewClick> mRecyclerViewClicks;
+    private ArrayList<RecyclerViewClick<RecyclerViewClick.ClickViewHolder>> mRecyclerViewClicks;
     /**
      * adapter 订阅
      */
-    private ArrayList<HomeAdapterDataObserver> mHomeAdapterDataObservers;
+    private ArrayList<AdapterManagementDataObserver> mHomeAdapterDataObservers;
     /**
      * 当前位置
      */
@@ -38,7 +43,7 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
     @Override
     public ClickViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
         android.util.Pair<Integer, Integer> integerIntegerPair = indexOfPosition(mCurrentPosition);
-        return (ClickViewHolder) mRecyclerViewClicks.get(integerIntegerPair.first).onCreateViewHolder(parent, viewType);
+        return mRecyclerViewClicks.get(integerIntegerPair.first).onCreateViewHolder(parent, viewType);
     }
 
     @Override
@@ -85,32 +90,51 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
      * @param recyclerViewClick adapter
      */
     public void addAdapter(RecyclerViewClick recyclerViewClick) {
+        recyclerViewClick.setBaseCount(getItemCount());
         mRecyclerViewClicks.add(recyclerViewClick);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(getItemCount(),recyclerViewClick.getItemCount());
+        modifyBase();
     }
 
     /**
      * 移除
+     *
      * @param position adapter
      */
-    public void removeAdapter(int position){
+    public void removeAdapter(int position) {
         mRecyclerViewClicks.remove(position);
+        modifyBase();
+    }
+
+    /**
+     * 在数量发生变化时 更新每个adapter在manager中的位置
+     */
+    public void modifyBase(){
+        int num = 0;
+        for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
+            mRecyclerViewClicks.get(i).setBaseCount(num);
+            num += mRecyclerViewClicks.get(i).getItemCount();
+        }
     }
 
     /**
      * 查找
+     *
      * @param recyclerViewClick 被查找对象
      * @return 位置 或者 -1
      */
-    public int indexOf(RecyclerViewClick recyclerViewClick){
+    public int indexOf(RecyclerViewClick recyclerViewClick) {
         return mRecyclerViewClicks.indexOf(recyclerViewClick);
     }
+
     /**
      * 移除
+     *
      * @param recyclerViewClick adapter
      */
-    public void removeAdapter(RecyclerViewClick recyclerViewClick){
+    public void removeAdapter(RecyclerViewClick recyclerViewClick) {
         mRecyclerViewClicks.remove(recyclerViewClick);
+        modifyBase();
     }
 
     @Override
@@ -154,11 +178,11 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
     @Override
     public void registerAdapterDataObserver(android.support.v7.widget.RecyclerView.AdapterDataObserver observer) {
         super.registerAdapterDataObserver(observer);
-        HomeAdapterDataObserver homeAdapterDataObserver = null;
+        AdapterManagementDataObserver homeAdapterDataObserver = null;
         int total = 0;
         for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
             total += mRecyclerViewClicks.get(i).getItemCount();
-            homeAdapterDataObserver = new HomeAdapterDataObserver(this, total);
+            homeAdapterDataObserver = new AdapterManagementDataObserver(this, total);
             mRecyclerViewClicks.get(i).registerAdapterDataObserver(homeAdapterDataObserver);
             mHomeAdapterDataObservers.add(homeAdapterDataObserver);
         }
@@ -173,19 +197,19 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
     }
 
     @Override
-    public void onRefresh(ArrayList<RecyclerViewClick> recyclerViewClicks) {
+    public void onRefresh(ArrayList<RecyclerViewClick<RecyclerViewClick.ClickViewHolder>> recyclerViewClicks) {
         mRecyclerViewClicks.clear();
         mRecyclerViewClicks.addAll(recyclerViewClicks);
         notifyDataSetChanged();
     }
 
     @Override
-    public RecyclerViewClick getItem(int position) {
+    public RecyclerViewClick<RecyclerViewClick.ClickViewHolder> getItem(int position) {
         return mRecyclerViewClicks.get(position);
     }
 
     @Override
-    public void onLoad(ArrayList<RecyclerViewClick> recyclerViewClicks) {
+    public void onLoad(ArrayList<RecyclerViewClick<RecyclerViewClick.ClickViewHolder>> recyclerViewClicks) {
         mRecyclerViewClicks.addAll(recyclerViewClicks);
         notifyDataSetChanged();
     }
@@ -193,11 +217,11 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
     /**
      * 私有订阅
      */
-    static class HomeAdapterDataObserver extends android.support.v7.widget.RecyclerView.AdapterDataObserver {
+    static class AdapterManagementDataObserver extends android.support.v7.widget.RecyclerView.AdapterDataObserver {
         private RecyclerViewClick mRecyclerViewClick;
         private int mPositionStart = -1;
 
-        public HomeAdapterDataObserver(RecyclerViewClick recyclerViewClick, int position) {
+        public AdapterManagementDataObserver(RecyclerViewClick recyclerViewClick, int position) {
             mRecyclerViewClick = recyclerViewClick;
             mPositionStart = position;
         }
@@ -230,6 +254,21 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
         @Override
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
             mRecyclerViewClick.notifyItemMoved(fromPosition, toPosition);
+        }
+    }
+
+    class ViewTypeHelp{
+        private SparseIntArray mSparseIntArray;
+        private SparseArray<ArrayList<Integer>> mListSparseArray;
+
+        public void updated(){
+            int itemType = 0;
+            for (int i = 0; i < mListSparseArray.size(); i++) {
+                for (int j = 0; j < mListSparseArray.valueAt(i).size(); j++) {
+//                    mSparseIntArray.put(itemType,);
+                    itemType++;
+                }
+            }
         }
     }
 }
