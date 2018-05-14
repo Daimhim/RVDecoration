@@ -11,7 +11,7 @@
 		android:supportsRtl="true"
 		android:theme="@style/Theme.AppCompat"
 		tools:ignore="GoogleAppIndexingWarning">
-		<activity android:name=".MainActivity">
+		<activity android:name=".recyclerviewexpandable.RecyclerViewExpandableClass">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				

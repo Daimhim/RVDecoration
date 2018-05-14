@@ -263,10 +263,14 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
 
         public void updated(){
             int itemType = 0;
+            int position = 0;
+            ArrayList<Integer> integers = null;
             for (int i = 0; i < mListSparseArray.size(); i++) {
-                for (int j = 0; j < mListSparseArray.valueAt(i).size(); j++) {
-//                    mSparseIntArray.put(itemType,);
-                    itemType++;
+                integers = mListSparseArray.valueAt(i);
+                for (int j = 0; j < integers.size(); j++) {
+                    int integer = integers.get(j);
+//                    mSparseIntArray.put(position,);
+                    position++;
                 }
             }
         }

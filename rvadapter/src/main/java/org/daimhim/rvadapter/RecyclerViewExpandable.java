@@ -128,13 +128,13 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
     @Override
     public final void onBindDataViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
-        int ofValue = mSparseArray.indexOfValue(position);
+        int lViewType = getItemViewType(position);
+        Pair<Integer, Integer> integerPair = indexOfPosition(position);
         if (holder == null) {return;}
-        if (ofValue < 0) {
-            Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        if (lViewType > 0) {
             onBindChildViewHolder((VHC) holder, integerPair.first, integerPair.second);
         } else {
-            onBindGroupViewHolder((VHG) holder, ofValue);
+            onBindGroupViewHolder((VHG) holder, integerPair.first);
         }
     }
 
@@ -149,12 +149,11 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
     @Override
     public final int getItemViewType(int position) {
-        int ofValue = mSparseArray.indexOfValue(position);
-        if (ofValue < 0) {
-            Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        if (integerPair.second == 0) {
             return checkParameters(getChildItemViewType(integerPair.first, integerPair.second));
         } else {
-            return checkParameters(-getGroupItemViewType(ofValue));
+            return checkParameters(-getGroupItemViewType(integerPair.first));
         }
     }
 
