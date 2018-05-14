@@ -76,6 +76,9 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
             if (num > position) {
                 num -= getChildrenCount(i);
                 num--;
+                if (num == position) {
+                    return new Pair<>(i, -1);
+                }
                 for (int j = 0; j < getChildrenCount(i); j++) {
                     num++;
                     if (num == position) {
@@ -119,10 +122,10 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
     @Override
     public final RecyclerViewClick.ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
-        if (viewType < 0) {
-            return onCreateGroupViewHolder(parent, viewType);
-        } else {
+        if (viewType > 0) {
             return onCreateChildViewHolder(parent, viewType);
+        } else {
+            return onCreateGroupViewHolder(parent, viewType);
         }
     }
 
@@ -150,21 +153,20 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     @Override
     public final int getItemViewType(int position) {
         Pair<Integer, Integer> integerPair = indexOfPosition(position);
-        if (integerPair.second == 0) {
-            return checkParameters(getChildItemViewType(integerPair.first, integerPair.second));
-        } else {
+        if (integerPair.second == -1) {
             return checkParameters(-getGroupItemViewType(integerPair.first));
+        } else {
+            return checkParameters(getChildItemViewType(integerPair.first, integerPair.second));
         }
     }
 
     @Override
     public long getItemId(int position) {
-        int ofValue = mSparseArray.indexOfValue(position);
-        if (ofValue < 0) {
-            Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        if (getItemViewType(position) > 0) {
             return getChildItemId(integerPair.first, integerPair.second);
         } else {
-            return getGroupItemId(ofValue);
+            return getGroupItemId(integerPair.first);
         }
     }
 

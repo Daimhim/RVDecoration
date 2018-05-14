@@ -34,7 +34,6 @@ implements RecyclerContract.ExpandableContract<SimpleArrayMap<String,List<String
         mContext = pContext;
         mArrayMap = new SimpleArrayMap<>();
         notifyPositionChanged();
-        notifyDataSetChanged();
     }
 
     @Override
