@@ -36,6 +36,15 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
         }
     }
 
+    @Override
+    public final int getItemViewType(int position) {
+        if (isEmptyView(position)){
+            return getEmptyViewType();
+        }else {
+            return getDataItemViewType(position);
+        }
+    }
+
     /**
      * 获取Item数量 可能会有头部和尾部 所以加上数据长度以便扩充
      * 而是否空页面的决定在于isEmptyView
@@ -61,12 +70,24 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
         return false;
     }
 
+    public boolean isEmptyView(int position) {
+        return isEmptyView();
+    }
+
     public boolean isEmptyView(RecyclerViewClick.ClickViewHolder holder, int position) {
         return isEmptyView();
     }
 
     public boolean isEmptyView(ViewGroup parent, int viewType) {
         return isEmptyView();
+    }
+
+    /**
+     * 获取空界面Type
+     * @return 空界面Type
+     */
+    public int getEmptyViewType(){
+        return 0;
     }
 
     /**
@@ -92,6 +113,14 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
         return null;
     }
 
+    /**
+     * 获取布局ViewType
+     * @param position
+     * @return
+     */
+    public int getDataItemViewType(int position){
+        return 0;
+    }
     /**
      * 数据加载页面
      *

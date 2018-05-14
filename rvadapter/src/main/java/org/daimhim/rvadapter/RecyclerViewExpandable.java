@@ -151,7 +151,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     @Override
-    public final int getItemViewType(int position) {
+    public int getDataItemViewType(int position) {
         Pair<Integer, Integer> integerPair = indexOfPosition(position);
         if (integerPair.second == -1) {
             return checkParameters(-getGroupItemViewType(integerPair.first));
@@ -277,12 +277,11 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
      */
     @Override
     public void onItemClick(View view, int position) {
-        int ofValue = mSparseArray.indexOfValue(position);
-        if (ofValue < 0 && mOnChildItemClickListeners != null) {
-            Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        if (getItemViewType(position) > 0 && mOnChildItemClickListeners != null) {
             mOnChildItemClickListeners.onChildItemClick(view, integerPair.first, integerPair.second);
-        } else if (ofValue > 0 && mOnGroupItemClickListeners != null) {
-            mOnGroupItemClickListeners.onGroupItemClick(view, ofValue);
+        } else if (getItemViewType(position) < 0 && mOnGroupItemClickListeners != null) {
+            mOnGroupItemClickListeners.onGroupItemClick(view, integerPair.first);
         }
     }
 

@@ -67,6 +67,11 @@ implements RecyclerContract.ExpandableContract<SimpleArrayMap<String,List<String
     }
 
     @Override
+    public boolean isEmptyView() {
+        return getGroupCount() == 0;
+    }
+
+    @Override
     public void onRefresh(SimpleArrayMap<String, List<String>> ts) {
         mArrayMap.clear();
         mArrayMap.putAll(ts);
