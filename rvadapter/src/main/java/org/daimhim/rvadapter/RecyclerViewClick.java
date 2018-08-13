@@ -11,11 +11,11 @@ import android.view.View;
  * 修改人：Daimhim
  * 修改时间：2017/12/24 16:30
  * 类描述：
- * 修改备注：
+ * 修改备注：该类仅限制内部使用，请用RecyclerViewEmpty替换
  *
  * @author Daimhim
  */
-
+@Deprecated
 public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHolder> extends android.support.v7.widget.RecyclerView.Adapter<VH> {
     /**
      * 扩展属性，用于adapter manager

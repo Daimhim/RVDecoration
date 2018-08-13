@@ -52,29 +52,6 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
         mRecyclerViewClicks.get(integerIntegerPair.first).onBindViewHolder(holder, integerIntegerPair.second);
     }
 
-    /**
-     * 应急
-     *
-     * @param viewType 查找类型
-     * @return 位置
-     */
-    private android.util.Pair<Integer, Integer> findViewType(int viewType) {
-        for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
-            for (int j = 0; j < mRecyclerViewClicks.get(i).getItemCount(); j++) {
-                int itemViewType = mRecyclerViewClicks.get(i).getItemViewType(j);
-                if (itemViewType > 0) {
-                    itemViewType += i;
-                } else {
-                    itemViewType += (0 - i);
-                }
-                if (viewType == itemViewType) {
-                    return new android.util.Pair<>(i, j);
-                }
-            }
-        }
-        return new android.util.Pair<>(-1, -1);
-    }
-
     @Override
     public int getItemCount() {
         int total = 0;
@@ -219,6 +196,9 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
      */
     static class AdapterManagementDataObserver extends android.support.v7.widget.RecyclerView.AdapterDataObserver {
         private RecyclerViewClick mRecyclerViewClick;
+        /**
+         * 当前adapter的起始位置
+         */
         private int mPositionStart = -1;
 
         public AdapterManagementDataObserver(RecyclerViewClick recyclerViewClick, int position) {
@@ -253,7 +233,7 @@ public class AdapterManagement extends RecyclerViewClick<RecyclerViewClick.Click
 
         @Override
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
-            mRecyclerViewClick.notifyItemMoved(fromPosition, toPosition);
+            mRecyclerViewClick.notifyItemMoved(mPositionStart + fromPosition, mPositionStart + toPosition);
         }
     }
 
