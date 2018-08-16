@@ -327,6 +327,27 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     public void setOnChildItemLongClickListener(RecyclerContract.OnChildItemLongClickListener onChildItemLongClickListener) {
         mOnChildItemLongClickListener = onChildItemLongClickListener;
     }
+    /**
+     * get GroupItemClick
+     * @return child click
+     */
+    public RecyclerContract.OnGroupItemClickListener getOnGroupItemClickListeners() {
+        return mOnGroupItemClickListeners;
+    }
+    /**
+     * get GroupItemLongClick
+     * @return child click
+     */
+    public RecyclerContract.OnGroupItemLongClickListener getOnGroupItemLongClickListener() {
+        return mOnGroupItemLongClickListener;
+    }
+    /**
+     * get ChildItemLongClick
+     * @return child click
+     */
+    public RecyclerContract.OnChildItemLongClickListener getOnChildItemLongClickListener() {
+        return mOnChildItemLongClickListener;
+    }
 
     /**
      * check View Type
