@@ -30,9 +30,6 @@ ext{
     TARGET_SDK_VERSION = 23
 
     LIB_VERSION = '25.4.0'
-
-    RVADAPTER_VERSIONCODE = 116
-    RVADAPTER_VERSIONNAME = "1.1.6"
 }
 
 task clean(type: Delete) {
