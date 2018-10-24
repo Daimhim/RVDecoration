@@ -102,7 +102,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     /**
      * 实现了点击事件
      */
-    public static class ClickViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
+    public static class ClickViewHolder<T> extends android.support.v7.widget.RecyclerView.ViewHolder {
         View.OnClickListener mOnClickListener;
         View.OnLongClickListener mOnLongClickListener;
         RecyclerViewClick mRecyclerViewClick;
@@ -159,7 +159,8 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
             return true;
         }
 
-
+        protected void onRefresh(T t) {
+        }
     }
 
 }

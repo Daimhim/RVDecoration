@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewClick;
+import org.daimhim.rvadapter.RecyclerViewEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,7 @@ public class LinearLayoutAdapter extends RecyclerViewClick<LinearLayoutAdapter.L
 
     }
 
-    class LinearLayoutViewholder extends RecyclerViewClick.ClickViewHolder {
+    class LinearLayoutViewholder extends RecyclerViewEmpty.ClickViewHolder {
         @BindView(R.id.tv_content)
         TextView mTvContent;
         public LinearLayoutViewholder(View itemView) {
