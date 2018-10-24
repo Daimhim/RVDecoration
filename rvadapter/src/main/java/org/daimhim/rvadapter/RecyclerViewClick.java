@@ -159,7 +159,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
             return true;
         }
 
-        protected void onRefresh(T t) {
+        public void onRefresh(T t) {
         }
     }
 
