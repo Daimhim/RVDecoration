@@ -3,6 +3,8 @@ package org.daimhim.rvadapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.ref.SoftReference;
+
 /**
  * 项目名称：org.daimhim.rvadapter
  * 项目版本：RVDecoration
@@ -25,7 +27,7 @@ public interface RecyclerContract {
          * @param view View
          * @param position position
          */
-        void onItemClick(View view, int position);
+        void onItemClick(RecyclerViewClick pRecyclerViewClick,View view, int position);
     }
 
     /**
@@ -37,7 +39,7 @@ public interface RecyclerContract {
          * @param view  view
          * @param position position
          */
-        void onItemLongClick(View view, int position);
+        void onItemLongClick(RecyclerViewClick pRecyclerViewClick,View view, int position);
     }
 
     /**
@@ -225,5 +227,42 @@ public interface RecyclerContract {
          * @param ts 数据
          */
         void onLoad(Ts ts);
+    }
+
+
+    class RecyclerClickListener implements View.OnClickListener {
+        private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
+        private int mPosition = -1;
+        @Override
+        public void onClick(View v) {
+            if (null != mRecyclerViewClickSoftReference.get()) {
+                mRecyclerViewClickSoftReference.get().onItemClick(v, mPosition);
+            }
+        }
+        public void setPositionRecyclerView(SoftReference<RecyclerViewClick> pRecyclerViewClickSoftReference,int pPosition) {
+            mRecyclerViewClickSoftReference = pRecyclerViewClickSoftReference;
+            mPosition = pPosition;
+        }
+    }
+    class RecyclerLongClickListener implements View.OnLongClickListener {
+        private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
+        private int mPosition = -1;
+        @Override
+        public boolean onLongClick(View v) {
+            if (null != mRecyclerViewClickSoftReference.get()) {
+                mRecyclerViewClickSoftReference.get().onItemLongClick(v, mPosition);
+            }
+            return false;
+        }
+
+        public void setPositionRecyclerView(SoftReference<RecyclerViewClick> pRecyclerViewClickSoftReference,int pPosition) {
+            mRecyclerViewClickSoftReference = pRecyclerViewClickSoftReference;
+            mPosition = pPosition;
+        }
+    }
+
+    interface Preload{
+        void initial();
+        void load();
     }
 }

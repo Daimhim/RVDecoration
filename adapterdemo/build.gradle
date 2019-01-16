@@ -3,40 +3,35 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
+
     defaultConfig {
+        applicationId "org.daimhim.adapterdemo"
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode 100
-        versionName "1.0.0"
-        applicationId "rv.daimhim.rvdecorationtest"
+        versionCode 1
+        versionName "1.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
 }
 
 dependencies {
-    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     testImplementation rootProject.ext.dependencies.libJunit
     androidTestImplementation rootProject.ext.dependencies.libRunner
     androidTestImplementation rootProject.ext.dependencies.libEspressoCore
-    implementation rootProject.ext.dependencies.libButterKnife
-    annotationProcessor rootProject.ext.dependencies.libButterknifeCompiler
     implementation rootProject.ext.dependencies.libConstraintLayout
     implementation rootProject.ext.dependencies.libAppCompatV7
-    implementation rootProject.ext.dependencies.libRecyclerViewV7
-    implementation rootProject.ext.dependencies.libDesign
-    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-3'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.google.dagger:dagger:2.15'
     implementation project(':rvdecoration')
     implementation project(':rvadapter')
-
 }
-

@@ -1,6 +1,14 @@
 package org.daimhim.rvadapter;
 
+import android.util.SparseArray;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.lang.ref.SoftReference;
 
 
 /**
@@ -61,7 +69,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      */
     public void onItemClick(View view, int position) {
         if (null != pOnItemClickListener) {
-            pOnItemClickListener.onItemClick(view, position - getBaseCount());
+            pOnItemClickListener.onItemClick(this,view, position - getBaseCount());
         }
     }
 
@@ -73,7 +81,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      */
     public void onItemLongClick(View view, int position) {
         if (null != pOnItemLongClickListener) {
-            pOnItemLongClickListener.onItemLongClick(view, position - getBaseCount());
+            pOnItemLongClickListener.onItemLongClick(this,view, position - getBaseCount());
         }
     }
 
@@ -82,7 +90,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         super.onViewRecycled(holder);
         holder.mOnClickListener = null;
         holder.mOnLongClickListener = null;
-        holder.mRecyclerViewClick = null;
     }
 
     /**
@@ -105,10 +112,12 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     public static class ClickViewHolder<T> extends android.support.v7.widget.RecyclerView.ViewHolder {
         View.OnClickListener mOnClickListener;
         View.OnLongClickListener mOnLongClickListener;
-        RecyclerViewClick mRecyclerViewClick;
+        private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
+        private SparseArray<View> mViews;
 
         public ClickViewHolder(View itemView) {
             super(itemView);
+            mViews = new SparseArray<>();
         }
 
         /**
@@ -121,12 +130,12 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick) {
             //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
             if (mOnClickListener == null) {
-                mRecyclerViewClick = recyclerViewClick;
+                mRecyclerViewClickSoftReference = new SoftReference<>(recyclerViewClick);
                 mOnClickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (null != mRecyclerViewClick) {
-                            mRecyclerViewClick.onItemClick(v, getLayoutPosition());
+                        if (null != mRecyclerViewClickSoftReference.get()) {
+                            mRecyclerViewClickSoftReference.get().onItemClick(v, getLayoutPosition());
                         }
                     }
                 };
@@ -143,13 +152,14 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * @return is set success
          */
         public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick) {
+
             if (mOnLongClickListener == null) {
-                mRecyclerViewClick = recyclerViewClick;
+                mRecyclerViewClickSoftReference = new SoftReference<>(recyclerViewClick);
                 mOnLongClickListener = new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        if (null != mRecyclerViewClick) {
-                            mRecyclerViewClick.onItemLongClick(v, getLayoutPosition());
+                        if (null != mRecyclerViewClickSoftReference.get()) {
+                            mRecyclerViewClickSoftReference.get().onItemLongClick(v, getLayoutPosition());
                         }
                         return false;
                     }
@@ -161,6 +171,59 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
 
         public void onRefresh(T t) {
         }
+
+        @SuppressWarnings("unchecked")
+        private <V extends View> V findViewById(int viewId) {
+            View view = mViews.get(viewId);
+            if (view == null) {
+                view = itemView.findViewById(viewId);
+                mViews.put(viewId, view);
+            }
+            return (V) view;
+        }
+
+        public View getView(int viewId) {
+            return findViewById(viewId);
+        }
+
+        public TextView getTextView(int viewId) {
+            return (TextView) getView(viewId);
+        }
+
+        public Button getButton(int viewId) {
+            return (Button) getView(viewId);
+        }
+
+        public ImageView getImageView(int viewId) {
+            return (ImageView) getView(viewId);
+        }
+
+        public ImageButton getImageButton(int viewId) {
+            return (ImageButton) getView(viewId);
+        }
+
+        public EditText getEditText(int viewId) {
+            return (EditText) getView(viewId);
+        }
+
+        public ClickViewHolder setText(int viewId, String value) {
+            TextView view = findViewById(viewId);
+            view.setText(value);
+            return this;
+        }
+
+        public ClickViewHolder setBackground(int viewId, int resId) {
+            View view = findViewById(viewId);
+            view.setBackgroundResource(resId);
+            return this;
+        }
+
+        public ClickViewHolder setClickListener(int viewId, View.OnClickListener listener) {
+            View view = findViewById(viewId);
+            view.setOnClickListener(listener);
+            return this;
+        }
+
     }
 
 }

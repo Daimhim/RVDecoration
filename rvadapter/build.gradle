@@ -1,15 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.COMPILE_SDK_VERSION
-    buildToolsVersion rootProject.ext.BUILD_TOOLS_VERSION
-
-
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
     defaultConfig {
-        minSdkVersion rootProject.ext.MIN_SDK_VERSION
-        targetSdkVersion rootProject.ext.TARGET_SDK_VERSION
-        versionCode 117
-        versionName "1.1.7"
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode 118
+        versionName "1.1.8"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -28,10 +26,10 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation "com.android.support:recyclerview-v7:$rootProject.ext.LIB_VERSION"
+    testImplementation rootProject.ext.dependencies.libJunit
+    androidTestImplementation rootProject.ext.dependencies.libRunner
+    androidTestImplementation rootProject.ext.dependencies.libEspressoCore
+    debugImplementation rootProject.ext.dependencies.libRecyclerViewV7
 }
 
 
