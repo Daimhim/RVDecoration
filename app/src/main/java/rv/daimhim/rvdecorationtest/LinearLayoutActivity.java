@@ -16,6 +16,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.daimhim.rvadapter.RecyclerContract;
+import org.daimhim.rvadapter.RecyclerViewClick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +84,7 @@ public class LinearLayoutActivity extends AppCompatActivity implements OnRefresh
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(RecyclerViewClick pRecyclerViewClick, View view, int position) {
         Toast.makeText(mContext,"position:"+position,Toast.LENGTH_SHORT).show();
     }
 }
