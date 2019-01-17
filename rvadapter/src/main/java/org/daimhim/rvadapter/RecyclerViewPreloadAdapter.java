@@ -68,34 +68,47 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
         public T getItem(int position) {
             return super.getItem(position);
         }
+
+
     }
 
 
     public RecyclerViewPreloadAdapter(DataSource<K, T> dataSource, boolean isAsync) {
+        final RecyclerViewPreloadAdapter<K, T, VH> ktvhRecyclerViewPreloadAdapterl = this;
         if (isAsync) {
             mKTVHPreloadPagedListAdapter = new PreloadPagedListAdapter<>(new AsyncDifferConfig.Builder<T>(new DiffUtil.ItemCallback<T>() {
                 @Override
                 public boolean areItemsTheSame(T oldItem, T newItem) {
-                    return RecyclerViewPreloadAdapter.this.areItemsTheSame(oldItem, newItem);
+                    return ktvhRecyclerViewPreloadAdapterl.areItemsTheSame(oldItem, newItem);
                 }
 
                 @Override
                 public boolean areContentsTheSame(T oldItem, T newItem) {
-                    return RecyclerViewPreloadAdapter.this.areContentsTheSame(oldItem, newItem);
+                    return ktvhRecyclerViewPreloadAdapterl.areContentsTheSame(oldItem, newItem);
                 }
-            }).build(), this);
+
+                @Override
+                public Object getChangePayload(T oldItem, T newItem) {
+                    return ktvhRecyclerViewPreloadAdapterl.getChangePayload(oldItem, newItem);
+                }
+            }).build(), ktvhRecyclerViewPreloadAdapterl);
         } else {
             mKTVHPreloadPagedListAdapter = new PreloadPagedListAdapter<>(new DiffUtil.ItemCallback<T>() {
                 @Override
                 public boolean areItemsTheSame(T oldItem, T newItem) {
-                    return RecyclerViewPreloadAdapter.this.areItemsTheSame(oldItem, newItem);
+                    return ktvhRecyclerViewPreloadAdapterl.areItemsTheSame(oldItem, newItem);
                 }
 
                 @Override
                 public boolean areContentsTheSame(T oldItem, T newItem) {
-                    return RecyclerViewPreloadAdapter.this.areContentsTheSame(oldItem, newItem);
+                    return ktvhRecyclerViewPreloadAdapterl.areContentsTheSame(oldItem, newItem);
                 }
-            }, this);
+
+                @Override
+                public Object getChangePayload(T oldItem, T newItem) {
+                    return ktvhRecyclerViewPreloadAdapterl.getChangePayload(oldItem, newItem);
+                }
+            }, ktvhRecyclerViewPreloadAdapterl);
         }
         mKTVHPreloadPagedListAdapter.submitList(getPagedList(dataSource));
     }
@@ -125,8 +138,12 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
                 .build();
     }
 
+    public PreloadPagedListAdapter<K, T, VH> getmKTVHPreloadPagedListAdapter() {
+        return mKTVHPreloadPagedListAdapter;
+    }
+
     public void onRefresh(){
-        mKTVHPreloadPagedListAdapter.submitList(null);
+//        mKTVHPreloadPagedListAdapter.submitList(null);
     }
 
     public K getInitialKey() {
@@ -139,6 +156,8 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
 
     public PagedList.Config getPagedListConfig() {
         return new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(getPageSize())
+                .setPrefetchDistance(getPageSize())
                 .setPageSize(getPageSize())
                 .build();
     }
@@ -168,5 +187,8 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
 
     public boolean areContentsTheSame(T oldItem, T newItem) {
         return false;
+    }
+    public Object getChangePayload(T oldItem, T newItem) {
+        return null;
     }
 }
