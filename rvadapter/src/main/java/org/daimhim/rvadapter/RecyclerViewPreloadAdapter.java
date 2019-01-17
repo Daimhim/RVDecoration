@@ -125,6 +125,10 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
                 .build();
     }
 
+    public void onRefresh(){
+        mKTVHPreloadPagedListAdapter.submitList(null);
+    }
+
     public K getInitialKey() {
         return null;
     }

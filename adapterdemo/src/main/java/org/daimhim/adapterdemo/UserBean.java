@@ -13,6 +13,15 @@ package org.daimhim.adapterdemo;
  */
 public class UserBean {
     private String name;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String pId) {
+        id = pId;
+    }
 
     @Override
     public String toString() {

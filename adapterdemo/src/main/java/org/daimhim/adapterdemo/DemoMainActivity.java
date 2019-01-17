@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import timber.log.Timber;
 
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView mRvRecyclerview;
     private SwipeRefreshLayout mSrlRefresh;
@@ -45,14 +45,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 for (int i = 0; i < params.requestedLoadSize; i++) {
                     lBean = new UserBean();
                     lBean.setName("loadInitial:Name:"+i);
+                    lBean.setId(""+i);
                     lUserBeans.add(lBean);
                 }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.onResult(lUserBeans,1,2);
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+                        callback.onResult(lUserBeans,0,1);
+//                    }
+//                }).start();
             }
 
             @Override
@@ -65,17 +66,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 Timber.i("loadAfter key:%s requestedLoadSize:%s", params.key,params.requestedLoadSize);
                 final ArrayList<UserBean> lUserBeans = new ArrayList<>();
                 UserBean lBean = null;
-                for (int i = 0; i < 15; i++) {
+                for (int i = 0; i < params.requestedLoadSize; i++) {
                     lBean = new UserBean();
-                    lBean.setName("loadAfter:Name:"+i);
+                    lBean.setName("loadAfter:Name:"+(i*params.key));
+                    lBean.setId(""+i);
                     lUserBeans.add(lBean);
                 }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
                         callback.onResult(lUserBeans,params.key+1);
-                    }
-                }).start();
+//                    }
+//                }).start();
             }
         };
         mPreloadAdapter = new RecyclerViewPreloadAdapter<Integer, UserBean, RecyclerViewEmpty.ClickViewHolder>(mBeanDataSource,false) {
@@ -87,25 +89,29 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
 
             @Override
+            public boolean areItemsTheSame(UserBean oldItem, UserBean newItem) {
+                return oldItem.getId().equals(newItem.getId());
+            }
+
+            @Override
+            public boolean areContentsTheSame(UserBean oldItem, UserBean newItem) {
+                return oldItem.getId().equals(newItem.getId());
+            }
+
+            @Override
             public void onBindDataViewHolder(ClickViewHolder holder, int position) {
                 UserBean lItem = getItem(position);
                 holder.getTextView(R.id.tv_content).setText(lItem.getName());
             }
 
-//            @SuppressLint("RestrictedApi")
-//            @Override
-//            protected PagedList<UserBean> getPagedList(DataSource<Integer, UserBean> dataSource) {
-//                return new PagedList.Builder<>(dataSource,getPageSize())
-//                        .setInitialKey(getInitialKey())
-//
-//                        .setNotifyExecutor(ArchTaskExecutor.getMainThreadExecutor())
-//                        .setFetchExecutor(ArchTaskExecutor.getIOThreadExecutor())
-//                        .build();
-//            }
+            @Override
+            public int getPageSize() {
+                return 5;
+            }
 
             @Override
             public Integer getInitialKey() {
-                return 1;
+                return 0;
             }
         };
         mRvRecyclerview.setAdapter(mPreloadAdapter);
@@ -120,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     @Override
     public void onRefresh() {
-        mBeanDataSource.invalidate();
+        mPreloadAdapter.onRefresh();
         mSrlRefresh.setRefreshing(false);
     }
 }
