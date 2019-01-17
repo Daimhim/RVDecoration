@@ -1,9 +1,12 @@
 package org.daimhim.rvadapter;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.ref.SoftReference;
+import java.util.List;
 
 /**
  * 项目名称：org.daimhim.rvadapter
@@ -14,6 +17,7 @@ import java.lang.ref.SoftReference;
  * 修改时间：2017/12/25 15:20
  * 类描述：
  * 修改备注：
+ *
  * @author Daimhim
  */
 
@@ -24,22 +28,24 @@ public interface RecyclerContract {
     interface OnItemClickListener {
         /**
          * 点击事件
-         * @param view View
+         *
+         * @param view     View
          * @param position position
          */
-        void onItemClick(RecyclerViewClick pRecyclerViewClick,View view, int position);
+        void onItemClick(RecyclerViewClick pRecyclerViewClick, View view, int position);
     }
 
     /**
-     *  提供给外部的 接口  传入此接口 监听点击事件
+     * 提供给外部的 接口  传入此接口 监听点击事件
      */
     interface OnItemLongClickListener {
         /**
          * 长点击事件
-         * @param view  view
+         *
+         * @param view     view
          * @param position position
          */
-        void onItemLongClick(RecyclerViewClick pRecyclerViewClick,View view, int position);
+        void onItemLongClick(RecyclerViewClick pRecyclerViewClick, View view, int position);
     }
 
     /**
@@ -48,20 +54,23 @@ public interface RecyclerContract {
     interface EmptyContract {
         /**
          * 是否空页面
+         *
          * @return true Y false N
          */
         boolean isEmptyView();
 
         /**
          * 设置空页面
-         * @param holder  一个Item单元
-         * @param position  位置
+         *
+         * @param holder   一个Item单元
+         * @param position 位置
          */
         void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position);
 
         /**
          * 设置空页面
-         * @param parent 父布局
+         *
+         * @param parent   父布局
          * @param viewType 类型
          * @return 视图
          */
@@ -74,7 +83,8 @@ public interface RecyclerContract {
     interface OnGroupItemClickListener {
         /**
          * 点击事件
-         * @param view 视图
+         *
+         * @param view          视图
          * @param groupPosition group位置
          */
         void onGroupItemClick(View view, int groupPosition);
@@ -85,8 +95,9 @@ public interface RecyclerContract {
      */
     interface OnGroupItemLongClickListener {
         /**
-         *  Group Loong OnClick
-         * @param view View
+         * Group Loong OnClick
+         *
+         * @param view          View
          * @param groupPosition Group Positiong
          */
         void onGroupItemLongClick(View view, int groupPosition);
@@ -98,7 +109,8 @@ public interface RecyclerContract {
     interface OnChildItemClickListener {
         /**
          * Child OnClick fun
-         * @param view View
+         *
+         * @param view          View
          * @param groupPosition Group Position
          * @param childPosition Child Position
          */
@@ -110,8 +122,9 @@ public interface RecyclerContract {
      */
     interface OnChildItemLongClickListener {
         /**
-         *  Child Long Onclick
-         * @param view View
+         * Child Long Onclick
+         *
+         * @param view          View
          * @param groupPosition group position
          * @param childPosition child position
          */
@@ -120,26 +133,30 @@ public interface RecyclerContract {
 
     /**
      * Adapter规范
+     *
      * @param <Ts> List
-     * @param <T> Item
+     * @param <T>  Item
      */
-    interface SpecificationContract<Ts,T> {
+    interface SpecificationContract<Ts, T> {
         /**
          * 刷新
+         *
          * @param ts 数据类型
          */
         void onRefresh(Ts ts);
 
         /**
          * 添加多条
-         * @param ts 数据类型
+         *
+         * @param ts       数据类型
          * @param position 位置
          */
         void onLoad(Ts ts, int position);
 
         /**
          * 插入
-         * @param t  数据类型
+         *
+         * @param t        数据类型
          * @param position 位置
          *                 该方法可以和add合并
          */
@@ -147,48 +164,55 @@ public interface RecyclerContract {
 
         /**
          * 删除
+         *
          * @param position 位置
          */
         void deleteItem(int position);
 
         /**
          * 替换
-         * @param t 数据类型
+         *
+         * @param t        数据类型
          * @param position 位置
          */
         void replaceItem(T t, int position);
 
         /**
          * 获取数据
-         * @param position  位置
+         *
+         * @param position 位置
          * @return 数据类型
          */
         T getItem(int position);
     }
 
     /**
-     *  Adapter规范
+     * Adapter规范
+     *
      * @param <G> Group Type
      * @param <C> Child Type
      * @param <T> Child Item Type
      */
-    interface ExpandableContract<G,C,T> {
+    interface ExpandableContract<G, C, T> {
         /**
          * 刷新
+         *
          * @param ts ts 数据类型
          */
         void onRefresh(G ts);
 
         /**
          * 添加多条
-         * @param ts ts 数据类型
+         *
+         * @param ts            ts 数据类型
          * @param groupPosition Group Position
-         * @param position Group position
+         * @param position      Group position
          */
         void onLoad(G ts, int groupPosition, int position);
 
         /**
          * 获取数据
+         *
          * @param groupPosition group Position
          * @param childPosition child Position
          * @return Child Data
@@ -197,6 +221,7 @@ public interface RecyclerContract {
 
         /**
          * 获取数据
+         *
          * @param groupPosition group Position
          * @return Child List Data
          */
@@ -205,25 +230,29 @@ public interface RecyclerContract {
 
     /**
      * Adapter规范
+     *
      * @param <Ts> List Type
-     * @param <T> Item Type
+     * @param <T>  Item Type
      */
-    interface SimpleContract<Ts,T> {
+    interface SimpleContract<Ts, T> {
         /**
          * 刷新
+         *
          * @param ts 数据类型
          */
         void onRefresh(Ts ts);
 
         /**
          * 获取数据
-         * @param position  位置
+         *
+         * @param position 位置
          * @return 数据类型
          */
         T getItem(int position);
 
         /**
          * 加载
+         *
          * @param ts 数据
          */
         void onLoad(Ts ts);
@@ -233,20 +262,24 @@ public interface RecyclerContract {
     class RecyclerClickListener implements View.OnClickListener {
         private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
         private int mPosition = -1;
+
         @Override
         public void onClick(View v) {
             if (null != mRecyclerViewClickSoftReference.get()) {
                 mRecyclerViewClickSoftReference.get().onItemClick(v, mPosition);
             }
         }
-        public void setPositionRecyclerView(SoftReference<RecyclerViewClick> pRecyclerViewClickSoftReference,int pPosition) {
+
+        public void setPositionRecyclerView(SoftReference<RecyclerViewClick> pRecyclerViewClickSoftReference, int pPosition) {
             mRecyclerViewClickSoftReference = pRecyclerViewClickSoftReference;
             mPosition = pPosition;
         }
     }
+
     class RecyclerLongClickListener implements View.OnLongClickListener {
         private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
         private int mPosition = -1;
+
         @Override
         public boolean onLongClick(View v) {
             if (null != mRecyclerViewClickSoftReference.get()) {
@@ -255,14 +288,11 @@ public interface RecyclerContract {
             return false;
         }
 
-        public void setPositionRecyclerView(SoftReference<RecyclerViewClick> pRecyclerViewClickSoftReference,int pPosition) {
+        public void setPositionRecyclerView(SoftReference<RecyclerViewClick> pRecyclerViewClickSoftReference, int pPosition) {
             mRecyclerViewClickSoftReference = pRecyclerViewClickSoftReference;
             mPosition = pPosition;
         }
     }
 
-    interface Preload{
-        void initial();
-        void load();
-    }
+
 }

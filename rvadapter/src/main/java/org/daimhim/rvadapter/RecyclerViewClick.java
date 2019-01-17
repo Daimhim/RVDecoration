@@ -112,7 +112,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     public static class ClickViewHolder<T> extends android.support.v7.widget.RecyclerView.ViewHolder {
         View.OnClickListener mOnClickListener;
         View.OnLongClickListener mOnLongClickListener;
-        private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
+        SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
         private SparseArray<View> mViews;
 
         public ClickViewHolder(View itemView) {

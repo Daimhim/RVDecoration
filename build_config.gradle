@@ -80,6 +80,8 @@ def EspressoCoreVersion = "3.0.2"
 
 //Timber
 def TimberVersion = "4.7.1"
+//Paging
+def PagingVersion = "1.0.1"
 
 def buildDate() {
     def date = new Date()
@@ -130,6 +132,7 @@ ext {
             libGridLayout              : "com.android.support:gridlayout-v7:${SupportVersion}",
             libConstraintLayout        : "com.android.support.constraint:constraint-layout:${ConstraintLayoutVersion}",
             libMultiDex                : "com.android.support:multidex:${MultiDexVersion}",
+            libPaging                  : "android.arch.paging:runtime:${PagingVersion}",
 
             // https://github.com/square/retrofit
             libRetrofit                : "com.squareup.retrofit2:retrofit:${RetrofitVersion}",

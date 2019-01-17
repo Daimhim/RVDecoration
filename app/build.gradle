@@ -29,7 +29,11 @@ dependencies {
     implementation rootProject.ext.dependencies.libButterKnife
     annotationProcessor rootProject.ext.dependencies.libButterknifeCompiler
     implementation rootProject.ext.dependencies.libConstraintLayout
-    implementation rootProject.ext.dependencies.libAppCompatV7
+    implementation (rootProject.ext.dependencies.libAppCompatV7){
+        exclude group: 'android.arch.lifecycle', module: 'livedata-core'
+        exclude group: 'android.arch.lifecycle', module: 'runtime'
+        exclude group: 'android.arch.core', module: 'runtime'
+    }
     implementation rootProject.ext.dependencies.libRecyclerViewV7
     implementation rootProject.ext.dependencies.libDesign
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-3'
