@@ -25,7 +25,7 @@ public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshL
 
     private RecyclerView mRvRecyclerview;
     private SwipeRefreshLayout mSrlRefresh;
-    private RecyclerViewPreloadAdapter<Integer,UserBean, RecyclerViewEmpty.ClickViewHolder> mPreloadAdapter;
+    private RecyclerViewPreloadAdapter<Integer,UserBean> mPreloadAdapter;
     private DataSource<Integer, UserBean> mBeanDataSource  = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +45,13 @@ public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshL
                     lBean.setName("loadInitial:Name:"+i);
                     lBean.setId(UUID.randomUUID().toString().replace("-",""));
                     lUserBeans.add(lBean);
-                    Timber.i("loadInitial:"+i);
                 }
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
                         callback.onResult(lUserBeans,0,2);
-//                    }
-//                }).start();
+                    }
+                }).start();
             }
 
             @Override
@@ -90,22 +89,21 @@ public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshL
                     lBean.setName("loadAfter:Name:"+i);
                     lBean.setId(UUID.randomUUID().toString().replace("-",""));
                     lUserBeans.add(lBean);
-                    Timber.i("loadAfter:"+i);
                 }
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException ep) {
                             ep.printStackTrace();
                         }
                         callback.onResult(lUserBeans,params.key+1);
-//                    }
-//                }).start();
+                    }
+                }).start();
             }
         };
-        mPreloadAdapter = new RecyclerViewPreloadAdapter<Integer, UserBean, RecyclerViewEmpty.ClickViewHolder>(mBeanDataSource,false) {
+        mPreloadAdapter = new RecyclerViewPreloadAdapter<Integer, UserBean>(mBeanDataSource) {
             @Override
             public ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
                 return new RecyclerViewEmpty.ClickViewHolder(LayoutInflater
@@ -115,16 +113,12 @@ public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshL
 
             @Override
             public boolean areItemsTheSame(UserBean oldItem, UserBean newItem) {
-                boolean bl = oldItem.getId().hashCode() == newItem.getId().hashCode();
-                Timber.i("bl:"+bl);
-                return bl;
+                return oldItem.getId().equals(newItem.getId());
             }
 
             @Override
             public boolean areContentsTheSame(UserBean oldItem, UserBean newItem) {
-                boolean bl = oldItem.getId().hashCode() == newItem.getId().hashCode();
-                Timber.i("bl:"+bl);
-                return bl;
+                return oldItem.getId().equals(newItem.getId());
             }
 
             @Override
@@ -143,7 +137,7 @@ public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshL
                 return 1;
             }
         };
-        mRvRecyclerview.setAdapter(mPreloadAdapter.getmKTVHPreloadPagedListAdapter());
+        mRvRecyclerview.setAdapter(mPreloadAdapter);
         mRvRecyclerview.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
@@ -155,7 +149,7 @@ public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
-        mPreloadAdapter.onRefresh();
+
         mSrlRefresh.setRefreshing(false);
     }
 }

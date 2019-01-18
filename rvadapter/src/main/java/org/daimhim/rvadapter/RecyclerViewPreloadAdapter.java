@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.recyclerview.extensions.AsyncDifferConfig;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -24,37 +25,78 @@ import java.util.List;
  *
  * @author：Administrator
  */
-public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEmpty.ClickViewHolder> extends RecyclerViewEmpty<VH> {
-    private PreloadPagedListAdapter<K, T, VH> mKTVHPreloadPagedListAdapter = null;
+public abstract class RecyclerViewPreloadAdapter<K, T> extends RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder> {
+    private final PagedList<T> mPagedListm;
+    private PreloadPagedListAdapter<K, T> mKTVHPreloadPagedListAdapter = null;
 
-    static class PreloadPagedListAdapter<K, T, VH extends RecyclerViewEmpty.ClickViewHolder> extends PagedListAdapter<T, VH> {
-        private RecyclerViewPreloadAdapter<K, T, VH> mKTVHRecyclerViewPreloadAdapter;
+    static class PreloadPagedListAdapter<K, T> extends PagedListAdapter<T, RecyclerViewEmpty.ClickViewHolder> {
+        private RecyclerViewPreloadAdapter<K, T> mKTVHRecyclerViewPreloadAdapter;
 
-        protected PreloadPagedListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback,
-                                          RecyclerViewPreloadAdapter<K, T, VH> pKTVHRecyclerViewPreloadAdapter) {
-            super(diffCallback);
+
+        protected PreloadPagedListAdapter(final RecyclerViewPreloadAdapter<K, T> pKTVHRecyclerViewPreloadAdapter) {
+            super(new AsyncDifferConfig.Builder<T>(new DiffUtil.ItemCallback<T>() {
+                @Override
+                public boolean areItemsTheSame(T oldItem, T newItem) {
+                    return pKTVHRecyclerViewPreloadAdapter.areItemsTheSame(oldItem, newItem);
+                }
+
+                @Override
+                public boolean areContentsTheSame(T oldItem, T newItem) {
+                    return pKTVHRecyclerViewPreloadAdapter.areContentsTheSame(oldItem, newItem);
+                }
+
+                @Override
+                public Object getChangePayload(T oldItem, T newItem) {
+                    return pKTVHRecyclerViewPreloadAdapter.getChangePayload(oldItem, newItem);
+                }
+            }).build());
             mKTVHRecyclerViewPreloadAdapter = pKTVHRecyclerViewPreloadAdapter;
-        }
+            registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    mKTVHRecyclerViewPreloadAdapter.notifyDataSetChanged();
+                }
 
-        protected PreloadPagedListAdapter(@NonNull AsyncDifferConfig<T> config,
-                                          RecyclerViewPreloadAdapter<K, T, VH> pKTVHRecyclerViewPreloadAdapter) {
-            super(config);
-            mKTVHRecyclerViewPreloadAdapter = pKTVHRecyclerViewPreloadAdapter;
+                @Override
+                public void onItemRangeChanged(int positionStart, int itemCount) {
+                    mKTVHRecyclerViewPreloadAdapter.notifyItemRangeChanged(positionStart, itemCount);
+                }
+
+                @Override
+                public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
+                    mKTVHRecyclerViewPreloadAdapter.notifyItemRangeChanged(positionStart, itemCount, payload);
+                }
+
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    mKTVHRecyclerViewPreloadAdapter.notifyItemRangeInserted(positionStart, itemCount);
+                }
+
+                @Override
+                public void onItemRangeRemoved(int positionStart, int itemCount) {
+                    mKTVHRecyclerViewPreloadAdapter.notifyItemRangeRemoved(positionStart, itemCount);
+                }
+
+                @Override
+                public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                    mKTVHRecyclerViewPreloadAdapter.notifyItemMoved(fromPosition, toPosition);
+                }
+            });
         }
 
         @NonNull
         @Override
-        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public RecyclerViewEmpty.ClickViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             return mKTVHRecyclerViewPreloadAdapter.onCreateDataViewHolder(parent, viewType);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull VH holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerViewEmpty.ClickViewHolder holder, int position) {
             mKTVHRecyclerViewPreloadAdapter.onBindViewHolder(holder, position);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull VH holder, int position, @NonNull List<Object> payloads) {
+        public void onBindViewHolder(@NonNull RecyclerViewEmpty.ClickViewHolder holder, int position, @NonNull List<Object> payloads) {
             mKTVHRecyclerViewPreloadAdapter.onBindViewHolder(holder, position, payloads);
         }
 
@@ -68,49 +110,13 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
         public T getItem(int position) {
             return super.getItem(position);
         }
-
-
     }
 
 
-    public RecyclerViewPreloadAdapter(DataSource<K, T> dataSource, boolean isAsync) {
-        final RecyclerViewPreloadAdapter<K, T, VH> ktvhRecyclerViewPreloadAdapterl = this;
-        if (isAsync) {
-            mKTVHPreloadPagedListAdapter = new PreloadPagedListAdapter<>(new AsyncDifferConfig.Builder<T>(new DiffUtil.ItemCallback<T>() {
-                @Override
-                public boolean areItemsTheSame(T oldItem, T newItem) {
-                    return ktvhRecyclerViewPreloadAdapterl.areItemsTheSame(oldItem, newItem);
-                }
-
-                @Override
-                public boolean areContentsTheSame(T oldItem, T newItem) {
-                    return ktvhRecyclerViewPreloadAdapterl.areContentsTheSame(oldItem, newItem);
-                }
-
-                @Override
-                public Object getChangePayload(T oldItem, T newItem) {
-                    return ktvhRecyclerViewPreloadAdapterl.getChangePayload(oldItem, newItem);
-                }
-            }).build(), ktvhRecyclerViewPreloadAdapterl);
-        } else {
-            mKTVHPreloadPagedListAdapter = new PreloadPagedListAdapter<>(new DiffUtil.ItemCallback<T>() {
-                @Override
-                public boolean areItemsTheSame(T oldItem, T newItem) {
-                    return ktvhRecyclerViewPreloadAdapterl.areItemsTheSame(oldItem, newItem);
-                }
-
-                @Override
-                public boolean areContentsTheSame(T oldItem, T newItem) {
-                    return ktvhRecyclerViewPreloadAdapterl.areContentsTheSame(oldItem, newItem);
-                }
-
-                @Override
-                public Object getChangePayload(T oldItem, T newItem) {
-                    return ktvhRecyclerViewPreloadAdapterl.getChangePayload(oldItem, newItem);
-                }
-            }, ktvhRecyclerViewPreloadAdapterl);
-        }
-        mKTVHPreloadPagedListAdapter.submitList(getPagedList(dataSource));
+    public RecyclerViewPreloadAdapter(DataSource<K, T> dataSource) {
+        mKTVHPreloadPagedListAdapter = new PreloadPagedListAdapter<>(this);
+        mPagedListm = getPagedList(dataSource);
+        mKTVHPreloadPagedListAdapter.submitList(mPagedListm);
     }
 
     @SuppressLint("RestrictedApi")
@@ -138,12 +144,16 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
                 .build();
     }
 
-    public PreloadPagedListAdapter<K, T, VH> getmKTVHPreloadPagedListAdapter() {
-        return mKTVHPreloadPagedListAdapter;
-    }
-
-    public void onRefresh(){
-//        mKTVHPreloadPagedListAdapter.submitList(null);
+    public void onRefresh() {
+        mKTVHPreloadPagedListAdapter.submitList(null);
+        mKTVHPreloadPagedListAdapter.notifyDataSetChanged();
+        notifyDataSetChanged();
+        if (mKTVHPreloadPagedListAdapter.getCurrentList() != null) {
+            mKTVHPreloadPagedListAdapter.getCurrentList().clear();
+            mKTVHPreloadPagedListAdapter.notifyDataSetChanged();
+        }
+        mPagedListm.detach();
+        mKTVHPreloadPagedListAdapter.submitList(mPagedListm);
     }
 
     public K getInitialKey() {
@@ -156,7 +166,7 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
 
     public PagedList.Config getPagedListConfig() {
         return new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(getPageSize())
+                .setInitialLoadSizeHint(getPageSize()*3)
                 .setPrefetchDistance(getPageSize())
                 .setPageSize(getPageSize())
                 .build();
@@ -167,10 +177,10 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
     }
 
     @Override
-    public abstract VH onCreateDataViewHolder(ViewGroup parent, int viewType);
+    public abstract RecyclerViewEmpty.ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType);
 
     @Override
-    public abstract void onBindDataViewHolder(VH holder, int position);
+    public abstract void onBindDataViewHolder(RecyclerViewEmpty.ClickViewHolder holder, int position);
 
     @Override
     public int getDataItemCount() {
@@ -188,6 +198,7 @@ public abstract class RecyclerViewPreloadAdapter<K, T, VH extends RecyclerViewEm
     public boolean areContentsTheSame(T oldItem, T newItem) {
         return false;
     }
+
     public Object getChangePayload(T oldItem, T newItem) {
         return null;
     }
