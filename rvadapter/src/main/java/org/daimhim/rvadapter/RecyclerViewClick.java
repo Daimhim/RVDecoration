@@ -1,5 +1,7 @@
 package org.daimhim.rvadapter;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
@@ -86,6 +88,11 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     }
 
     @Override
+    public void onBindViewHolder(@NonNull VH holder, int position) {
+        Log.d("TAG:"+getClass().getName(),"position:"+position);
+    }
+
+    @Override
     public void onViewRecycled(VH holder) {
         super.onViewRecycled(holder);
         holder.mOnClickListener = null;
@@ -110,9 +117,8 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * 实现了点击事件
      */
     public static class ClickViewHolder<T> extends android.support.v7.widget.RecyclerView.ViewHolder {
-        View.OnClickListener mOnClickListener;
-        View.OnLongClickListener mOnLongClickListener;
-        SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
+        RecyclerContract.RecyclerClickListener mOnClickListener;
+        RecyclerContract.RecyclerLongClickListener mOnLongClickListener;
         private SparseArray<View> mViews;
 
         public ClickViewHolder(View itemView) {
@@ -127,19 +133,12 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * @param recyclerViewClick Adapter对象
          * @return 是否set成功
          */
-        public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick) {
+        public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick,int position) {
             //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
             if (mOnClickListener == null) {
-                mRecyclerViewClickSoftReference = new SoftReference<>(recyclerViewClick);
-                mOnClickListener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (null != mRecyclerViewClickSoftReference.get()) {
-                            mRecyclerViewClickSoftReference.get().onItemClick(v, getLayoutPosition());
-                        }
-                    }
-                };
+                mOnClickListener = new RecyclerContract.RecyclerClickListener();
             }
+            mOnClickListener.setPositionRecyclerView(recyclerViewClick,position);
             view.setOnClickListener(mOnClickListener);
             return true;
         }
@@ -151,20 +150,11 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * @param recyclerViewClick Adapter对象
          * @return is set success
          */
-        public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick) {
-
+        public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick,int position) {
             if (mOnLongClickListener == null) {
-                mRecyclerViewClickSoftReference = new SoftReference<>(recyclerViewClick);
-                mOnLongClickListener = new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (null != mRecyclerViewClickSoftReference.get()) {
-                            mRecyclerViewClickSoftReference.get().onItemLongClick(v, getLayoutPosition());
-                        }
-                        return false;
-                    }
-                };
+                mOnLongClickListener = new RecyclerContract.RecyclerLongClickListener();
             }
+            mOnLongClickListener.setPositionRecyclerView(recyclerViewClick,position);
             view.setOnLongClickListener(mOnLongClickListener);
             return true;
         }

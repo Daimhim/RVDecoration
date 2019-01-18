@@ -18,8 +18,8 @@ import android.view.ViewGroup;
  * @author Daimhim
  */
 
-public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.ClickViewHolder, VHC extends RecyclerViewClick.ClickViewHolder>
-        extends RecyclerViewEmpty<RecyclerViewClick.ClickViewHolder> {
+public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.ClickViewHolder, VHC extends RecyclerViewEmpty.ClickViewHolder>
+        extends RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder> {
     private RecyclerContract.OnGroupItemClickListener mOnGroupItemClickListeners;
     private RecyclerContract.OnGroupItemLongClickListener mOnGroupItemLongClickListener;
 
@@ -121,7 +121,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
 
 
     @Override
-    public final RecyclerViewClick.ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+    public final RecyclerViewEmpty.ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
         if (viewType > 0) {
             return onCreateChildViewHolder(parent, viewType);
         } else {
@@ -130,7 +130,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewClick.Click
     }
 
     @Override
-    public final void onBindDataViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
+    public final void onBindDataViewHolder(RecyclerViewEmpty.ClickViewHolder holder, int position) {
         int lViewType = getItemViewType(position);
         Pair<Integer, Integer> integerPair = indexOfPosition(position);
         if (holder == null) {return;}

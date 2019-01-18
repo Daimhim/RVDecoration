@@ -26,7 +26,7 @@ import java.util.List;
  * @author：Administrator
  */
 public abstract class RecyclerViewPreloadAdapter<K, T> extends RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder> {
-    private final PagedList<T> mPagedListm;
+    private DataSource<K, T> mDataSource;
     private PreloadPagedListAdapter<K, T> mKTVHPreloadPagedListAdapter = null;
 
     static class PreloadPagedListAdapter<K, T> extends PagedListAdapter<T, RecyclerViewEmpty.ClickViewHolder> {
@@ -114,31 +114,15 @@ public abstract class RecyclerViewPreloadAdapter<K, T> extends RecyclerViewEmpty
 
 
     public RecyclerViewPreloadAdapter(DataSource<K, T> dataSource) {
+        mDataSource = dataSource;
         mKTVHPreloadPagedListAdapter = new PreloadPagedListAdapter<>(this);
-        mPagedListm = getPagedList(dataSource);
-        mKTVHPreloadPagedListAdapter.submitList(mPagedListm);
+        mKTVHPreloadPagedListAdapter.submitList(getPagedList(dataSource));
     }
 
     @SuppressLint("RestrictedApi")
     protected PagedList<T> getPagedList(DataSource<K, T> dataSource) {
         return new PagedList.Builder<>(dataSource, getPagedListConfig())
                 .setInitialKey(getInitialKey())
-                .setBoundaryCallback(new PagedList.BoundaryCallback<T>() {
-                    @Override
-                    public void onZeroItemsLoaded() {
-                        super.onZeroItemsLoaded();
-                    }
-
-                    @Override
-                    public void onItemAtFrontLoaded(@NonNull T itemAtFront) {
-                        super.onItemAtFrontLoaded(itemAtFront);
-                    }
-
-                    @Override
-                    public void onItemAtEndLoaded(@NonNull T itemAtEnd) {
-                        super.onItemAtEndLoaded(itemAtEnd);
-                    }
-                })
                 .setNotifyExecutor(ArchTaskExecutor.getMainThreadExecutor())
                 .setFetchExecutor(ArchTaskExecutor.getIOThreadExecutor())
                 .build();
@@ -146,14 +130,15 @@ public abstract class RecyclerViewPreloadAdapter<K, T> extends RecyclerViewEmpty
 
     public void onRefresh() {
         mKTVHPreloadPagedListAdapter.submitList(null);
-        mKTVHPreloadPagedListAdapter.notifyDataSetChanged();
-        notifyDataSetChanged();
-        if (mKTVHPreloadPagedListAdapter.getCurrentList() != null) {
-            mKTVHPreloadPagedListAdapter.getCurrentList().clear();
-            mKTVHPreloadPagedListAdapter.notifyDataSetChanged();
-        }
-        mPagedListm.detach();
-        mKTVHPreloadPagedListAdapter.submitList(mPagedListm);
+        mKTVHPreloadPagedListAdapter.submitList(getPagedList(mDataSource));
+    }
+
+
+    @Override
+    public void onViewRecycled(ClickViewHolder holder) {
+        super.onViewRecycled(holder);
+        mDataSource = null;
+        mKTVHPreloadPagedListAdapter = null;
     }
 
     public K getInitialKey() {
@@ -169,6 +154,7 @@ public abstract class RecyclerViewPreloadAdapter<K, T> extends RecyclerViewEmpty
                 .setInitialLoadSizeHint(getPageSize()*3)
                 .setPrefetchDistance(getPageSize())
                 .setPageSize(getPageSize())
+                .setEnablePlaceholders(true)
                 .build();
     }
 

@@ -12,10 +12,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import org.daimhim.rvadapter.AdapterManagement;
+import org.daimhim.rvadapter.RecyclerViewClick;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 import org.daimhim.rvadapter.RecyclerViewPreloadAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 
 import timber.log.Timber;
@@ -82,6 +85,10 @@ public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshL
             @Override
             public void loadAfter(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer, UserBean> callback) {
                 Timber.i("loadAfter key:%s requestedLoadSize:%s", params.key,params.requestedLoadSize);
+                if (params.key == 5){
+                    callback.onResult(Collections.<UserBean>emptyList(),params.key);
+                    return;
+                }
                 final ArrayList<UserBean> lUserBeans = new ArrayList<>();
                 UserBean lBean = null;
                 for (int i = params.requestedLoadSize*params.key; i < (params.requestedLoadSize*params.key)+params.requestedLoadSize; i++) {
@@ -137,7 +144,44 @@ public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshL
                 return 1;
             }
         };
-        mRvRecyclerview.setAdapter(mPreloadAdapter);
+        RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder> lRecyclerViewEmpty = new RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder>() {
+            @Override
+            public ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+                return new ClickViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_activity_main,parent,false));
+            }
+
+            @Override
+            public void onBindDataViewHolder(ClickViewHolder holder, int position) {
+                holder.getTextView(R.id.tv_content).setText("position:"+position);
+            }
+
+            @Override
+            public int getDataItemCount() {
+                return 10;
+            }
+        };
+        RecyclerViewEmpty<RecyclerViewClick.ClickViewHolder> lRecyclerViewEmpty1 = new RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder>() {
+            @Override
+            public ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+                return new ClickViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_activity_main, parent, false));
+            }
+
+            @Override
+            public void onBindDataViewHolder(ClickViewHolder holder, int position) {
+                holder.getTextView(R.id.tv_content).setText("position:" + position);
+            }
+
+            @Override
+            public int getDataItemCount() {
+                return 10;
+            }
+        };
+
+        AdapterManagement lAdapterManagement = new AdapterManagement();
+        lAdapterManagement.addAdapter(lRecyclerViewEmpty);
+        lAdapterManagement.addAdapter(mPreloadAdapter);
+        lAdapterManagement.addAdapter(lRecyclerViewEmpty1);
+        mRvRecyclerview.setAdapter(lAdapterManagement);
         mRvRecyclerview.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
@@ -149,6 +193,7 @@ public class DemoMainActivity extends AppCompatActivity implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
+        mPreloadAdapter.onRefresh();
 
         mSrlRefresh.setRefreshing(false);
     }

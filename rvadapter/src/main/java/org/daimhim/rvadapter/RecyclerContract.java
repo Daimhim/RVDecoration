@@ -263,6 +263,7 @@ public interface RecyclerContract {
         private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
         private int mPosition = -1;
 
+
         @Override
         public void onClick(View v) {
             if (null != mRecyclerViewClickSoftReference.get()) {
@@ -270,8 +271,8 @@ public interface RecyclerContract {
             }
         }
 
-        public void setPositionRecyclerView(SoftReference<RecyclerViewClick> pRecyclerViewClickSoftReference, int pPosition) {
-            mRecyclerViewClickSoftReference = pRecyclerViewClickSoftReference;
+        public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
+            mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
             mPosition = pPosition;
         }
     }
@@ -288,8 +289,8 @@ public interface RecyclerContract {
             return false;
         }
 
-        public void setPositionRecyclerView(SoftReference<RecyclerViewClick> pRecyclerViewClickSoftReference, int pPosition) {
-            mRecyclerViewClickSoftReference = pRecyclerViewClickSoftReference;
+        public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
+            mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
             mPosition = pPosition;
         }
     }

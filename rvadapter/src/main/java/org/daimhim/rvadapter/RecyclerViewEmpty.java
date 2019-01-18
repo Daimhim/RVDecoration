@@ -29,6 +29,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
 
     @Override
     public final void onBindViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
         if (isEmptyView(holder, position)) {
             onBindEmptyViewHolder(holder, position);
         } else {
