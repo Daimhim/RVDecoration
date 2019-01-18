@@ -10,8 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.lang.ref.SoftReference;
-
 
 /**
  * 项目名称：org.daimhim.rvadapter

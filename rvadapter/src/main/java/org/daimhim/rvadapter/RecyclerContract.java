@@ -1,12 +1,9 @@
 package org.daimhim.rvadapter;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.ref.SoftReference;
-import java.util.List;
 
 /**
  * 项目名称：org.daimhim.rvadapter

@@ -7,7 +7,7 @@ android {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode 118
-        versionName "1.1.8"
+        versionName "1.1.8_Beta-1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
