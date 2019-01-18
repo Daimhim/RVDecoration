@@ -43,7 +43,7 @@ public class LinearLayoutAdapter extends RecyclerViewClick<LinearLayoutAdapter.L
     @Override
     public void onBindViewHolder(LinearLayoutViewholder holder, int position) {
         holder.mTvContent.setText(getItem(position));
-        holder.performItemClick(holder.mTvContent,this);
+        holder.performItemClick(holder.mTvContent,this,position);
     }
 
     @Override

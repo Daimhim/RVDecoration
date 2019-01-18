@@ -14,7 +14,6 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 
-import org.daimhim.rvadapter.RecyclerViewClick;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 
 import java.util.ArrayList;
@@ -109,7 +108,7 @@ public class EmptyActivity extends Activity {
             return 0;
         }
 
-        class TestViewHolder extends RecyclerViewClick.ClickViewHolder{
+        class TestViewHolder extends RecyclerViewEmpty.ClickViewHolder{
 
             public TestViewHolder(View itemView) {
                 super(itemView);

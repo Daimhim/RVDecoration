@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode 118
-        versionName "1.1.8_Beta-1"
+        versionCode 119
+        versionName "1.2.0_Beta-1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -30,7 +30,7 @@ dependencies {
     testImplementation rootProject.ext.dependencies.libJunit
     androidTestImplementation rootProject.ext.dependencies.libRunner
     androidTestImplementation rootProject.ext.dependencies.libEspressoCore
-    debugImplementation rootProject.ext.dependencies.libRecyclerViewV7
+    compileOnly rootProject.ext.dependencies.libRecyclerViewV7
 }
 
 
