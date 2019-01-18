@@ -260,7 +260,7 @@ public interface RecyclerContract {
 
 
     class RecyclerClickListener implements View.OnClickListener {
-        private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
+        private SoftReference<RecyclerViewEmpty> mRecyclerViewClickSoftReference;
         private int mPosition = -1;
 
 
@@ -271,14 +271,14 @@ public interface RecyclerContract {
             }
         }
 
-        public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
+        public void setPositionRecyclerView(RecyclerViewEmpty pRecyclerViewClick, int pPosition) {
             mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
             mPosition = pPosition;
         }
     }
 
     class RecyclerLongClickListener implements View.OnLongClickListener {
-        private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
+        private SoftReference<RecyclerViewEmpty> mRecyclerViewClickSoftReference;
         private int mPosition = -1;
 
         @Override
@@ -289,7 +289,7 @@ public interface RecyclerContract {
             return false;
         }
 
-        public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
+        public void setPositionRecyclerView(RecyclerViewEmpty pRecyclerViewClick, int pPosition) {
             mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
             mPosition = pPosition;
         }
