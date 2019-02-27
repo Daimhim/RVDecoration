@@ -30,7 +30,7 @@ dependencies {
     testImplementation rootProject.ext.dependencies.libJunit
     androidTestImplementation rootProject.ext.dependencies.libRunner
     androidTestImplementation rootProject.ext.dependencies.libEspressoCore
-    compileOnly rootProject.ext.dependencies.libRecyclerViewV7
+    implementation rootProject.ext.dependencies.libRecyclerViewV7
 }
 
 

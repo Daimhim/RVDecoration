@@ -1,6 +1,7 @@
 package org.daimhim.rvadapter;
 
 
+import android.util.Pair;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -78,6 +79,12 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
         mRecyclerViewClicks.add(recyclerViewClick);
         notifyItemRangeInserted(getItemCount(),recyclerViewClick.getItemCount());
         modifyBase();
+    }
+
+    @Override
+    protected int getSpanSize(int defSize, int position) {
+        Pair<Integer, Integer> lIntegerIntegerPair = indexOfPosition(position);
+        return mRecyclerViewClicks.get(lIntegerIntegerPair.first).getSpanSize(defSize,lIntegerIntegerPair.second);
     }
 
     /**
