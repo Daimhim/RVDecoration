@@ -35,6 +35,7 @@ dependencies {
     implementation rootProject.ext.dependencies.libUsed
     implementation rootProject.ext.dependencies.libTimber
     implementation project(':rvadapter')
+    implementation project(':rvdecoration')
     implementation rootProject.ext.dependencies.libPictureLoad
     testImplementation rootProject.ext.dependencies.libJunit
     androidTestImplementation rootProject.ext.dependencies.libRunner

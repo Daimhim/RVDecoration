@@ -59,7 +59,7 @@ implements RecyclerContract.ExpandableContract<List<ItemListBean>,ItemListBean, 
 
     @Override
     public void onBindGroupViewHolder(RecyclerViewClick.ClickViewHolder holder, int groupPosition) {
-        holder.getTextView(R.id.tv_recommend_title).setText(getChild(groupPosition).getItemName());
+        holder.getTextView(R.id.tv_recommend_title).setText(getChild(groupPosition).getItemName()+"("+groupPosition+")");
     }
 
     @Override
@@ -87,7 +87,7 @@ implements RecyclerContract.ExpandableContract<List<ItemListBean>,ItemListBean, 
         lImageView.setLayoutParams(lLayoutParams);
 //        ImgLoadingUtil.loadImage(lDefaultConfig, lImageView,lChildItem.getGoodsImg());
         holder.getTextView(R.id.tv_goods_name).setText(lChildItem.getGoodsName());
-        holder.getTextView(R.id.tv_goods_price).setText("¥"+lChildItem.getGoodsPrice());
+        holder.getTextView(R.id.tv_goods_price).setText("¥"+"("+groupPosition+")"+"("+childPosition+")");
     }
 
     @Override
@@ -105,8 +105,6 @@ implements RecyclerContract.ExpandableContract<List<ItemListBean>,ItemListBean, 
             DataListBean lChildItem = getChildItem(lIntegerIntegerPair.first, lIntegerIntegerPair.second);
             lSpanSize = lChildItem.getItemWidth();
         }
-        Timber.i("first:%s second:%s position:%s lSpanSize:%s",
-                lIntegerIntegerPair.first,lIntegerIntegerPair.second,position,lSpanSize);
         return lSpanSize;
     }
 

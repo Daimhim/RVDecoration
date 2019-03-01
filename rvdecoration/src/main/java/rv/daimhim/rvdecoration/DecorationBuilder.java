@@ -58,6 +58,11 @@ public class DecorationBuilder {
             P.orientation = orientation;
             return this;
         }
+        //测量
+        public Builder setMeasureTarget(RecycleDecoration.MeasureTarget pMeasureTarget) {
+            P.mMeasureTarget = pMeasureTarget;
+            return this;
+        }
 
         public RecycleDecoration create(){
             RecycleDecoration lRecycleDecoration = new RecycleDecoration();
@@ -68,6 +73,7 @@ public class DecorationBuilder {
                 default:
                     break;
             }
+            P.mRecyclerView.addItemDecoration(lRecycleDecoration);
             return lRecycleDecoration;
         }
     }
@@ -83,6 +89,8 @@ public class DecorationBuilder {
         int verticalSize = R.dimen.dimen_size_1;
         @DimenRes
         int horizontalSize = R.dimen.dimen_size_1;
+
+        RecycleDecoration.MeasureTarget mMeasureTarget;
 
         int orientation = OrientationHelper.VERTICAL;
     }

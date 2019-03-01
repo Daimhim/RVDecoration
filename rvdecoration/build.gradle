@@ -18,4 +18,6 @@ dependencies {
     androidTestImplementation rootProject.ext.dependencies.libRunner
     androidTestImplementation rootProject.ext.dependencies.libEspressoCore
     debugImplementation rootProject.ext.dependencies.libRecyclerViewV7
+    debugImplementation rootProject.ext.dependencies.libTimber
+    debugImplementation project(':rvadapter')
 }

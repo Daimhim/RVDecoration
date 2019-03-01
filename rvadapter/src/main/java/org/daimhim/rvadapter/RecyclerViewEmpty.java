@@ -18,6 +18,15 @@ import android.view.ViewGroup;
 public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewClick<RecyclerViewClick.ClickViewHolder>
         implements RecyclerContract.EmptyContract {
 
+    /**
+     * 在manager中使用
+     * @param position
+     * @return
+     */
+    protected int getVirtualLocation(int position){
+        return position;
+    }
+
     @Override
     public final RecyclerViewClick.ClickViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isEmptyView(parent, viewType)) {
@@ -30,6 +39,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     @Override
     public final void onBindViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
+        position = getVirtualLocation(position);
         if (isEmptyView(holder, position)) {
             onBindEmptyViewHolder(holder, position);
         } else {
@@ -39,6 +49,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
 
     @Override
     public final int getItemViewType(int position) {
+        position = getVirtualLocation(position);
         if (isEmptyView(position)){
             return getEmptyViewType();
         }else {

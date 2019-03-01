@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 
-import com.example.used.decoration.DecorationBuilder;
 import com.example.used.decoration.GridDecoration;
 import com.example.used.decoration.RecycleDecoration;
 import com.google.gson.Gson;
@@ -20,6 +19,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import java.util.Arrays;
 import java.util.List;
 
+import rv.daimhim.rvdecoration.DecorationBuilder;
 import timber.log.Timber;
 
 
@@ -49,37 +49,42 @@ public class TestActivity extends AppCompatActivity {
         mRecommendCategoryAdapter = new RecommendCategoryAdapter();
         mRvRecyclerview.setAdapter(mRecommendCategoryAdapter);
         initData();
-        mRvRecyclerview.addItemDecoration(DecorationBuilder
-                .Builder(new GridDecoration(this))
-                .setOrientation(GridDecoration.VERTICAL_CROSS)
-                .setTopLine(false)
-                .setDividerColor(R.color.cl_000000)
-                .setDividerWidth(SystemUtil.dip2px(this, 7))
-                .setCustomizedOffsets(new RecycleDecoration.CustomizedOffsets() {
-                    @Override
-                    public boolean obtainOffsets(Rect itemRect, Rect itemColor, int dividerColor, int dividerWidth, int position) {
-
-                        Pair<Integer, Integer> lIntegerIntegerPair = mRecommendCategoryAdapter.indexOfPosition(position);
-                        if (lIntegerIntegerPair.second != -1) {
-                            itemRect.set(0,0,0,0);
-                            int lItemWidth = mRecommendCategoryAdapter.getChildItem(lIntegerIntegerPair.first, lIntegerIntegerPair.second).getItemWidth();
-                            switch (lItemWidth){
-                                case 12:
-                                    itemRect.left = itemRect.right = dividerWidth;
-                                    itemColor.left = itemColor.right = dividerColor;
-                                    break;
-                                case 6:
-                                    break;
-                                case 4:
-                                    break;
-                                case 3:
-                                    break;
-                            }
-                        }
-                        return true;
-                    }
-                })
-                .builder());
+        new DecorationBuilder
+                .Builder(mRvRecyclerview)
+                .verticalDivider(R.color.cl_000000)
+                .verticalSpacing(R.dimen.dimen_size_5)
+                .create();
+//        mRvRecyclerview.addItemDecoration(DecorationBuilder
+//                .Builder(new GridDecoration(this))
+//                .setOrientation(GridDecoration.VERTICAL_CROSS)
+//                .setTopLine(false)
+//                .setDividerColor(R.color.cl_000000)
+//                .setDividerWidth(SystemUtil.dip2px(this, 7))
+//                .setCustomizedOffsets(new RecycleDecoration.CustomizedOffsets() {
+//                    @Override
+//                    public boolean obtainOffsets(Rect itemRect, Rect itemColor, int dividerColor, int dividerWidth, int position) {
+//
+//                        Pair<Integer, Integer> lIntegerIntegerPair = mRecommendCategoryAdapter.indexOfPosition(position);
+//                        if (lIntegerIntegerPair.second != -1) {
+//                            itemRect.set(0,0,0,0);
+//                            int lItemWidth = mRecommendCategoryAdapter.getChildItem(lIntegerIntegerPair.first, lIntegerIntegerPair.second).getItemWidth();
+//                            switch (lItemWidth){
+//                                case 12:
+//                                    itemRect.left = itemRect.right = dividerWidth;
+//                                    itemColor.left = itemColor.right = dividerColor;
+//                                    break;
+//                                case 6:
+//                                    break;
+//                                case 4:
+//                                    break;
+//                                case 3:
+//                                    break;
+//                            }
+//                        }
+//                        return true;
+//                    }
+//                })
+//                .builder());
     }
 
     private void initData() {
@@ -101,12 +106,10 @@ public class TestActivity extends AppCompatActivity {
                 lSize = lItemListBean.getDataList().size();
             }
             int[] lRule = getRule(lSize);
-            Timber.i("lRule:%s lSize:%s", Arrays.toString(lRule), lSize);
             for (int j = 0; j < lSize; j++) {
                 lItemListBean.getDataList().get(j).setItemWidth(lRule[j]);
             }
         }
-        Timber.i(lItemList.toString());
         mRecommendCategoryAdapter.onRefresh(lItemList);
     }
 

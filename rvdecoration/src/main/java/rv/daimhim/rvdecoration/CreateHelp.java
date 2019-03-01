@@ -11,7 +11,11 @@ public class CreateHelp {
                                               DecorationBuilder.DecorationParams p){
         RecyclerView.LayoutManager lLayoutManager = p.mRecyclerView.getLayoutManager();
         if (lLayoutManager instanceof GridLayoutManager){
-
+            GridDecoration lGridDecoration = null;
+            lGridDecoration = new GridDecoration(p.mContext,
+                    p.verticalColor,p.verticalSize,p.orientation,p.mRecyclerView);
+            pLRecycleDecoration.setDrawBeforeTarget(lGridDecoration);
+            pLRecycleDecoration.setMeasureTarget(lGridDecoration.getMeasureTarget());
         }else if (lLayoutManager instanceof LinearLayoutManager){
             LinearDecoration lLinearDecoration = null;
             if (p.orientation == OrientationHelper.VERTICAL) {
@@ -35,6 +39,9 @@ public class CreateHelp {
             }
             pLRecycleDecoration.setDrawBeforeTarget(lStaggeredGridDecoration);
             pLRecycleDecoration.setMeasureTarget(lStaggeredGridDecoration.getMeasureTarget());
+        }
+        if (p.mMeasureTarget !=null){
+            pLRecycleDecoration.setMeasureTarget(p.mMeasureTarget);
         }
     }
 }
