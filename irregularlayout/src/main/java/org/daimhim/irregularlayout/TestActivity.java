@@ -51,7 +51,7 @@ public class TestActivity extends AppCompatActivity {
         initData();
         new DecorationBuilder
                 .Builder(mRvRecyclerview)
-                .verticalDivider(R.color.cl_000000)
+                .verticalDivider(R.color.cl_ffffff)
                 .verticalSpacing(R.dimen.dimen_size_5)
                 .create();
 //        mRvRecyclerview.addItemDecoration(DecorationBuilder

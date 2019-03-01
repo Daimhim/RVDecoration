@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.View;
 
+import org.daimhim.rvadapter.AdapterManagement;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
 
 import java.util.Timer;
@@ -57,6 +58,8 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
         RecyclerView.Adapter lAdapter = pRecyclerView.getAdapter();
         if (lAdapter instanceof RecyclerViewExpandable) {
             mMeasureTarget = new ExpandableVerticalGridDecoration((RecyclerViewExpandable) lAdapter);
+        }else if (lAdapter instanceof AdapterManagement){
+
         }
     }
 
@@ -89,6 +92,7 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
             int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
             int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
             int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
+            outRect.set(0,0,0,0);
 //            Timber.i("lChildAdapterPosition:%s mPreviousPosition:%s lSpanCount:%s lSpanSize:%s",lChildAdapterPosition,mPreviousPosition,lSpanCount,lSpanSize);
             if (mOrientation == GridLayoutManager.VERTICAL) {
                 Pair<Integer, Integer> lPair = mRecyclerViewExpandable.indexOfPosition(lChildAdapterPosition);
@@ -97,7 +101,7 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
                 if (lPair.second == -1) { //group
                     onMeasureItemOffsets(lChildAdapterPosition, 0, outRect, true);
                 } else if (lSpanCount == lSpanSize){ //full line
-                    onMeasureItemOffsets(lChildAdapterPosition, -1, outRect, false);
+                    onMeasureItemOffsets(lChildAdapterPosition, 2, outRect, false);
                 }else if (mPreviousPosition == 0) { //first
                     mPreviousPosition += lSpanSize;
                     onMeasureItemOffsets(lChildAdapterPosition, -1, outRect, false);
@@ -125,6 +129,8 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
         } else if (pPlace == 1) {
             outRect.set(0, 0, mSize, mSize);
         } else if (pPlace == -1) {
+            outRect.set(mSize, 0, mSize, mSize);
+        } else if (pPlace == 2) {
             outRect.set(mSize, 0, mSize, mSize);
         } else {
             outRect.set(0, 0, mSize, mSize);
