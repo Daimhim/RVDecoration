@@ -42,18 +42,24 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * 点击事件
      */
     protected RecyclerContract.OnItemClickListener pOnItemClickListener;
+    protected RecyclerContract.OnItemClickListener2 pOnItemClickListener2;
     /**
      * 长点击事件
      */
     protected RecyclerContract.OnItemLongClickListener pOnItemLongClickListener;
+    protected RecyclerContract.OnItemLongClickListener2 pOnItemLongClickListener2;
 
     /**
      * set点击事件
      *
      * @param onItemClickListener 点击事件监听对象
      */
+    @Deprecated
     public void setOnItemClickListener(RecyclerContract.OnItemClickListener onItemClickListener) {
         pOnItemClickListener = onItemClickListener;
+    }
+    public void setpOnItemClickListener2(RecyclerContract.OnItemClickListener2 pPOnItemClickListener2) {
+        pOnItemClickListener2 = pPOnItemClickListener2;
     }
 
     /**
@@ -61,8 +67,12 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      *
      * @param pOnItemLongClickListener 点击事件监听对象
      */
+    @Deprecated
     public void setpOnItemLongClickListener(RecyclerContract.OnItemLongClickListener pOnItemLongClickListener) {
         this.pOnItemLongClickListener = pOnItemLongClickListener;
+    }
+    public void setpOnItemLongClickListener2(RecyclerContract.OnItemLongClickListener2 pPOnItemLongClickListener2) {
+        pOnItemLongClickListener2 = pPOnItemLongClickListener2;
     }
 
     /**
@@ -72,8 +82,12 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * @param position 位置
      */
     public void onItemClick(View view, int position) {
+        //兼容处理
         if (null != pOnItemClickListener) {
-            pOnItemClickListener.onItemClick(this,view, position - getBaseCount());
+            pOnItemClickListener.onItemClick(view, position - getBaseCount());
+        }
+        if (null != pOnItemClickListener2) {
+            pOnItemClickListener2.onItemClick(this, view, position - getBaseCount());
         }
     }
 
@@ -84,14 +98,18 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * @param position 位置
      */
     public void onItemLongClick(View view, int position) {
+        //兼容处理
         if (null != pOnItemLongClickListener) {
-            pOnItemLongClickListener.onItemLongClick(this,view, position - getBaseCount());
+            pOnItemLongClickListener.onItemLongClick(view, position - getBaseCount());
+        }
+        if (null != pOnItemLongClickListener2) {
+            pOnItemLongClickListener2.onItemLongClick(this, view, position - getBaseCount());
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        Log.d("TAG:"+getClass().getName(),"position:"+position);
+        Log.d("TAG:" + getClass().getName(), "position:" + position);
     }
 
     @Override
@@ -99,17 +117,22 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         super.onViewRecycled(holder);
         holder.mOnClickListener = null;
         holder.mOnLongClickListener = null;
+        holder.mRecyclerClickListener = null;
+        holder.mRecyclerLongClickListener = null;
     }
 
     /**
      * 获取在之前有多少个
+     *
      * @return 基数
      */
     public int getBaseCount() {
         return mBaseCount;
     }
+
     /**
      * set在之前有多少个
+     *
      * @return 基数
      */
     public void setBaseCount(int baseCount) {
@@ -120,9 +143,9 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager lLayoutManager = recyclerView.getLayoutManager();
-        if (lLayoutManager instanceof GridLayoutManager){
+        if (lLayoutManager instanceof GridLayoutManager) {
             final GridLayoutManager lLayoutManager1 = (GridLayoutManager) lLayoutManager;
-            lLayoutManager1.setSpanSizeLookup(new BaseSpanSizeLookup(this,lLayoutManager1.getSpanCount()));
+            lLayoutManager1.setSpanSizeLookup(new BaseSpanSizeLookup(this, lLayoutManager1.getSpanCount()));
         }
     }
 
@@ -130,17 +153,17 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         RecyclerView.LayoutManager lLayoutManager = recyclerView.getLayoutManager();
-        if (lLayoutManager instanceof GridLayoutManager){
+        if (lLayoutManager instanceof GridLayoutManager) {
             final GridLayoutManager lLayoutManager1 = (GridLayoutManager) lLayoutManager;
             lLayoutManager1.setSpanSizeLookup(null);
         }
     }
 
-    protected int getSpanSize(int defSize, int position){
+    protected int getSpanSize(int defSize, int position) {
         return defSize;
     }
 
-    class BaseSpanSizeLookup extends GridLayoutManager.SpanSizeLookup{
+    class BaseSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
         private RecyclerViewClick mRecyclerViewClick;
         private int defSize = 0;
 
@@ -151,7 +174,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
 
         @Override
         public int getSpanSize(int position) {
-            return mRecyclerViewClick.getSpanSize(defSize,position);
+            return mRecyclerViewClick.getSpanSize(defSize, position);
         }
     }
 
@@ -197,6 +220,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
             view.setOnClickListener(mOnClickListener);
             return true;
         }
+
         /**
          * 执行点击事件
          *
@@ -229,13 +253,13 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * @param recyclerViewClick Adapter对象
          * @return 是否set成功
          */
-        public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick,int position) {
+        public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick, int position) {
             //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
             if (mRecyclerClickListener == null) {
                 mRecyclerClickListener = new RecyclerContract.RecyclerClickListener();
             }
-            mRecyclerClickListener.setPositionRecyclerView(recyclerViewClick,position);
-            view.setOnClickListener(mOnClickListener);
+            mRecyclerClickListener.setPositionRecyclerView(recyclerViewClick, position);
+            view.setOnClickListener(mRecyclerClickListener);
             return true;
         }
 
@@ -246,12 +270,12 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * @param recyclerViewClick Adapter对象
          * @return is set success
          */
-        public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick,int position) {
+        public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick, int position) {
             if (mRecyclerLongClickListener == null) {
                 mRecyclerLongClickListener = new RecyclerContract.RecyclerLongClickListener();
             }
-            mRecyclerLongClickListener.setPositionRecyclerView(recyclerViewClick,position);
-            view.setOnLongClickListener(mOnLongClickListener);
+            mRecyclerLongClickListener.setPositionRecyclerView(recyclerViewClick, position);
+            view.setOnLongClickListener(mRecyclerLongClickListener);
             return true;
         }
 

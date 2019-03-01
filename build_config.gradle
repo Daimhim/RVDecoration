@@ -49,7 +49,7 @@ def MultiDexVersion = "1.0.2"
 def OneKeyPaymentVersion = "1.0.7"
 
 //RvAdapter
-def RvAdapterVersion = "1.1.6"
+def RvAdapterVersion = "1.2.0_Beta-4"
 
 //Used
 def UsedVersion = "1.0.5-alpha-1"

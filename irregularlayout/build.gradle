@@ -5,7 +5,7 @@ android {
     buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        applicationId "org.daimhim.adapterdemo"
+        applicationId "org.daimhim.irregularlayout"
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode 1
@@ -26,15 +26,17 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation rootProject.ext.dependencies.libTimber
-    testImplementation rootProject.ext.dependencies.libJunit
-    androidTestImplementation rootProject.ext.dependencies.libRunner
-    androidTestImplementation rootProject.ext.dependencies.libEspressoCore
+
+    implementation rootProject.ext.dependencies.libGson
     implementation rootProject.ext.dependencies.libConstraintLayout
     implementation rootProject.ext.dependencies.libAppCompatV7
     implementation rootProject.ext.dependencies.libRecyclerViewV7
-    implementation rootProject.ext.dependencies.libPaging
-    implementation project(':rvdecoration')
-    implementation 'org.daimhim.rvdecoration:rvadapter:1.2.0_Beta-4'
-//    implementation project(':rvadapter')
+    implementation rootProject.ext.dependencies.libSmartRefreshLayout
+    implementation rootProject.ext.dependencies.libUsed
+    implementation rootProject.ext.dependencies.libTimber
+    implementation project(':rvadapter')
+    implementation rootProject.ext.dependencies.libPictureLoad
+    testImplementation rootProject.ext.dependencies.libJunit
+    androidTestImplementation rootProject.ext.dependencies.libRunner
+    androidTestImplementation rootProject.ext.dependencies.libEspressoCore
 }

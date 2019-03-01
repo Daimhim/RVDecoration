@@ -6,6 +6,7 @@ buildscript {
         jcenter()
         google()
         maven { url 'https://jitpack.io' }
+        maven { url 'https://dl.bintray.com/daimhim/widget/'}
         mavenCentral()
     }
     dependencies {
@@ -16,11 +17,13 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+
 allprojects {
     repositories {
         jcenter()
         google()
         maven { url 'https://jitpack.io' }
+        maven { url 'https://dl.bintray.com/daimhim/widget/'}
         mavenCentral()
     }
 }

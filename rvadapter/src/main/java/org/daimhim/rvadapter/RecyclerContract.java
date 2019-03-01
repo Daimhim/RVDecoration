@@ -22,7 +22,7 @@ public interface RecyclerContract {
     /**
      * 提供给外部的 接口  传入此接口 监听点击事件
      */
-    interface OnItemClickListener {
+    interface OnItemClickListener2 {
         /**
          * 点击事件
          *
@@ -35,7 +35,7 @@ public interface RecyclerContract {
     /**
      * 提供给外部的 接口  传入此接口 监听点击事件
      */
-    interface OnItemLongClickListener {
+    interface OnItemLongClickListener2 {
         /**
          * 长点击事件
          *
@@ -44,6 +44,31 @@ public interface RecyclerContract {
          */
         void onItemLongClick(RecyclerViewClick pRecyclerViewClick, View view, int position);
     }
+
+    /**
+     * 提供给外部的 接口  传入此接口 监听点击事件
+     */
+    interface OnItemClickListener {
+        /**
+         * 点击事件
+         * @param view View
+         * @param position position
+         */
+        void onItemClick(View view, int position);
+    }
+
+    /**
+     *  提供给外部的 接口  传入此接口 监听点击事件
+     */
+    interface OnItemLongClickListener {
+        /**
+         * 长点击事件
+         * @param view  view
+         * @param position position
+         */
+        void onItemLongClick(View view, int position);
+    }
+
 
     /**
      * 空界面
