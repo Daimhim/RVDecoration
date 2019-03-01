@@ -15,6 +15,7 @@ import android.view.View;
 import org.daimhim.rvadapter.AdapterManagement;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
 
+import java.util.ArrayList;
 import java.util.Timer;
 
 import timber.log.Timber;
@@ -60,19 +61,21 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
             mMeasureTarget = new ExpandableVerticalGridDecoration((RecyclerViewExpandable) lAdapter);
         }else if (lAdapter instanceof AdapterManagement){
 
+        }else {
+            mMeasureTarget = new MortalGridDecoration();
         }
     }
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        int childCount = parent.getChildCount();
-        View childAt;
-        for (int i = 0; i < childCount; i++) {
-            mRect.set(0, 0, 0, 0);
-            childAt = parent.getChildAt(i);
-            getMeasureTarget().getItemOffsets(mRect, childAt, parent, state);
-            DrawHelp.drawLine(c, mRect, mPaint, childAt);
-        }
+//        int childCount = parent.getChildCount();
+//        View childAt;
+//        for (int i = 0; i < childCount; i++) {
+//            mRect.set(0, 0, 0, 0);
+//            childAt = parent.getChildAt(i);
+//            getMeasureTarget().getItemOffsets(mRect, childAt, parent, state);
+//            DrawHelp.drawLine(c, mRect, mPaint, childAt);
+//        }
     }
 
 
@@ -89,15 +92,17 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            final RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) view.getLayoutParams();
             int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
+//            Timber.i("topMargin:%s leftMargin:%s rightMargin:%s bottomMargin:%s lChildAdapterPosition:%s",
+//                    lp.topMargin,lp.leftMargin,lp.rightMargin,lp.bottomMargin,lChildAdapterPosition);
             int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
             int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
             outRect.set(0,0,0,0);
-//            Timber.i("lChildAdapterPosition:%s mPreviousPosition:%s lSpanCount:%s lSpanSize:%s",lChildAdapterPosition,mPreviousPosition,lSpanCount,lSpanSize);
             if (mOrientation == GridLayoutManager.VERTICAL) {
                 Pair<Integer, Integer> lPair = mRecyclerViewExpandable.indexOfPosition(lChildAdapterPosition);
-//                Timber.i("first:%s second:%s position:%s lSpanSize:%s",
-//                        lPair.first,lPair.second,lChildAdapterPosition,lSpanSize);
+                Timber.i("first:%s second:%s position:%s lSpanSize:%s mPreviousPosition:%s lSpanCount:%s",
+                        lPair.first,lPair.second,lChildAdapterPosition,lSpanSize,mPreviousPosition,lSpanCount);
                 if (lPair.second == -1) { //group
                     onMeasureItemOffsets(lChildAdapterPosition, 0, outRect, true);
                 } else if (lSpanCount == lSpanSize){ //full line
@@ -115,7 +120,34 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
             }
         }
     }
-
+    class MortalGridDecoration implements RecycleDecoration.MeasureTarget{
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            final RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) view.getLayoutParams();
+            int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
+//            Timber.i("topMargin:%s leftMargin:%s rightMargin:%s bottomMargin:%s lChildAdapterPosition:%s",
+//                    lp.topMargin,lp.leftMargin,lp.rightMargin,lp.bottomMargin,lChildAdapterPosition);
+            int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
+            int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
+            outRect.set(0,0,0,0);
+            if (mOrientation == GridLayoutManager.VERTICAL) {
+//                Timber.i("first:%s second:%s position:%s lSpanSize:%s mPreviousPosition:%s lSpanCount:%s",
+//                        lPair.first,lPair.second,lChildAdapterPosition,lSpanSize,mPreviousPosition,lSpanCount);
+                if (lSpanCount == lSpanSize){ //full line
+                    onMeasureItemOffsets(lChildAdapterPosition, 2, outRect, false);
+                }else if (mPreviousPosition == 0) { //first
+                    mPreviousPosition += lSpanSize;
+                    onMeasureItemOffsets(lChildAdapterPosition, -1, outRect, false);
+                } else if (mPreviousPosition + lSpanSize == lSpanCount) { //last
+                    mPreviousPosition = 0;
+                    onMeasureItemOffsets(lChildAdapterPosition, 1, outRect, false);
+                } else {  // center
+                    mPreviousPosition += lSpanSize;
+                    onMeasureItemOffsets(lChildAdapterPosition, 0, outRect, false);
+                }
+            }
+        }
+    }
 
     /**
      * @param position
@@ -127,12 +159,12 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
         if (isFull) {
 //            outRect.set(0, 0, 0, 0);
         } else if (pPlace == 1) {
-            outRect.set(0, 0, mSize, mSize);
+            outRect.set(0, 0, 0, mSize);
         } else if (pPlace == -1) {
-            outRect.set(mSize, 0, mSize, mSize);
+            outRect.set(0, 0, mSize, mSize);
         } else if (pPlace == 2) {
             outRect.set(mSize, 0, mSize, mSize);
-        } else {
+        } else if (pPlace == 0){
             outRect.set(0, 0, mSize, mSize);
         }
     }

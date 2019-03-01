@@ -109,7 +109,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        Log.d("TAG:" + getClass().getName(), "position:" + position);
+//        Log.d("TAG:" + getClass().getName(), "position:" + position);
     }
 
     @Override
