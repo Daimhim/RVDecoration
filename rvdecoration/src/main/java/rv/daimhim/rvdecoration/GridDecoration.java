@@ -15,9 +15,6 @@ import android.view.View;
 import org.daimhim.rvadapter.AdapterManagement;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
 
-import java.util.ArrayList;
-import java.util.Timer;
-
 import timber.log.Timber;
 
 /**
@@ -41,8 +38,15 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
     private final int mSize;
     private final int mOrientation;
     private Rect mRect;
-    private int mPreviousPosition = 0;
+    /**
+     *  Previous Weights
+     */
+    private int mPreviousWeights = 0;
     private RecycleDecoration.MeasureTarget mMeasureTarget;
+    /**
+     * previous line
+     */
+    private int mPreviousLine = -1;
 
     public GridDecoration(Context pContext, @ColorRes int color,
                           @DimenRes int size, int orientation, RecyclerView pRecyclerView) {
@@ -98,24 +102,35 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
 //                    lp.topMargin,lp.leftMargin,lp.rightMargin,lp.bottomMargin,lChildAdapterPosition);
             int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
             int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
-            outRect.set(0,0,0,0);
+            int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
             if (mOrientation == GridLayoutManager.VERTICAL) {
                 Pair<Integer, Integer> lPair = mRecyclerViewExpandable.indexOfPosition(lChildAdapterPosition);
-                Timber.i("first:%s second:%s position:%s lSpanSize:%s mPreviousPosition:%s lSpanCount:%s",
-                        lPair.first,lPair.second,lChildAdapterPosition,lSpanSize,mPreviousPosition,lSpanCount);
                 if (lPair.second == -1) { //group
-                    onMeasureItemOffsets(lChildAdapterPosition, 0, outRect, true);
+
                 } else if (lSpanCount == lSpanSize){ //full line
-                    onMeasureItemOffsets(lChildAdapterPosition, 2, outRect, false);
-                }else if (mPreviousPosition == 0) { //first
-                    mPreviousPosition += lSpanSize;
-                    onMeasureItemOffsets(lChildAdapterPosition, -1, outRect, false);
-                } else if (mPreviousPosition + lSpanSize == lSpanCount) { //last
-                    mPreviousPosition = 0;
-                    onMeasureItemOffsets(lChildAdapterPosition, 1, outRect, false);
+                    outRect.set(mSize, 0, mSize, mSize);
+                }else if (mPreviousWeights == 0) { //first
+                    mPreviousWeights += lSpanSize;
+                    if (mPreviousLine < spanGroupIndexl){
+                        outRect.set(mSize, 0, mSize, mSize);
+                    }else {
+                        outRect.set(0, 0, mSize, mSize);
+                    }
+                } else if (mPreviousWeights + lSpanSize == lSpanCount) { //last
+                    mPreviousWeights = 0;
+                    if (mPreviousLine < spanGroupIndexl){
+                        outRect.set(0, 0, mSize, mSize);
+                    }else {
+                        outRect.set(mSize, 0, mSize, mSize);
+                    }
+                    mPreviousLine = spanGroupIndexl;
                 } else {  // center
-                    mPreviousPosition += lSpanSize;
-                    onMeasureItemOffsets(lChildAdapterPosition, 0, outRect, false);
+                    mPreviousWeights += lSpanSize;
+                    if (mPreviousLine < spanGroupIndexl){
+                        outRect.set(0, 0, mSize, mSize);
+                    }else {
+                        outRect.set(0, 0, mSize, mSize);
+                    }
                 }
             }
         }
@@ -129,44 +144,36 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
 //                    lp.topMargin,lp.leftMargin,lp.rightMargin,lp.bottomMargin,lChildAdapterPosition);
             int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
             int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
-            outRect.set(0,0,0,0);
+            int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
             if (mOrientation == GridLayoutManager.VERTICAL) {
-//                Timber.i("first:%s second:%s position:%s lSpanSize:%s mPreviousPosition:%s lSpanCount:%s",
-//                        lPair.first,lPair.second,lChildAdapterPosition,lSpanSize,mPreviousPosition,lSpanCount);
                 if (lSpanCount == lSpanSize){ //full line
-                    onMeasureItemOffsets(lChildAdapterPosition, 2, outRect, false);
-                }else if (mPreviousPosition == 0) { //first
-                    mPreviousPosition += lSpanSize;
-                    onMeasureItemOffsets(lChildAdapterPosition, -1, outRect, false);
-                } else if (mPreviousPosition + lSpanSize == lSpanCount) { //last
-                    mPreviousPosition = 0;
-                    onMeasureItemOffsets(lChildAdapterPosition, 1, outRect, false);
+                    outRect.set(mSize, 0, mSize, mSize);
+                }else if (mPreviousWeights == 0) { //first
+                    mPreviousWeights += lSpanSize;
+                    if (mPreviousLine < spanGroupIndexl){
+                        outRect.set(mSize, 0, mSize, mSize);
+                    }else {
+                        outRect.set(0, 0, mSize, mSize);
+                    }
+                } else if (mPreviousWeights + lSpanSize == lSpanCount) { //last
+                    mPreviousWeights = 0;
+                    if (mPreviousLine < spanGroupIndexl){
+                        outRect.set(0, 0, mSize, mSize);
+                    }else {
+                        outRect.set(mSize, 0, mSize, mSize);
+                    }
+                    mPreviousLine = spanGroupIndexl;
                 } else {  // center
-                    mPreviousPosition += lSpanSize;
-                    onMeasureItemOffsets(lChildAdapterPosition, 0, outRect, false);
+                    mPreviousWeights += lSpanSize;
+                    if (mPreviousLine < spanGroupIndexl){
+                        outRect.set(0, 0, mSize, mSize);
+                    }else {
+                        outRect.set(0, 0, mSize, mSize);
+                    }
                 }
             }
         }
     }
 
-    /**
-     * @param position
-     * @param pPlace   -1 lift 0 cent 1 right
-     * @param outRect
-     */
-    void onMeasureItemOffsets(int position, int pPlace, Rect outRect, boolean isFull) {
-        Timber.i("position:%s pPlace%s",position,pPlace);
-        if (isFull) {
-//            outRect.set(0, 0, 0, 0);
-        } else if (pPlace == 1) {
-            outRect.set(0, 0, 0, mSize);
-        } else if (pPlace == -1) {
-            outRect.set(0, 0, mSize, mSize);
-        } else if (pPlace == 2) {
-            outRect.set(mSize, 0, mSize, mSize);
-        } else if (pPlace == 0){
-            outRect.set(0, 0, mSize, mSize);
-        }
-    }
 
 }

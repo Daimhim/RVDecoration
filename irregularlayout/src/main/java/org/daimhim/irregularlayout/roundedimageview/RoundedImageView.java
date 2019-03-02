@@ -60,7 +60,7 @@ public class RoundedImageView extends ImageView {
 
     private Drawable mBackgroundDrawable;
     private ColorStateList mBorderColor =
-            ColorStateList.valueOf(meyki.sst.ui.views.roundedimageview.RoundedDrawable.DEFAULT_BORDER_COLOR);
+            ColorStateList.valueOf(RoundedDrawable.DEFAULT_BORDER_COLOR);
     private float mBorderWidth = DEFAULT_BORDER_WIDTH;
     private ColorFilter mColorFilter = null;
     private boolean mColorMod = false;
@@ -98,13 +98,13 @@ public class RoundedImageView extends ImageView {
         float cornerRadiusOverride =
                 a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius, -1);
 
-        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.TOP_LEFT] =
+        mCornerRadii[Corner.TOP_LEFT] =
                 a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_left, -1);
-        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.TOP_RIGHT] =
+        mCornerRadii[Corner.TOP_RIGHT] =
                 a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_right, -1);
-        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.BOTTOM_RIGHT] =
+        mCornerRadii[Corner.BOTTOM_RIGHT] =
                 a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_right, -1);
-        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.BOTTOM_LEFT] =
+        mCornerRadii[Corner.BOTTOM_LEFT] =
                 a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_left, -1);
 
         boolean any = false;
@@ -132,7 +132,7 @@ public class RoundedImageView extends ImageView {
 
         mBorderColor = a.getColorStateList(R.styleable.RoundedImageView_riv_border_color);
         if (mBorderColor == null) {
-            mBorderColor = ColorStateList.valueOf(meyki.sst.ui.views.roundedimageview.RoundedDrawable.DEFAULT_BORDER_COLOR);
+            mBorderColor = ColorStateList.valueOf(RoundedDrawable.DEFAULT_BORDER_COLOR);
         }
 
         mMutateBackground = a.getBoolean(R.styleable.RoundedImageView_riv_mutate_background, false);
@@ -226,7 +226,7 @@ public class RoundedImageView extends ImageView {
     @Override
     public void setImageDrawable(Drawable drawable) {
         mResource = 0;
-        mDrawable = meyki.sst.ui.views.roundedimageview.RoundedDrawable.fromDrawable(drawable);
+        mDrawable = RoundedDrawable.fromDrawable(drawable);
         updateDrawableAttrs();
         super.setImageDrawable(mDrawable);
     }
@@ -234,7 +234,7 @@ public class RoundedImageView extends ImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         mResource = 0;
-        mDrawable = meyki.sst.ui.views.roundedimageview.RoundedDrawable.fromBitmap(bm);
+        mDrawable = RoundedDrawable.fromBitmap(bm);
         updateDrawableAttrs();
         super.setImageDrawable(mDrawable);
     }
@@ -269,7 +269,7 @@ public class RoundedImageView extends ImageView {
                 mResource = 0;
             }
         }
-        return meyki.sst.ui.views.roundedimageview.RoundedDrawable.fromDrawable(d);
+        return RoundedDrawable.fromDrawable(d);
     }
 
     @Override
@@ -307,7 +307,7 @@ public class RoundedImageView extends ImageView {
                 mBackgroundResource = 0;
             }
         }
-        return meyki.sst.ui.views.roundedimageview.RoundedDrawable.fromDrawable(d);
+        return RoundedDrawable.fromDrawable(d);
     }
 
     private void updateDrawableAttrs() {
@@ -317,7 +317,7 @@ public class RoundedImageView extends ImageView {
     private void updateBackgroundDrawableAttrs(boolean convert) {
         if (mMutateBackground) {
             if (convert) {
-                mBackgroundDrawable = meyki.sst.ui.views.roundedimageview.RoundedDrawable.fromDrawable(mBackgroundDrawable);
+                mBackgroundDrawable = RoundedDrawable.fromDrawable(mBackgroundDrawable);
             }
             updateAttrs(mBackgroundDrawable, ScaleType.FIT_XY);
         }
@@ -351,8 +351,8 @@ public class RoundedImageView extends ImageView {
     private void updateAttrs(Drawable drawable, ScaleType scaleType) {
         if (drawable == null) { return; }
 
-        if (drawable instanceof meyki.sst.ui.views.roundedimageview.RoundedDrawable) {
-            ((meyki.sst.ui.views.roundedimageview.RoundedDrawable) drawable)
+        if (drawable instanceof RoundedDrawable) {
+            ((RoundedDrawable) drawable)
                     .setScaleType(scaleType)
                     .setBorderWidth(mBorderWidth)
                     .setBorderColor(mBorderColor)
@@ -361,11 +361,11 @@ public class RoundedImageView extends ImageView {
                     .setTileModeY(mTileModeY);
 
             if (mCornerRadii != null) {
-                ((meyki.sst.ui.views.roundedimageview.RoundedDrawable) drawable).setCornerRadius(
-                        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.TOP_LEFT],
-                        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.TOP_RIGHT],
-                        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.BOTTOM_RIGHT],
-                        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.BOTTOM_LEFT]);
+                ((RoundedDrawable) drawable).setCornerRadius(
+                        mCornerRadii[Corner.TOP_LEFT],
+                        mCornerRadii[Corner.TOP_RIGHT],
+                        mCornerRadii[Corner.BOTTOM_RIGHT],
+                        mCornerRadii[Corner.BOTTOM_LEFT]);
             }
 
             applyColorMod();
@@ -411,7 +411,7 @@ public class RoundedImageView extends ImageView {
      * @param corner the corner.
      * @return the radius.
      */
-    public float getCornerRadius(@meyki.sst.ui.views.roundedimageview.Corner int corner) {
+    public float getCornerRadius(@Corner int corner) {
         return mCornerRadii[corner];
     }
 
@@ -431,7 +431,7 @@ public class RoundedImageView extends ImageView {
      * @param corner the corner to set.
      * @param resId the dimension resource id of the corner radius.
      */
-    public void setCornerRadiusDimen(@meyki.sst.ui.views.roundedimageview.Corner int corner, @DimenRes int resId) {
+    public void setCornerRadiusDimen(@Corner int corner, @DimenRes int resId) {
         setCornerRadius(corner, getResources().getDimensionPixelSize(resId));
     }
 
@@ -450,7 +450,7 @@ public class RoundedImageView extends ImageView {
      * @param corner the corner to set.
      * @param radius the corner radius to set in px.
      */
-    public void setCornerRadius(@meyki.sst.ui.views.roundedimageview.Corner int corner, float radius) {
+    public void setCornerRadius(@Corner int corner, float radius) {
         if (mCornerRadii[corner] == radius) {
             return;
         }
@@ -471,17 +471,17 @@ public class RoundedImageView extends ImageView {
      * @param bottomLeft radius of the bottom left corner in px.
      */
     public void setCornerRadius(float topLeft, float topRight, float bottomLeft, float bottomRight) {
-        if (mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.TOP_LEFT] == topLeft
-                && mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.TOP_RIGHT] == topRight
-                && mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.BOTTOM_RIGHT] == bottomRight
-                && mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.BOTTOM_LEFT] == bottomLeft) {
+        if (mCornerRadii[Corner.TOP_LEFT] == topLeft
+                && mCornerRadii[Corner.TOP_RIGHT] == topRight
+                && mCornerRadii[Corner.BOTTOM_RIGHT] == bottomRight
+                && mCornerRadii[Corner.BOTTOM_LEFT] == bottomLeft) {
             return;
         }
 
-        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.TOP_LEFT] = topLeft;
-        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.TOP_RIGHT] = topRight;
-        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.BOTTOM_LEFT] = bottomLeft;
-        mCornerRadii[meyki.sst.ui.views.roundedimageview.Corner.BOTTOM_RIGHT] = bottomRight;
+        mCornerRadii[Corner.TOP_LEFT] = topLeft;
+        mCornerRadii[Corner.TOP_RIGHT] = topRight;
+        mCornerRadii[Corner.BOTTOM_LEFT] = bottomLeft;
+        mCornerRadii[Corner.BOTTOM_RIGHT] = bottomRight;
 
         updateDrawableAttrs();
         updateBackgroundDrawableAttrs(false);
@@ -522,7 +522,7 @@ public class RoundedImageView extends ImageView {
         if (mBorderColor.equals(colors)) { return; }
 
         mBorderColor =
-                (colors != null) ? colors : ColorStateList.valueOf(meyki.sst.ui.views.roundedimageview.RoundedDrawable.DEFAULT_BORDER_COLOR);
+                (colors != null) ? colors : ColorStateList.valueOf(RoundedDrawable.DEFAULT_BORDER_COLOR);
         updateDrawableAttrs();
         updateBackgroundDrawableAttrs(false);
         if (mBorderWidth > 0) {

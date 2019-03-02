@@ -28,8 +28,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation rootProject.ext.dependencies.libGson
+    implementation rootProject.ext.dependencies.libPaging
     implementation rootProject.ext.dependencies.libConstraintLayout
-    implementation rootProject.ext.dependencies.libAppCompatV7
+    implementation (rootProject.ext.dependencies.libAppCompatV7) {
+        exclude group: 'android.arch.lifecycle'
+    }
     implementation rootProject.ext.dependencies.libRecyclerViewV7
     implementation rootProject.ext.dependencies.libSmartRefreshLayout
     implementation rootProject.ext.dependencies.libUsed

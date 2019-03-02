@@ -26,11 +26,13 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     compileOnly rootProject.ext.dependencies.libPaging
+    compileOnly rootProject.ext.dependencies.libRecyclerViewV7
+
     testImplementation rootProject.ext.dependencies.libJunit
     androidTestImplementation rootProject.ext.dependencies.libRunner
     androidTestImplementation rootProject.ext.dependencies.libEspressoCore
-    compileOnly rootProject.ext.dependencies.libRecyclerViewV7
 }
 
 
