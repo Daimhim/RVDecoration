@@ -15,8 +15,6 @@ import android.view.View;
 import org.daimhim.rvadapter.AdapterManagement;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
 
-import timber.log.Timber;
-
 /**
  * 项目名称：rv.daimhim.rvdecoration
  * 项目版本：RVDecoration
@@ -62,9 +60,9 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
         mSpanSizeLookup.setSpanIndexCacheEnabled(true);
         RecyclerView.Adapter lAdapter = pRecyclerView.getAdapter();
         if (lAdapter instanceof RecyclerViewExpandable) {
-            mMeasureTarget = new ExpandableVerticalGridDecoration((RecyclerViewExpandable) lAdapter);
+            mMeasureTarget = new ExpandableGridDecoration((RecyclerViewExpandable) lAdapter);
         }else if (lAdapter instanceof AdapterManagement){
-
+            mMeasureTarget = new ExpandableAndMortalGridDecoration(lAdapter);
         }else {
             mMeasureTarget = new MortalGridDecoration();
         }
@@ -87,46 +85,47 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
         return mMeasureTarget;
     }
 
-    class ExpandableVerticalGridDecoration implements RecycleDecoration.MeasureTarget {
+    class ExpandableGridDecoration implements RecycleDecoration.MeasureTarget {
         private RecyclerViewExpandable mRecyclerViewExpandable;
 
-        public ExpandableVerticalGridDecoration(RecyclerViewExpandable pRecyclerViewExpandable) {
+        public ExpandableGridDecoration(RecyclerViewExpandable pRecyclerViewExpandable) {
             mRecyclerViewExpandable = pRecyclerViewExpandable;
         }
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            final RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) view.getLayoutParams();
             int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
-//            Timber.i("topMargin:%s leftMargin:%s rightMargin:%s bottomMargin:%s lChildAdapterPosition:%s",
-//                    lp.topMargin,lp.leftMargin,lp.rightMargin,lp.bottomMargin,lChildAdapterPosition);
             int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
             int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
             int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
+            expandableGridDecoration(outRect, lChildAdapterPosition, lSpanSize, lSpanCount, spanGroupIndexl);
+        }
+
+        private void expandableGridDecoration(Rect outRect, int lChildAdapterPositionp, int lSpanSizep, int lSpanCountp, int spanGroupIndexp) {
             if (mOrientation == GridLayoutManager.VERTICAL) {
-                Pair<Integer, Integer> lPair = mRecyclerViewExpandable.indexOfPosition(lChildAdapterPosition);
+                Pair<Integer, Integer> lPair = mRecyclerViewExpandable.indexOfPosition(lChildAdapterPositionp);
                 if (lPair.second == -1) { //group
 
-                } else if (lSpanCount == lSpanSize){ //full line
+                } else if (lSpanCountp == lSpanSizep){ //full line
                     outRect.set(mSize, 0, mSize, mSize);
                 }else if (mPreviousWeights == 0) { //first
-                    mPreviousWeights += lSpanSize;
-                    if (mPreviousLine < spanGroupIndexl){
+                    mPreviousWeights += lSpanSizep;
+                    if (mPreviousLine < spanGroupIndexp){
                         outRect.set(mSize, 0, mSize, mSize);
                     }else {
                         outRect.set(0, 0, mSize, mSize);
                     }
-                } else if (mPreviousWeights + lSpanSize == lSpanCount) { //last
+                } else if (mPreviousWeights + lSpanSizep == lSpanCountp) { //last
                     mPreviousWeights = 0;
-                    if (mPreviousLine < spanGroupIndexl){
+                    if (mPreviousLine < spanGroupIndexp){
                         outRect.set(0, 0, mSize, mSize);
                     }else {
                         outRect.set(mSize, 0, mSize, mSize);
                     }
-                    mPreviousLine = spanGroupIndexl;
+                    mPreviousLine = spanGroupIndexp;
                 } else {  // center
-                    mPreviousWeights += lSpanSize;
-                    if (mPreviousLine < spanGroupIndexl){
+                    mPreviousWeights += lSpanSizep;
+                    if (mPreviousLine < spanGroupIndexp){
                         outRect.set(0, 0, mSize, mSize);
                     }else {
                         outRect.set(0, 0, mSize, mSize);
@@ -138,10 +137,7 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
     class MortalGridDecoration implements RecycleDecoration.MeasureTarget{
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            final RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) view.getLayoutParams();
             int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
-//            Timber.i("topMargin:%s leftMargin:%s rightMargin:%s bottomMargin:%s lChildAdapterPosition:%s",
-//                    lp.topMargin,lp.leftMargin,lp.rightMargin,lp.bottomMargin,lChildAdapterPosition);
             int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
             int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
             int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
@@ -174,6 +170,20 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
             }
         }
     }
+    class ExpandableAndMortalGridDecoration implements RecycleDecoration.MeasureTarget{
+        RecyclerView.Adapter mAdapter;
 
+        public ExpandableAndMortalGridDecoration(RecyclerView.Adapter mAdapterp) {
+            mAdapter = mAdapterp;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
+            int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
+            int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
+            int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
+        }
+    }
 
 }
