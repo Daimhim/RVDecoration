@@ -17,5 +17,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onClick(View pView){
         startActivity(new Intent(pView.getContext(),TestActivity.class));
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content,new TestFragment())
+                .commit();
     }
 }

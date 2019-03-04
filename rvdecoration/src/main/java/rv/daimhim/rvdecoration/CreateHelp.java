@@ -12,8 +12,7 @@ public class CreateHelp {
         RecyclerView.LayoutManager lLayoutManager = p.mRecyclerView.getLayoutManager();
         if (lLayoutManager instanceof GridLayoutManager){
             GridDecoration lGridDecoration = null;
-            lGridDecoration = new GridDecoration(p.mContext,
-                    p.verticalColor,p.verticalSize,p.orientation,p.mRecyclerView);
+            lGridDecoration = new GridDecoration(p);
             pLRecycleDecoration.setDrawBeforeTarget(lGridDecoration);
             pLRecycleDecoration.setMeasureTarget(lGridDecoration);
         }else if (lLayoutManager instanceof LinearLayoutManager){

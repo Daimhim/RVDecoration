@@ -39,8 +39,9 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-3'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.google.dagger:dagger:2.15'
-    implementation project(':rvdecoration')
+//    implementation project(':rvdecoration')
     implementation project(':rvadapter')
-
+//    implementation 'org.daimhim.rvdecoration:rvdecoration:1.0.0'
+    implementation (name:'rvdecoration-release', ext:'aar')
 }
 

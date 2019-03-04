@@ -87,7 +87,7 @@ implements RecyclerContract.ExpandableContract<List<ItemListBean>,ItemListBean, 
         lImageView.setLayoutParams(lLayoutParams);
 //        ImgLoadingUtil.loadImage(lDefaultConfig, lImageView,lChildItem.getGoodsImg());
         holder.getTextView(R.id.tv_goods_name).setText(lChildItem.getGoodsName());
-        holder.getTextView(R.id.tv_goods_price).setText("¥"+"("+groupPosition+")"+"("+childPosition+")");
+        holder.getTextView(R.id.tv_goods_price).setText("¥"+"("+groupPosition+")"+"("+childPosition+")" + "("+indexOfItemInPosition(groupPosition,childPosition)+")");
     }
 
     @Override

@@ -3,8 +3,13 @@ package org.daimhim.irregularlayout;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -30,7 +35,7 @@ import rv.daimhim.rvdecoration.DecorationBuilder;
  *
  * @author：Administrator
  */
-public class TestActivity extends AppCompatActivity {
+public class TestFragment extends Fragment {
 
 
     private RecyclerView mRvRecyclerview;
@@ -39,18 +44,27 @@ public class TestActivity extends AppCompatActivity {
     private TestAdapter mTestAdapter;
     private AdapterManagement mAdapterManagement;
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
-        initView();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_test,container,false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        initView(view);
         initData();
         new DecorationBuilder
                 .Builder(mRvRecyclerview)
                 .verticalDivider(R.color.cl_ffffff)
                 .verticalSpacing(R.dimen.dimen_size_5)
+                .setFootCount(2)
+                .setBaseCount(2)
+                .applyHead(true)
+                .applyFoot(true)
                 .create();
     }
+
 
     private void initData() {
 
@@ -84,9 +98,9 @@ public class TestActivity extends AppCompatActivity {
         mTestAdapter.onRefresh(lStrings);
     }
 
-    private void initView() {
-        mRvRecyclerview = (RecyclerView) findViewById(R.id.rv_recyclerview);
-        mSrlRefresh = (SmartRefreshLayout) findViewById(R.id.srl_Refresh);
+    private void initView(View pView) {
+        mRvRecyclerview = (RecyclerView) pView.findViewById(R.id.rv_recyclerview);
+        mSrlRefresh = (SmartRefreshLayout) pView.findViewById(R.id.srl_Refresh);
         mRvRecyclerview.setNestedScrollingEnabled(false);
         mSrlRefresh.setEnableLoadMore(false).setEnableRefresh(true);
         mSrlRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -98,6 +112,28 @@ public class TestActivity extends AppCompatActivity {
         mSrlRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                HomeItemBean lHomeItemBean = new Gson().fromJson(datasur, HomeItemBean.class);
+
+                List<ItemListBean> lItemList = lHomeItemBean.getItemList();
+                ItemListBean lItemListBean = null;
+                for (int i = lItemList.size() - 1; i >= 0; i--) {
+                    lItemListBean = lItemList.get(i);
+                    int lSize = lItemListBean.getDataList().size();
+                    if (lSize <= 0) {
+                        lItemList.remove(i);
+                        continue;
+                    } else if (lSize > 9) {
+                        for (int j = lSize - 1; j >= 9; j--) {
+                            lItemListBean.getDataList().remove(j);
+                        }
+                        lSize = lItemListBean.getDataList().size();
+                    }
+                    int[] lRule = getRule(lSize);
+                    for (int j = 0; j < lSize; j++) {
+                        lItemListBean.getDataList().get(j).setItemWidth(lRule[j]);
+                    }
+                }
+                mRecommendCategoryAdapter.onRefresh(lItemList);
                 refreshLayout.finishRefresh();
             }
         });
@@ -107,6 +143,7 @@ public class TestActivity extends AppCompatActivity {
         mAdapterManagement = new AdapterManagement();
         mAdapterManagement.addAdapter(mTestAdapter);
         mAdapterManagement.addAdapter(mRecommendCategoryAdapter);
+        mAdapterManagement.addAdapter(mTestAdapter);
         mRvRecyclerview.setAdapter(mAdapterManagement);
     }
 

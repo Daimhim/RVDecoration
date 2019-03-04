@@ -1,5 +1,6 @@
 package rv.daimhim.rvdecoration;
 
+import android.arch.lifecycle.BuildConfig;
 import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
@@ -36,6 +37,26 @@ public class DecorationBuilder {
             return this;
         }
 
+        public Builder applyHead(boolean isHead){
+            P.isHead = isHead;
+            return this;
+        }
+
+        public Builder applyFoot(boolean isFood){
+            P.isFood = isFood;
+            return this;
+        }
+
+        public Builder setBaseCount(int count){
+            P.baseCount = count;
+            return this;
+        }
+
+        public Builder setFootCount(int count){
+            P.footCount = count;
+            return this;
+        }
+
         //水平间隔颜色
         public Builder horizontalDivider(@ColorRes int color) {
             P.horizontalColor = color;
@@ -66,12 +87,8 @@ public class DecorationBuilder {
 
         public RecycleDecoration create(){
             RecycleDecoration lRecycleDecoration = new RecycleDecoration();
-            switch (BuildConfig.VERSION_CODE){
-                case 100:
-                    new CreateHelp().createDecorationVersion100(lRecycleDecoration,P);
-                    break;
-                default:
-                    break;
+            if (BuildConfig.VERSION_CODE<=100){
+                new CreateHelp().createDecorationVersion100(lRecycleDecoration,P);
             }
             P.mRecyclerView.addItemDecoration(lRecycleDecoration);
             return lRecycleDecoration;
@@ -89,6 +106,10 @@ public class DecorationBuilder {
         int verticalSize = R.dimen.dimen_size_1;
         @DimenRes
         int horizontalSize = R.dimen.dimen_size_1;
+        boolean isHead;
+        boolean isFood;
+        int baseCount = -1;
+        int footCount = -1;
 
         RecycleDecoration.MeasureTarget mMeasureTarget;
 

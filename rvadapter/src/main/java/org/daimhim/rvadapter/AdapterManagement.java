@@ -196,13 +196,13 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
      * 私有订阅
      */
     static class AdapterManagementDataObserver extends android.support.v7.widget.RecyclerView.AdapterDataObserver {
-        private RecyclerViewEmpty mRecyclerViewClick;
+        private AdapterManagement mRecyclerViewClick;
         /**
          * 当前adapter的起始位置
          */
         private int mPositionStart = -1;
 
-        public AdapterManagementDataObserver(RecyclerViewEmpty recyclerViewClick, int position) {
+        public AdapterManagementDataObserver(AdapterManagement recyclerViewClick, int position) {
             mRecyclerViewClick = recyclerViewClick;
             mPositionStart = position;
         }
@@ -210,31 +210,37 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
         @Override
         public void onChanged() {
             mRecyclerViewClick.notifyDataSetChanged();
+            mRecyclerViewClick.modifyBase();
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {
             mRecyclerViewClick.notifyItemRangeChanged(mPositionStart + positionStart, itemCount);
+            mRecyclerViewClick.modifyBase();
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
             mRecyclerViewClick.notifyItemRangeChanged(mPositionStart + positionStart, itemCount, payload);
+            mRecyclerViewClick.modifyBase();
         }
 
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             mRecyclerViewClick.notifyItemRangeInserted(mPositionStart + positionStart, itemCount);
+            mRecyclerViewClick.modifyBase();
         }
 
         @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {
             mRecyclerViewClick.notifyItemRangeRemoved(mPositionStart + positionStart, itemCount);
+            mRecyclerViewClick.modifyBase();
         }
 
         @Override
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
             mRecyclerViewClick.notifyItemMoved(mPositionStart + fromPosition, mPositionStart + toPosition);
+            mRecyclerViewClick.modifyBase();
         }
     }
 }

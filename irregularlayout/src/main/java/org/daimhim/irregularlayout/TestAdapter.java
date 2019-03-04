@@ -45,7 +45,7 @@ implements RecyclerContract.SimpleContract<List<String>,String> {
 
     @Override
     protected int getSpanSize(int defSize, int position) {
-        return 1;
+        return 12;
     }
 
     @Override

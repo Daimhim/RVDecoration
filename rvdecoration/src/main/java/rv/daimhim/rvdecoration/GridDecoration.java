@@ -30,7 +30,7 @@ import timber.log.Timber;
  *
  * @author：Administrator
  */
-public class GridDecoration implements RecycleDecoration.DrawBeforeTarget , RecycleDecoration.MeasureTarget{
+public class GridDecoration implements RecycleDecoration.DrawBeforeTarget, RecycleDecoration.MeasureTarget {
     private final GridLayoutManager mLayoutManager;
     private final GridLayoutManager.SpanSizeLookup mSpanSizeLookup;
     private final RecyclerView.Adapter mRecyclerViewAdapter;
@@ -42,27 +42,28 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget , Recy
     private final int mOrientation;
     private Rect mRect;
     /**
-     *  Previous Weights
+     * Previous Weights
      */
     private int mPreviousWeights = 0;
     /**
      * previous line
      */
     private int mPreviousLine = -1;
+    private DecorationBuilder.DecorationParams mDecorationParams;
 
-    public GridDecoration(Context pContext, @ColorRes int color,
-                          @DimenRes int size, int orientation, RecyclerView pRecyclerView) {
-        mSize = pContext.getResources().getDimensionPixelSize(size);
+    public GridDecoration(DecorationBuilder.DecorationParams pParams) {
+        mDecorationParams = pParams;
+        mSize = pParams.mContext.getResources().getDimensionPixelSize(pParams.verticalSize);
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.mPaint.setColor(ContextCompat.getColor(pContext, color));
+        this.mPaint.setColor(ContextCompat.getColor(pParams.mContext, pParams.verticalColor));
         this.mPaint.setStyle(Paint.Style.STROKE);
         this.mPaint.setStrokeWidth(mSize);
-        mOrientation = orientation;
+        mOrientation = pParams.orientation;
         mRect = new Rect();
-        mLayoutManager = (GridLayoutManager) pRecyclerView.getLayoutManager();
+        mLayoutManager = (GridLayoutManager) pParams.mRecyclerView.getLayoutManager();
         mSpanSizeLookup = mLayoutManager.getSpanSizeLookup();
         mSpanSizeLookup.setSpanIndexCacheEnabled(true);
-        mRecyclerViewAdapter = pRecyclerView.getAdapter();
+        mRecyclerViewAdapter = pParams.mRecyclerView.getAdapter();
     }
 
     @Override
@@ -84,11 +85,17 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget , Recy
         int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
         int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
         int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
-        taskAssignment(outRect, lChildAdapterPosition, lSpanSize, lSpanCount, spanGroupIndexl, mRecyclerViewAdapter);
+        if (lChildAdapterPosition == 0) {
+            mPreviousWeights = 0;
+            mPreviousLine = -1;
+        }
+        taskAssignment(outRect, lChildAdapterPosition, lSpanSize, lSpanCount, spanGroupIndexl,
+                mRecyclerViewAdapter);
     }
 
     /**
      * 任务派发
+     *
      * @param outRect
      * @param pChildAdapterPosition
      * @param pSpanSize
@@ -96,51 +103,58 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget , Recy
      * @param pSpanGroupIndexl
      * @param pAdapter
      */
-    private void taskAssignment(Rect outRect, int pChildAdapterPosition, int pSpanSize, int pSpanCount, int pSpanGroupIndexl, RecyclerView.Adapter pAdapter) {
-        Timber.i("pChildAdapterPosition:%s pSpanSize:%s pSpanCount:%s pSpanGroupIndexl:%s",pChildAdapterPosition,pSpanSize,pSpanCount,pSpanGroupIndexl);
+    private void taskAssignment(Rect outRect, int pChildAdapterPosition, int pSpanSize, int pSpanCount,
+                                int pSpanGroupIndexl, RecyclerView.Adapter pAdapter) {
+        Timber.i("pChildAdapterPosition:%s pSpanSize:%s pSpanCount:%s pSpanGroupIndexl:%s pAdapter:%s",
+                pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl, pAdapter.getClass().getSimpleName());
         if (pAdapter instanceof RecyclerViewExpandable) {
-            expandableGridDecoration(outRect, pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl, (RecyclerViewExpandable) pAdapter);
-        }else if (pAdapter instanceof AdapterManagement){
+            expandableGridDecoration(outRect, pChildAdapterPosition, pSpanSize, pSpanCount,
+                    pSpanGroupIndexl, (RecyclerViewExpandable) pAdapter);
+        } else if (pAdapter instanceof AdapterManagement) {
             AdapterManagement lAdapter1 = (AdapterManagement) pAdapter;
             Pair<Integer, Integer> lIntegerIntegerPair = lAdapter1.indexOfPosition(pChildAdapterPosition);
             RecyclerViewEmpty<RecyclerViewClick.ClickViewHolder> lItem = lAdapter1.getItem(lIntegerIntegerPair.first);
+            lAdapter1.modifyBase();
             taskAssignment(outRect, pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl, lItem);
-        }else {
-            mortalGridDecoration(outRect, pSpanSize, pSpanCount, pSpanGroupIndexl);
+        } else {
+            mortalGridDecoration(outRect,pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl);
         }
     }
 
     /**
      * 规则布局
+     *
      * @param outRect
      * @param pSpanSize
      * @param pSpanCount
      * @param pSpanGroupIndexl
      */
-    private void mortalGridDecoration(Rect outRect, int pSpanSize, int pSpanCount, int pSpanGroupIndexl) {
+    private void mortalGridDecoration(Rect outRect, int lChildAdapterPositionp, int pSpanSize, int pSpanCount, int pSpanGroupIndexl) {
         if (mOrientation == GridLayoutManager.VERTICAL) {
-            if (pSpanCount == pSpanSize){ //full line
+            if (mDecorationParams.isHead && lChildAdapterPositionp < mDecorationParams.baseCount
+                    || (mDecorationParams.isFood && lChildAdapterPositionp >= mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
+            } else if (pSpanCount == pSpanSize) { //full line
                 outRect.set(mSize, 0, mSize, mSize);
-            }else if (mPreviousWeights == 0) { //first
+            } else if (mPreviousWeights == 0) { //first
                 mPreviousWeights += pSpanSize;
-                if (mPreviousLine < pSpanGroupIndexl){
+                if (mPreviousLine < pSpanGroupIndexl) {
                     outRect.set(mSize, 0, mSize, mSize);
-                }else {
+                } else {
                     outRect.set(0, 0, mSize, mSize);
                 }
             } else if (mPreviousWeights + pSpanSize == pSpanCount) { //last
                 mPreviousWeights = 0;
-                if (mPreviousLine < pSpanGroupIndexl){
+                if (mPreviousLine < pSpanGroupIndexl) {
                     outRect.set(0, 0, mSize, mSize);
-                }else {
+                } else {
                     outRect.set(mSize, 0, mSize, mSize);
                 }
                 mPreviousLine = pSpanGroupIndexl;
             } else {  // center
                 mPreviousWeights += pSpanSize;
-                if (mPreviousLine < pSpanGroupIndexl){
+                if (mPreviousLine < pSpanGroupIndexl) {
                     outRect.set(0, 0, mSize, mSize);
-                }else {
+                } else {
                     outRect.set(0, 0, mSize, mSize);
                 }
             }
@@ -149,6 +163,7 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget , Recy
 
     /**
      * 不规则布局
+     *
      * @param outRect
      * @param lChildAdapterPositionp
      * @param lSpanSizep
@@ -156,33 +171,38 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget , Recy
      * @param spanGroupIndexp
      * @param pRecyclerViewExpandable
      */
-    private void expandableGridDecoration(Rect outRect, int lChildAdapterPositionp, int lSpanSizep, int lSpanCountp, int spanGroupIndexp,RecyclerViewExpandable pRecyclerViewExpandable) {
+    private void expandableGridDecoration(Rect outRect, int lChildAdapterPositionp, int lSpanSizep,
+                                          int lSpanCountp, int spanGroupIndexp, RecyclerViewExpandable pRecyclerViewExpandable) {
         if (mOrientation == GridLayoutManager.VERTICAL) {
-            Pair<Integer, Integer> lPair = pRecyclerViewExpandable.indexOfPosition(lChildAdapterPositionp);
-            if (lPair.second == -1) { //group
 
-            } else if (lSpanCountp == lSpanSizep){ //full line
+            Pair<Integer, Integer> lPair = pRecyclerViewExpandable
+                    .indexOfPosition(lChildAdapterPositionp - (mDecorationParams.baseCount == -1 ?
+                            pRecyclerViewExpandable.getBaseCount() : mDecorationParams.baseCount));
+            if (lPair.second == -1
+                    || (mDecorationParams.isHead && lChildAdapterPositionp < mDecorationParams.baseCount)
+                    || (mDecorationParams.isFood && lChildAdapterPositionp > mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
+            } else if (lSpanCountp == lSpanSizep) { //full line
                 outRect.set(mSize, 0, mSize, mSize);
-            }else if (mPreviousWeights == 0) { //first
+            } else if (mPreviousWeights == 0) { //first
                 mPreviousWeights += lSpanSizep;
-                if (mPreviousLine < spanGroupIndexp){
+                if (mPreviousLine < spanGroupIndexp) {
                     outRect.set(mSize, 0, mSize, mSize);
-                }else {
+                } else {
                     outRect.set(0, 0, mSize, mSize);
                 }
             } else if (mPreviousWeights + lSpanSizep == lSpanCountp) { //last
                 mPreviousWeights = 0;
-                if (mPreviousLine < spanGroupIndexp){
+                if (mPreviousLine < spanGroupIndexp) {
                     outRect.set(0, 0, mSize, mSize);
-                }else {
+                } else {
                     outRect.set(mSize, 0, mSize, mSize);
                 }
                 mPreviousLine = spanGroupIndexp;
             } else {  // center
                 mPreviousWeights += lSpanSizep;
-                if (mPreviousLine < spanGroupIndexp){
+                if (mPreviousLine < spanGroupIndexp) {
                     outRect.set(0, 0, mSize, mSize);
-                }else {
+                } else {
                     outRect.set(0, 0, mSize, mSize);
                 }
             }
