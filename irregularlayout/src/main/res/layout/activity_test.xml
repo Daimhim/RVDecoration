@@ -11,6 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
-        app:spanCount="12"
+        app:spanCount="3"
         app:layoutManager="android.support.v7.widget.GridLayoutManager" />
 </com.scwang.smartrefresh.layout.SmartRefreshLayout>

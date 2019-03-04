@@ -15,7 +15,7 @@ public class CreateHelp {
             lGridDecoration = new GridDecoration(p.mContext,
                     p.verticalColor,p.verticalSize,p.orientation,p.mRecyclerView);
             pLRecycleDecoration.setDrawBeforeTarget(lGridDecoration);
-            pLRecycleDecoration.setMeasureTarget(lGridDecoration.getMeasureTarget());
+            pLRecycleDecoration.setMeasureTarget(lGridDecoration);
         }else if (lLayoutManager instanceof LinearLayoutManager){
             LinearDecoration lLinearDecoration = null;
             if (p.orientation == OrientationHelper.VERTICAL) {

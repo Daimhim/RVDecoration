@@ -13,7 +13,11 @@ import android.util.Pair;
 import android.view.View;
 
 import org.daimhim.rvadapter.AdapterManagement;
+import org.daimhim.rvadapter.RecyclerViewClick;
+import org.daimhim.rvadapter.RecyclerViewEmpty;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
+
+import timber.log.Timber;
 
 /**
  * 项目名称：rv.daimhim.rvdecoration
@@ -26,9 +30,10 @@ import org.daimhim.rvadapter.RecyclerViewExpandable;
  *
  * @author：Administrator
  */
-public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
+public class GridDecoration implements RecycleDecoration.DrawBeforeTarget , RecycleDecoration.MeasureTarget{
     private final GridLayoutManager mLayoutManager;
     private final GridLayoutManager.SpanSizeLookup mSpanSizeLookup;
+    private final RecyclerView.Adapter mRecyclerViewAdapter;
     /**
      * 画笔
      */
@@ -40,7 +45,6 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
      *  Previous Weights
      */
     private int mPreviousWeights = 0;
-    private RecycleDecoration.MeasureTarget mMeasureTarget;
     /**
      * previous line
      */
@@ -58,14 +62,7 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
         mLayoutManager = (GridLayoutManager) pRecyclerView.getLayoutManager();
         mSpanSizeLookup = mLayoutManager.getSpanSizeLookup();
         mSpanSizeLookup.setSpanIndexCacheEnabled(true);
-        RecyclerView.Adapter lAdapter = pRecyclerView.getAdapter();
-        if (lAdapter instanceof RecyclerViewExpandable) {
-            mMeasureTarget = new ExpandableGridDecoration((RecyclerViewExpandable) lAdapter);
-        }else if (lAdapter instanceof AdapterManagement){
-            mMeasureTarget = new ExpandableAndMortalGridDecoration(lAdapter);
-        }else {
-            mMeasureTarget = new MortalGridDecoration();
-        }
+        mRecyclerViewAdapter = pRecyclerView.getAdapter();
     }
 
     @Override
@@ -81,109 +78,116 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget {
     }
 
 
-    public RecycleDecoration.MeasureTarget getMeasureTarget() {
-        return mMeasureTarget;
+    @Override
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
+        int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
+        int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
+        int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
+        taskAssignment(outRect, lChildAdapterPosition, lSpanSize, lSpanCount, spanGroupIndexl, mRecyclerViewAdapter);
     }
 
-    class ExpandableGridDecoration implements RecycleDecoration.MeasureTarget {
-        private RecyclerViewExpandable mRecyclerViewExpandable;
-
-        public ExpandableGridDecoration(RecyclerViewExpandable pRecyclerViewExpandable) {
-            mRecyclerViewExpandable = pRecyclerViewExpandable;
+    /**
+     * 任务派发
+     * @param outRect
+     * @param pChildAdapterPosition
+     * @param pSpanSize
+     * @param pSpanCount
+     * @param pSpanGroupIndexl
+     * @param pAdapter
+     */
+    private void taskAssignment(Rect outRect, int pChildAdapterPosition, int pSpanSize, int pSpanCount, int pSpanGroupIndexl, RecyclerView.Adapter pAdapter) {
+        Timber.i("pChildAdapterPosition:%s pSpanSize:%s pSpanCount:%s pSpanGroupIndexl:%s",pChildAdapterPosition,pSpanSize,pSpanCount,pSpanGroupIndexl);
+        if (pAdapter instanceof RecyclerViewExpandable) {
+            expandableGridDecoration(outRect, pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl, (RecyclerViewExpandable) pAdapter);
+        }else if (pAdapter instanceof AdapterManagement){
+            AdapterManagement lAdapter1 = (AdapterManagement) pAdapter;
+            Pair<Integer, Integer> lIntegerIntegerPair = lAdapter1.indexOfPosition(pChildAdapterPosition);
+            RecyclerViewEmpty<RecyclerViewClick.ClickViewHolder> lItem = lAdapter1.getItem(lIntegerIntegerPair.first);
+            taskAssignment(outRect, pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl, lItem);
+        }else {
+            mortalGridDecoration(outRect, pSpanSize, pSpanCount, pSpanGroupIndexl);
         }
+    }
 
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
-            int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
-            int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
-            int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
-            expandableGridDecoration(outRect, lChildAdapterPosition, lSpanSize, lSpanCount, spanGroupIndexl);
-        }
-
-        private void expandableGridDecoration(Rect outRect, int lChildAdapterPositionp, int lSpanSizep, int lSpanCountp, int spanGroupIndexp) {
-            if (mOrientation == GridLayoutManager.VERTICAL) {
-                Pair<Integer, Integer> lPair = mRecyclerViewExpandable.indexOfPosition(lChildAdapterPositionp);
-                if (lPair.second == -1) { //group
-
-                } else if (lSpanCountp == lSpanSizep){ //full line
+    /**
+     * 规则布局
+     * @param outRect
+     * @param pSpanSize
+     * @param pSpanCount
+     * @param pSpanGroupIndexl
+     */
+    private void mortalGridDecoration(Rect outRect, int pSpanSize, int pSpanCount, int pSpanGroupIndexl) {
+        if (mOrientation == GridLayoutManager.VERTICAL) {
+            if (pSpanCount == pSpanSize){ //full line
+                outRect.set(mSize, 0, mSize, mSize);
+            }else if (mPreviousWeights == 0) { //first
+                mPreviousWeights += pSpanSize;
+                if (mPreviousLine < pSpanGroupIndexl){
                     outRect.set(mSize, 0, mSize, mSize);
-                }else if (mPreviousWeights == 0) { //first
-                    mPreviousWeights += lSpanSizep;
-                    if (mPreviousLine < spanGroupIndexp){
-                        outRect.set(mSize, 0, mSize, mSize);
-                    }else {
-                        outRect.set(0, 0, mSize, mSize);
-                    }
-                } else if (mPreviousWeights + lSpanSizep == lSpanCountp) { //last
-                    mPreviousWeights = 0;
-                    if (mPreviousLine < spanGroupIndexp){
-                        outRect.set(0, 0, mSize, mSize);
-                    }else {
-                        outRect.set(mSize, 0, mSize, mSize);
-                    }
-                    mPreviousLine = spanGroupIndexp;
-                } else {  // center
-                    mPreviousWeights += lSpanSizep;
-                    if (mPreviousLine < spanGroupIndexp){
-                        outRect.set(0, 0, mSize, mSize);
-                    }else {
-                        outRect.set(0, 0, mSize, mSize);
-                    }
+                }else {
+                    outRect.set(0, 0, mSize, mSize);
+                }
+            } else if (mPreviousWeights + pSpanSize == pSpanCount) { //last
+                mPreviousWeights = 0;
+                if (mPreviousLine < pSpanGroupIndexl){
+                    outRect.set(0, 0, mSize, mSize);
+                }else {
+                    outRect.set(mSize, 0, mSize, mSize);
+                }
+                mPreviousLine = pSpanGroupIndexl;
+            } else {  // center
+                mPreviousWeights += pSpanSize;
+                if (mPreviousLine < pSpanGroupIndexl){
+                    outRect.set(0, 0, mSize, mSize);
+                }else {
+                    outRect.set(0, 0, mSize, mSize);
                 }
             }
         }
     }
-    class MortalGridDecoration implements RecycleDecoration.MeasureTarget{
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
-            int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
-            int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
-            int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
-            if (mOrientation == GridLayoutManager.VERTICAL) {
-                if (lSpanCount == lSpanSize){ //full line
+
+    /**
+     * 不规则布局
+     * @param outRect
+     * @param lChildAdapterPositionp
+     * @param lSpanSizep
+     * @param lSpanCountp
+     * @param spanGroupIndexp
+     * @param pRecyclerViewExpandable
+     */
+    private void expandableGridDecoration(Rect outRect, int lChildAdapterPositionp, int lSpanSizep, int lSpanCountp, int spanGroupIndexp,RecyclerViewExpandable pRecyclerViewExpandable) {
+        if (mOrientation == GridLayoutManager.VERTICAL) {
+            Pair<Integer, Integer> lPair = pRecyclerViewExpandable.indexOfPosition(lChildAdapterPositionp);
+            if (lPair.second == -1) { //group
+
+            } else if (lSpanCountp == lSpanSizep){ //full line
+                outRect.set(mSize, 0, mSize, mSize);
+            }else if (mPreviousWeights == 0) { //first
+                mPreviousWeights += lSpanSizep;
+                if (mPreviousLine < spanGroupIndexp){
                     outRect.set(mSize, 0, mSize, mSize);
-                }else if (mPreviousWeights == 0) { //first
-                    mPreviousWeights += lSpanSize;
-                    if (mPreviousLine < spanGroupIndexl){
-                        outRect.set(mSize, 0, mSize, mSize);
-                    }else {
-                        outRect.set(0, 0, mSize, mSize);
-                    }
-                } else if (mPreviousWeights + lSpanSize == lSpanCount) { //last
-                    mPreviousWeights = 0;
-                    if (mPreviousLine < spanGroupIndexl){
-                        outRect.set(0, 0, mSize, mSize);
-                    }else {
-                        outRect.set(mSize, 0, mSize, mSize);
-                    }
-                    mPreviousLine = spanGroupIndexl;
-                } else {  // center
-                    mPreviousWeights += lSpanSize;
-                    if (mPreviousLine < spanGroupIndexl){
-                        outRect.set(0, 0, mSize, mSize);
-                    }else {
-                        outRect.set(0, 0, mSize, mSize);
-                    }
+                }else {
+                    outRect.set(0, 0, mSize, mSize);
+                }
+            } else if (mPreviousWeights + lSpanSizep == lSpanCountp) { //last
+                mPreviousWeights = 0;
+                if (mPreviousLine < spanGroupIndexp){
+                    outRect.set(0, 0, mSize, mSize);
+                }else {
+                    outRect.set(mSize, 0, mSize, mSize);
+                }
+                mPreviousLine = spanGroupIndexp;
+            } else {  // center
+                mPreviousWeights += lSpanSizep;
+                if (mPreviousLine < spanGroupIndexp){
+                    outRect.set(0, 0, mSize, mSize);
+                }else {
+                    outRect.set(0, 0, mSize, mSize);
                 }
             }
         }
     }
-    class ExpandableAndMortalGridDecoration implements RecycleDecoration.MeasureTarget{
-        RecyclerView.Adapter mAdapter;
 
-        public ExpandableAndMortalGridDecoration(RecyclerView.Adapter mAdapterp) {
-            mAdapter = mAdapterp;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int lChildAdapterPosition = parent.getChildAdapterPosition(view); //当前位置
-            int lSpanSize = mSpanSizeLookup.getSpanSize(lChildAdapterPosition); // 当前Item所占权重
-            int lSpanCount = mLayoutManager.getSpanCount();  //一行总权重
-            int spanGroupIndexl = mSpanSizeLookup.getSpanGroupIndex(lChildAdapterPosition, lSpanCount);
-        }
-    }
 
 }
