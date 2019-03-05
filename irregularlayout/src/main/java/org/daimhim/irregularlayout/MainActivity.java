@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         Timber.plant(new Timber.DebugTree());
     }
     public void onClick(View pView){
-        startActivity(new Intent(pView.getContext(),TestActivity.class));
+//        startActivity(new Intent(pView.getContext(),TestActivity.class));
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(android.R.id.content,new TestFragment())

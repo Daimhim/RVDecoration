@@ -39,6 +39,11 @@ implements RecyclerContract.SimpleContract<List<String>,String> {
     }
 
     @Override
+    public int getDataItemViewType(int position) {
+        return 10;
+    }
+
+    @Override
     public int getDataItemCount() {
         return mStrings.size();
     }

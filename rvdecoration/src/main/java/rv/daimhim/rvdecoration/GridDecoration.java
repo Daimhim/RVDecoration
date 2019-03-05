@@ -105,7 +105,7 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget, Recyc
      */
     private void taskAssignment(Rect outRect, int pChildAdapterPosition, int pSpanSize, int pSpanCount,
                                 int pSpanGroupIndexl, RecyclerView.Adapter pAdapter) {
-        Timber.i("pChildAdapterPosition:%s pSpanSize:%s pSpanCount:%s pSpanGroupIndexl:%s pAdapter:%s",
+        Timber.d("pChildAdapterPosition:%s pSpanSize:%s pSpanCount:%s pSpanGroupIndexl:%s pAdapter:%s",
                 pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl, pAdapter.getClass().getSimpleName());
         if (pAdapter instanceof RecyclerViewExpandable) {
             expandableGridDecoration(outRect, pChildAdapterPosition, pSpanSize, pSpanCount,
@@ -179,20 +179,20 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget, Recyc
                     .indexOfPosition(lChildAdapterPositionp - (mDecorationParams.baseCount == -1 ?
                             pRecyclerViewExpandable.getBaseCount() : mDecorationParams.baseCount));
             if (lPair.second == -1
-                    || (mDecorationParams.isHead && lChildAdapterPositionp < mDecorationParams.baseCount)
+                    || (mDecorationParams.isHead && (lChildAdapterPositionp < mDecorationParams.baseCount || lChildAdapterPositionp < pRecyclerViewExpandable.getBaseCount()))
                     || (mDecorationParams.isFood && lChildAdapterPositionp > mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
             } else if (lSpanCountp == lSpanSizep) { //full line
                 outRect.set(mSize, 0, mSize, mSize);
             } else if (mPreviousWeights == 0) { //first
                 mPreviousWeights += lSpanSizep;
-                if (mPreviousLine < spanGroupIndexp) {
+                if (mPreviousLine <= spanGroupIndexp) {
                     outRect.set(mSize, 0, mSize, mSize);
                 } else {
                     outRect.set(0, 0, mSize, mSize);
                 }
             } else if (mPreviousWeights + lSpanSizep == lSpanCountp) { //last
                 mPreviousWeights = 0;
-                if (mPreviousLine < spanGroupIndexp) {
+                if (mPreviousLine <= spanGroupIndexp) {
                     outRect.set(0, 0, mSize, mSize);
                 } else {
                     outRect.set(mSize, 0, mSize, mSize);
@@ -200,7 +200,7 @@ public class GridDecoration implements RecycleDecoration.DrawBeforeTarget, Recyc
                 mPreviousLine = spanGroupIndexp;
             } else {  // center
                 mPreviousWeights += lSpanSizep;
-                if (mPreviousLine < spanGroupIndexp) {
+                if (mPreviousLine <= spanGroupIndexp) {
                     outRect.set(0, 0, mSize, mSize);
                 } else {
                     outRect.set(0, 0, mSize, mSize);

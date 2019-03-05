@@ -43,6 +43,7 @@ public class TestFragment extends Fragment {
     private RecommendCategoryAdapter mRecommendCategoryAdapter;
     private TestAdapter mTestAdapter;
     private AdapterManagement mAdapterManagement;
+    private TestBannerAdapter mTestBannerAdapter;
 
     @Nullable
     @Override
@@ -92,10 +93,19 @@ public class TestFragment extends Fragment {
         mRecommendCategoryAdapter.onRefresh(lItemList);
 
         ArrayList<String> lStrings = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             lStrings.add(i+"");
         }
         mTestAdapter.onRefresh(lStrings);
+        ArrayList<String> lStrings1 = new ArrayList<>();
+        lStrings1.add("http://i0.hdslb.com/bfs/archive/ffe9735cdb517513b7de05d95767eef31abe3da9.jpg");
+        lStrings1.add("http://pic11.photophoto.cn/20090505/0019032531853250_b.jpg");
+        lStrings1.add("http://pic32.nipic.com/20130831/12906030_162306055000_2.png");
+        lStrings1.add("http://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-663171.jpg");
+        lStrings1.add("http://img3.redocn.com/tupian/20150318/huifeidekeaixiaolongkongbaipaizikatongshiliangdongwuchahua_4024620.jpg");
+        lStrings1.add("http://pic3.nipic.com/20090527/1242397_102231006_2.jpg");
+
+        mTestBannerAdapter.onRefresh(lStrings1);
     }
 
     private void initView(View pView) {
@@ -140,7 +150,9 @@ public class TestFragment extends Fragment {
         mRecommendCategoryAdapter = new RecommendCategoryAdapter();
 
         mTestAdapter = new TestAdapter();
+        mTestBannerAdapter = new TestBannerAdapter();
         mAdapterManagement = new AdapterManagement();
+        mAdapterManagement.addAdapter(mTestBannerAdapter);
         mAdapterManagement.addAdapter(mTestAdapter);
         mAdapterManagement.addAdapter(mRecommendCategoryAdapter);
         mAdapterManagement.addAdapter(mTestAdapter);

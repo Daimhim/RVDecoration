@@ -33,6 +33,7 @@ dependencies {
     implementation (rootProject.ext.dependencies.libAppCompatV7) {
         exclude group: 'android.arch.lifecycle'
     }
+    implementation rootProject.ext.dependencies.libBanner
     implementation rootProject.ext.dependencies.libRecyclerViewV7
     implementation rootProject.ext.dependencies.libSmartRefreshLayout
     implementation rootProject.ext.dependencies.libUsed
