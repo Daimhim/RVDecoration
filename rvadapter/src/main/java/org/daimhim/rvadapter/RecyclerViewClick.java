@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.ref.SoftReference;
+
 
 /**
  * 项目名称：org.daimhim.rvadapter
@@ -42,12 +44,10 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * 点击事件
      */
     protected RecyclerContract.OnItemClickListener pOnItemClickListener;
-    protected RecyclerContract.OnItemClickListener2 pOnItemClickListener2;
     /**
      * 长点击事件
      */
     protected RecyclerContract.OnItemLongClickListener pOnItemLongClickListener;
-    protected RecyclerContract.OnItemLongClickListener2 pOnItemLongClickListener2;
 
     /**
      * set点击事件
@@ -57,9 +57,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     @Deprecated
     public void setOnItemClickListener(RecyclerContract.OnItemClickListener onItemClickListener) {
         pOnItemClickListener = onItemClickListener;
-    }
-    public void setpOnItemClickListener2(RecyclerContract.OnItemClickListener2 pPOnItemClickListener2) {
-        pOnItemClickListener2 = pPOnItemClickListener2;
     }
 
     /**
@@ -71,9 +68,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     public void setpOnItemLongClickListener(RecyclerContract.OnItemLongClickListener pOnItemLongClickListener) {
         this.pOnItemLongClickListener = pOnItemLongClickListener;
     }
-    public void setpOnItemLongClickListener2(RecyclerContract.OnItemLongClickListener2 pPOnItemLongClickListener2) {
-        pOnItemLongClickListener2 = pPOnItemLongClickListener2;
-    }
 
     /**
      * 点击事件 执行过程
@@ -82,12 +76,10 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * @param position 位置
      */
     public void onItemClick(View view, int position) {
+        position = position-getBaseCount();
         //兼容处理
         if (null != pOnItemClickListener) {
             pOnItemClickListener.onItemClick(view, position - getBaseCount());
-        }
-        if (null != pOnItemClickListener2) {
-            pOnItemClickListener2.onItemClick(this, view, position - getBaseCount());
         }
     }
 
@@ -98,12 +90,10 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * @param position 位置
      */
     public void onItemLongClick(View view, int position) {
+        position = position-getBaseCount();
         //兼容处理
         if (null != pOnItemLongClickListener) {
             pOnItemLongClickListener.onItemLongClick(view, position - getBaseCount());
-        }
-        if (null != pOnItemLongClickListener2) {
-            pOnItemLongClickListener2.onItemLongClick(this, view, position - getBaseCount());
         }
     }
 
@@ -115,8 +105,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     @Override
     public void onViewRecycled(VH holder) {
         super.onViewRecycled(holder);
-        holder.mOnClickListener = null;
-        holder.mOnLongClickListener = null;
         holder.mRecyclerClickListener = null;
         holder.mRecyclerLongClickListener = null;
     }
@@ -185,11 +173,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         RecyclerContract.RecyclerClickListener mRecyclerClickListener;
         RecyclerContract.RecyclerLongClickListener mRecyclerLongClickListener;
         private SparseArray<View> mViews;
-        RecyclerViewClick mRecyclerViewClick;
-        @Deprecated
-        View.OnClickListener mOnClickListener;
-        @Deprecated
-        View.OnLongClickListener mOnLongClickListener;
 
         public ClickViewHolder(View itemView) {
             super(itemView);
@@ -206,18 +189,11 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         @Deprecated
         public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick) {
             //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
-            if (mOnClickListener == null) {
-                mRecyclerViewClick = recyclerViewClick;
-                mOnClickListener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (null != mRecyclerViewClick) {
-                            mRecyclerViewClick.onItemClick(v, getLayoutPosition());
-                        }
-                    }
-                };
+            if (mRecyclerClickListener == null) {
+                mRecyclerClickListener = new RecyclerContract.RecyclerClickListener();
             }
-            view.setOnClickListener(mOnClickListener);
+            mRecyclerClickListener.setPositionRecyclerView(recyclerViewClick, getAdapterPosition());
+            view.setOnClickListener(mRecyclerClickListener);
             return true;
         }
 
@@ -230,51 +206,10 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          */
         @Deprecated
         public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick) {
-            if (mOnLongClickListener == null) {
-                mRecyclerViewClick = recyclerViewClick;
-                mOnLongClickListener = new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (null != mRecyclerViewClick) {
-                            mRecyclerViewClick.onItemLongClick(v, getLayoutPosition());
-                        }
-                        return false;
-                    }
-                };
-            }
-            view.setOnLongClickListener(mOnLongClickListener);
-            return true;
-        }
-
-        /**
-         * 执行点击事件
-         *
-         * @param view              需要设置点击事件的View
-         * @param recyclerViewClick Adapter对象
-         * @return 是否set成功
-         */
-        public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick, int position) {
-            //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
-            if (mRecyclerClickListener == null) {
-                mRecyclerClickListener = new RecyclerContract.RecyclerClickListener();
-            }
-            mRecyclerClickListener.setPositionRecyclerView(recyclerViewClick, position);
-            view.setOnClickListener(mRecyclerClickListener);
-            return true;
-        }
-
-        /**
-         * 执行点击事件
-         *
-         * @param view              需要设置点击事件的View
-         * @param recyclerViewClick Adapter对象
-         * @return is set success
-         */
-        public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick, int position) {
             if (mRecyclerLongClickListener == null) {
                 mRecyclerLongClickListener = new RecyclerContract.RecyclerLongClickListener();
             }
-            mRecyclerLongClickListener.setPositionRecyclerView(recyclerViewClick, position);
+            mRecyclerLongClickListener.setPositionRecyclerView(recyclerViewClick, getAdapterPosition());
             view.setOnLongClickListener(mRecyclerLongClickListener);
             return true;
         }

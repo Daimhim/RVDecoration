@@ -294,8 +294,10 @@ public interface RecyclerContract {
         }
 
         public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
-            mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
-            mPosition = pPosition;
+            if (mRecyclerViewClickSoftReference.get()!=null && mRecyclerViewClickSoftReference.get() == pRecyclerViewClick) {
+                mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
+                mPosition = pPosition;
+            }
         }
     }
 
@@ -312,8 +314,10 @@ public interface RecyclerContract {
         }
 
         public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
-            mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
-            mPosition = pPosition;
+            if (mRecyclerViewClickSoftReference.get()!=null && mRecyclerViewClickSoftReference.get() == pRecyclerViewClick) {
+                mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
+                mPosition = pPosition;
+            }
         }
     }
 
