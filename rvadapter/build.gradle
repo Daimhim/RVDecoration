@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode 123
-        versionName "1.2.0_Beta-5"
+        versionCode 124
+        versionName "1.2.0_Beta-6"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
