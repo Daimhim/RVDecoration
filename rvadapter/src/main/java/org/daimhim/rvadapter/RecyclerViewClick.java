@@ -54,7 +54,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      *
      * @param onItemClickListener 点击事件监听对象
      */
-    @Deprecated
     public void setOnItemClickListener(RecyclerContract.OnItemClickListener onItemClickListener) {
         pOnItemClickListener = onItemClickListener;
     }
@@ -64,7 +63,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      *
      * @param pOnItemLongClickListener 点击事件监听对象
      */
-    @Deprecated
     public void setpOnItemLongClickListener(RecyclerContract.OnItemLongClickListener pOnItemLongClickListener) {
         this.pOnItemLongClickListener = pOnItemLongClickListener;
     }
@@ -186,7 +184,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * @param recyclerViewClick Adapter对象
          * @return 是否set成功
          */
-        @Deprecated
         public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick) {
             //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
             if (mRecyclerClickListener == null) {
@@ -204,7 +201,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * @param recyclerViewClick Adapter对象
          * @return is set success
          */
-        @Deprecated
         public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick) {
             if (mRecyclerLongClickListener == null) {
                 mRecyclerLongClickListener = new RecyclerContract.RecyclerLongClickListener();
