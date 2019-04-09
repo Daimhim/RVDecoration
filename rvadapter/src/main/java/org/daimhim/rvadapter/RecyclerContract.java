@@ -51,19 +51,21 @@ public interface RecyclerContract {
     interface OnItemClickListener {
         /**
          * 点击事件
-         * @param view View
+         *
+         * @param view     View
          * @param position position
          */
         void onItemClick(View view, int position);
     }
 
     /**
-     *  提供给外部的 接口  传入此接口 监听点击事件
+     * 提供给外部的 接口  传入此接口 监听点击事件
      */
     interface OnItemLongClickListener {
         /**
          * 长点击事件
-         * @param view  view
+         *
+         * @param view     view
          * @param position position
          */
         void onItemLongClick(View view, int position);
@@ -287,7 +289,7 @@ public interface RecyclerContract {
 
         @Override
         public void onClick(View v) {
-            if (null != mRecyclerViewClickSoftReference.get()) {
+            if (mRecyclerViewClickSoftReference != null && null != mRecyclerViewClickSoftReference.get()) {
                 mRecyclerViewClickSoftReference.get().onItemClick(v, mPosition);
             }
         }
@@ -306,7 +308,7 @@ public interface RecyclerContract {
 
         @Override
         public boolean onLongClick(View v) {
-            if (null != mRecyclerViewClickSoftReference.get()) {
+            if (mRecyclerViewClickSoftReference != null && null != mRecyclerViewClickSoftReference.get()) {
                 mRecyclerViewClickSoftReference.get().onItemLongClick(v, mPosition);
             }
             return false;

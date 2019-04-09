@@ -74,7 +74,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * @param position 位置
      */
     public void onItemClick(View view, int position) {
-        position = position-getBaseCount();
         //兼容处理
         if (null != pOnItemClickListener) {
             pOnItemClickListener.onItemClick(view, position - getBaseCount());
@@ -88,7 +87,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * @param position 位置
      */
     public void onItemLongClick(View view, int position) {
-        position = position-getBaseCount();
         //兼容处理
         if (null != pOnItemLongClickListener) {
             pOnItemLongClickListener.onItemLongClick(view, position - getBaseCount());
