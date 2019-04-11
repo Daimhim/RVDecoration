@@ -22,25 +22,28 @@ import android.view.View;
  * 修改备注：
  */
 
-public class LinearDecoration extends AbsLinearDecoration implements RecycleDecoration.DrawBeforeTarget,
+public class LinearVerticalDecoration extends AbsLinearDecoration implements RecycleDecoration.DrawBeforeTarget,
         RecycleDecoration.MeasureTarget  {
     /**
      * 画笔
      */
     private Paint mPaint;
     private final int mSize;
-    private final int mOrientation;
     private Rect mRect;
-    protected LinearDecoration(Context pContext, @ColorRes int color,
-                               @DimenRes int size, int orientation) {
-        mSize = pContext.getResources().getDimensionPixelSize(size);
+    private boolean isFoot;
+    private boolean isHead;
+    protected LinearVerticalDecoration(DecorationBuilder.DecorationParams pP) {
+        mSize = pP.mContext.getResources().getDimensionPixelSize(pP.verticalSize);
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.mPaint.setColor(ContextCompat.getColor(pContext, color));
+        this.mPaint.setColor(ContextCompat.getColor(pP.mContext, pP.verticalColor));
         this.mPaint.setStyle(Paint.Style.STROKE);
         this.mPaint.setStrokeWidth(mSize);
-        mOrientation = orientation;
+        this.isFoot = pP.isFood;
+        this.isHead = pP.isHead;
         mRect = new Rect();
     }
+
+
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         int childCount = parent.getChildCount();
@@ -55,8 +58,12 @@ public class LinearDecoration extends AbsLinearDecoration implements RecycleDeco
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        if (mOrientation == LinearLayoutManager.HORIZONTAL) {
-            outRect.set(0, 0, mSize, 0);
+        int count = state.getItemCount() - 1; //总长度
+        int lChildAdapterPosition = parent.getChildAdapterPosition(view);
+        if (lChildAdapterPosition == 0 && isHead) {
+            outRect.set(0, mSize, 0, mSize);
+        }else if (lChildAdapterPosition == count && !isFoot){
+            outRect.set(0, 0, 0, 0);
         } else {
             outRect.set(0, 0, 0, mSize);
         }

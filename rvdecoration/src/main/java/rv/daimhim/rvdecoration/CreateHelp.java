@@ -43,4 +43,38 @@ public class CreateHelp {
             pLRecycleDecoration.setMeasureTarget(p.mMeasureTarget);
         }
     }
+    protected void createDecorationVersion101(RecycleDecoration pLRecycleDecoration,
+                                              DecorationBuilder.DecorationParams p){
+        RecyclerView.LayoutManager lLayoutManager = p.mRecyclerView.getLayoutManager();
+        if (lLayoutManager instanceof GridLayoutManager){
+            GridDecoration lGridDecoration = null;
+            lGridDecoration = new GridDecoration(p);
+            pLRecycleDecoration.setDrawBeforeTarget(lGridDecoration);
+            pLRecycleDecoration.setMeasureTarget(lGridDecoration);
+        }else if (lLayoutManager instanceof LinearLayoutManager){
+            AbsLinearDecoration lAbsLinearDecoration = null;
+            if (p.orientation == OrientationHelper.VERTICAL) {
+                lAbsLinearDecoration = new LinearVerticalDecoration(p);
+            }else {
+                lAbsLinearDecoration = new LinearHorizontalDecoration(p);
+            }
+            pLRecycleDecoration.setMeasureTarget(lAbsLinearDecoration);
+            pLRecycleDecoration.setDrawBeforeTarget(lAbsLinearDecoration);
+        }else if (lLayoutManager instanceof StaggeredGridLayoutManager){
+            StaggeredGridDecoration lStaggeredGridDecoration = null;
+            int lSpanCount = ((StaggeredGridLayoutManager) lLayoutManager).getSpanCount();
+            if (p.orientation == OrientationHelper.VERTICAL) {
+                lStaggeredGridDecoration =  new StaggeredGridDecoration(p.mContext,
+                        p.verticalColor, p.verticalSize,p.orientation,lSpanCount);
+            }else {
+                lStaggeredGridDecoration = new StaggeredGridDecoration(p.mContext,
+                        p.horizontalColor, p.horizontalSize,p.orientation,lSpanCount);
+            }
+            pLRecycleDecoration.setDrawBeforeTarget(lStaggeredGridDecoration);
+            pLRecycleDecoration.setMeasureTarget(lStaggeredGridDecoration.getMeasureTarget());
+        }
+        if (p.mMeasureTarget !=null){
+            pLRecycleDecoration.setMeasureTarget(p.mMeasureTarget);
+        }
+    }
 }
