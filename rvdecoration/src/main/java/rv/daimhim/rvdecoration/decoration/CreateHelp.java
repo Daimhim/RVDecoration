@@ -17,7 +17,7 @@ import rv.daimhim.rvdecoration.decoration.LinearHorizontalDecoration;
 import rv.daimhim.rvdecoration.decoration.LinearVerticalDecoration;
 
 public class CreateHelp {
-    protected void createDecorationVersion100(RecycleDecoration pLRecycleDecoration,
+    public void createDecorationVersion100(RecycleDecoration pLRecycleDecoration,
                                               DecorationBuilder.DecorationParams p){
         RecyclerView.LayoutManager lLayoutManager = p.mRecyclerView.getLayoutManager();
         if (lLayoutManager instanceof GridLayoutManager){
@@ -53,7 +53,7 @@ public class CreateHelp {
             pLRecycleDecoration.setMeasureTarget(p.mMeasureTarget);
         }
     }
-    protected void createDecorationVersion101(RecycleDecoration pLRecycleDecoration,
+    public void createDecorationVersion101(RecycleDecoration pLRecycleDecoration,
                                               DecorationBuilder.DecorationParams p){
         RecyclerView.LayoutManager lLayoutManager = p.mRecyclerView.getLayoutManager();
         if (lLayoutManager instanceof GridLayoutManager){
