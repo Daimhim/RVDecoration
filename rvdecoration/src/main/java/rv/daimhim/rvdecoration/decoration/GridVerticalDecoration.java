@@ -38,8 +38,6 @@ public class GridVerticalDecoration extends AbsGridDecoration {
      */
     private Paint mPaint;
     private final int mSize;
-    private final int mOrientation;
-    private Rect mRect;
     /**
      * Previous Weights
      */
@@ -57,8 +55,6 @@ public class GridVerticalDecoration extends AbsGridDecoration {
         this.mPaint.setColor(ContextCompat.getColor(pParams.mContext, pParams.verticalColor));
         this.mPaint.setStyle(Paint.Style.STROKE);
         this.mPaint.setStrokeWidth(mSize);
-        mOrientation = pParams.orientation;
-        mRect = new Rect();
         mLayoutManager = (GridLayoutManager) pParams.mRecyclerView.getLayoutManager();
         mSpanSizeLookup = mLayoutManager.getSpanSizeLookup();
         mSpanSizeLookup.setSpanIndexCacheEnabled(true);
@@ -121,7 +117,6 @@ public class GridVerticalDecoration extends AbsGridDecoration {
      * @param pSpanGroupIndexl
      */
     private void mortalGridDecoration(Rect outRect, int lChildAdapterPositionp, int pSpanSize, int pSpanCount, int pSpanGroupIndexl) {
-        if (mOrientation == GridLayoutManager.VERTICAL) {
             if (mDecorationParams.isHead && lChildAdapterPositionp < mDecorationParams.baseCount
                     || (mDecorationParams.isFood && lChildAdapterPositionp >= mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
             } else if (pSpanCount == pSpanSize) { //full line
@@ -149,7 +144,6 @@ public class GridVerticalDecoration extends AbsGridDecoration {
                     outRect.set(0, 0, mSize, mSize);
                 }
             }
-        }
     }
 
     /**
@@ -164,8 +158,6 @@ public class GridVerticalDecoration extends AbsGridDecoration {
      */
     private void expandableGridDecoration(Rect outRect, int lChildAdapterPositionp, int lSpanSizep,
                                           int lSpanCountp, int spanGroupIndexp, RecyclerViewExpandable pRecyclerViewExpandable) {
-        if (mOrientation == GridLayoutManager.VERTICAL) {
-
             Pair<Integer, Integer> lPair = pRecyclerViewExpandable
                     .indexOfPosition(lChildAdapterPositionp - (mDecorationParams.baseCount == -1 ?
                             pRecyclerViewExpandable.getBaseCount() : mDecorationParams.baseCount));
@@ -197,6 +189,5 @@ public class GridVerticalDecoration extends AbsGridDecoration {
                     outRect.set(0, 0, mSize, mSize);
                 }
             }
-        }
     }
 }
