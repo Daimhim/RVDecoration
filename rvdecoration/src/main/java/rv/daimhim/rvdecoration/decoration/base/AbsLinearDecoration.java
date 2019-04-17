@@ -1,4 +1,6 @@
-package rv.daimhim.rvdecoration;
+package rv.daimhim.rvdecoration.decoration.base;
+
+import rv.daimhim.rvdecoration.RecycleDecoration;
 
 /**
  * 项目名称：rv.daimhim.rvdecoration

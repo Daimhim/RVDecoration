@@ -1,11 +1,8 @@
-package rv.daimhim.rvdecoration;
+package rv.daimhim.rvdecoration.decoration;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +14,8 @@ import org.daimhim.rvadapter.RecyclerViewClick;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
 
+import rv.daimhim.rvdecoration.DecorationBuilder;
+import rv.daimhim.rvdecoration.decoration.base.AbsGridDecoration;
 import timber.log.Timber;
 
 /**
@@ -30,7 +29,7 @@ import timber.log.Timber;
  *
  * @author：Administrator
  */
-public class GridDecoration implements RecycleDecoration.DrawBeforeTarget, RecycleDecoration.MeasureTarget {
+public class GridDecoration extends AbsGridDecoration {
     private final GridLayoutManager mLayoutManager;
     private final GridLayoutManager.SpanSizeLookup mSpanSizeLookup;
     private final RecyclerView.Adapter mRecyclerViewAdapter;

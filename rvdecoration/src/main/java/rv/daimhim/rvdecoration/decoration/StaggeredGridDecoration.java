@@ -1,4 +1,4 @@
-package rv.daimhim.rvdecoration;
+package rv.daimhim.rvdecoration.decoration;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
+import rv.daimhim.rvdecoration.DrawHelp;
+import rv.daimhim.rvdecoration.RecycleDecoration;
+
 public class StaggeredGridDecoration implements RecycleDecoration.DrawBeforeTarget {
     /**
      * 画笔
@@ -20,7 +23,7 @@ public class StaggeredGridDecoration implements RecycleDecoration.DrawBeforeTarg
     private RecycleDecoration.MeasureTarget mMeasureTarget;
 
     protected StaggeredGridDecoration(Context pContext, @ColorRes int color,
-                                      @DimenRes int size, int orientation,int spanCount) {
+                                   @DimenRes int size, int orientation, int spanCount) {
         int mSize = pContext.getResources().getDimensionPixelSize(size);
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mPaint.setColor(ContextCompat.getColor(pContext, color));

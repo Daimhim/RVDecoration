@@ -57,7 +57,7 @@ public class RecycleDecoration extends RecyclerView.ItemDecoration{
         mMeasureTarget = measureTarget;
     }
 
-    interface DrawBeforeTarget{
+    public interface DrawBeforeTarget{
         /**
          * tag绘制之前
          * @param c 画板
@@ -67,7 +67,7 @@ public class RecycleDecoration extends RecyclerView.ItemDecoration{
         void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state);
     }
 
-    interface DrawAfterTarget{
+    public interface DrawAfterTarget{
         /**
          * tag绘制之后
          * @param c 画板
@@ -77,7 +77,7 @@ public class RecycleDecoration extends RecyclerView.ItemDecoration{
         void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state);
     }
 
-    interface MeasureTarget{
+    public interface MeasureTarget{
         /**
          * 测量
          * @param outRect 结果

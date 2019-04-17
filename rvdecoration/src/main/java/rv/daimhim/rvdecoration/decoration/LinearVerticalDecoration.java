@@ -1,15 +1,16 @@
-package rv.daimhim.rvdecoration;
+package rv.daimhim.rvdecoration.decoration;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import rv.daimhim.rvdecoration.DecorationBuilder;
+import rv.daimhim.rvdecoration.DrawHelp;
+import rv.daimhim.rvdecoration.RecycleDecoration;
+import rv.daimhim.rvdecoration.decoration.base.AbsLinearDecoration;
 
 /**
  * 项目名称：rv.daimhim.rvdecoration

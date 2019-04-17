@@ -16,7 +16,7 @@ public class DrawHelp {
      * @param pPaint 画笔
      * @param pView 当前Item的View对象
      */
-    protected static void drawLine(Canvas c, Rect pRect, Paint pPaint,View pView) {
+    public static void drawLine(Canvas c, Rect pRect, Paint pPaint,View pView) {
         int startX;
         int startY;
         int stopX;

@@ -1,10 +1,20 @@
-package rv.daimhim.rvdecoration;
+package rv.daimhim.rvdecoration.decoration;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+
+import rv.daimhim.rvdecoration.DecorationBuilder;
+import rv.daimhim.rvdecoration.RecycleDecoration;
+import rv.daimhim.rvdecoration.decoration.GridDecoration;
+import rv.daimhim.rvdecoration.decoration.LinearDecoration;
+import rv.daimhim.rvdecoration.decoration.StaggeredGridDecoration;
+import rv.daimhim.rvdecoration.decoration.base.AbsGridDecoration;
+import rv.daimhim.rvdecoration.decoration.base.AbsLinearDecoration;
+import rv.daimhim.rvdecoration.decoration.LinearHorizontalDecoration;
+import rv.daimhim.rvdecoration.decoration.LinearVerticalDecoration;
 
 public class CreateHelp {
     protected void createDecorationVersion100(RecycleDecoration pLRecycleDecoration,
@@ -47,10 +57,12 @@ public class CreateHelp {
                                               DecorationBuilder.DecorationParams p){
         RecyclerView.LayoutManager lLayoutManager = p.mRecyclerView.getLayoutManager();
         if (lLayoutManager instanceof GridLayoutManager){
-            GridDecoration lGridDecoration = null;
-            lGridDecoration = new GridDecoration(p);
-            pLRecycleDecoration.setDrawBeforeTarget(lGridDecoration);
-            pLRecycleDecoration.setMeasureTarget(lGridDecoration);
+            AbsGridDecoration lAbsGridDecoration = null;
+            if (p.orientation == GridLayoutManager.VERTICAL){
+                lAbsGridDecoration = new GridVerticalDecoration();
+            }
+            pLRecycleDecoration.setDrawBeforeTarget(lAbsGridDecoration);
+            pLRecycleDecoration.setMeasureTarget(lAbsGridDecoration);
         }else if (lLayoutManager instanceof LinearLayoutManager){
             AbsLinearDecoration lAbsLinearDecoration = null;
             if (p.orientation == OrientationHelper.VERTICAL) {

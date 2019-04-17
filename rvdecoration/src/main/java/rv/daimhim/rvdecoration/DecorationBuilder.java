@@ -9,6 +9,8 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
+import rv.daimhim.rvdecoration.decoration.CreateHelp;
+
 public class DecorationBuilder {
 
     public static class Builder {
@@ -117,24 +119,25 @@ public class DecorationBuilder {
         }
     }
 
-    static class DecorationParams {
-        Context mContext;
-        RecyclerView mRecyclerView;
+    public static class DecorationParams {
+        public Context mContext;
+        public RecyclerView mRecyclerView;
         @ColorRes
-        int verticalColor = R.color.cl_999999;
+        public int verticalColor = R.color.cl_999999;
         @ColorRes
-        int horizontalColor = R.color.cl_999999;
+        public int horizontalColor = R.color.cl_999999;
         @DimenRes
-        int verticalSize = R.dimen.dimen_size_1;
+        public int verticalSize = R.dimen.dimen_size_1;
         @DimenRes
-        int horizontalSize = R.dimen.dimen_size_1;
-        boolean isHead;
-        boolean isFood;
-        int baseCount = -1;
-        int footCount = -1;
+        public int horizontalSize = R.dimen.dimen_size_1;
+        public boolean isHead;
+        public boolean isFood;
+        public int baseCount = -1;
+        public int footCount = -1;
 
-        RecycleDecoration.MeasureTarget mMeasureTarget;
+        public RecycleDecoration.MeasureTarget mMeasureTarget;
 
-        int orientation = OrientationHelper.VERTICAL;
+        public int orientation = OrientationHelper.VERTICAL;
+
     }
 }
