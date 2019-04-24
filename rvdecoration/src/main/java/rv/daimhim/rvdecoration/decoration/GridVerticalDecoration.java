@@ -50,6 +50,7 @@ public class GridVerticalDecoration extends AbsGridDecoration {
 
     public GridVerticalDecoration(DecorationBuilder.DecorationParams pParams) {
         mDecorationParams = pParams;
+        mDecorationParams.bothSides = pParams.mContext.getResources().getDimensionPixelSize(pParams.bothSides);
         mSize = pParams.mContext.getResources().getDimensionPixelSize(pParams.verticalSize);
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mPaint.setColor(ContextCompat.getColor(pParams.mContext, pParams.verticalColor));

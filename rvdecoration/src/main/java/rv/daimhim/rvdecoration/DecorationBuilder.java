@@ -86,6 +86,12 @@ public class DecorationBuilder {
             return this;
         }
 
+        //两侧
+        public Builder bothSides(@DimenRes int size){
+            P.bothSides = size;
+            return this;
+        }
+
         //测量
         public Builder setMeasureTarget(RecycleDecoration.MeasureTarget pMeasureTarget) {
             P.mMeasureTarget = pMeasureTarget;
