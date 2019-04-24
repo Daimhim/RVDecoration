@@ -124,16 +124,16 @@ public class GridVerticalDecoration extends AbsGridDecoration {
             } else if (mPreviousWeights == 0) { //first
                 mPreviousWeights += pSpanSize;
                 if (mPreviousLine < pSpanGroupIndexl) {
-                    outRect.set(mSize, 0, mSize, mSize);
+                    outRect.set(mDecorationParams.bothSides, 0, mSize, mSize);
                 } else {
-                    outRect.set(0, 0, mSize, mSize);
+                    outRect.set(0, 0, mDecorationParams.bothSides, mSize);
                 }
             } else if (mPreviousWeights + pSpanSize == pSpanCount) { //last
                 mPreviousWeights = 0;
                 if (mPreviousLine < pSpanGroupIndexl) {
-                    outRect.set(0, 0, mSize, mSize);
+                    outRect.set(0, 0, mDecorationParams.bothSides, mSize);
                 } else {
-                    outRect.set(mSize, 0, mSize, mSize);
+                    outRect.set(mDecorationParams.bothSides, 0, mSize, mSize);
                 }
                 mPreviousLine = pSpanGroupIndexl;
             } else {  // center
@@ -169,16 +169,16 @@ public class GridVerticalDecoration extends AbsGridDecoration {
             } else if (mPreviousWeights == 0) { //first
                 mPreviousWeights += lSpanSizep;
                 if (mPreviousLine <= spanGroupIndexp) {
-                    outRect.set(mSize, 0, mSize, mSize);
+                    outRect.set(mDecorationParams.bothSides, 0, mSize, mSize);
                 } else {
-                    outRect.set(0, 0, mSize, mSize);
+                    outRect.set(0, 0, mDecorationParams.bothSides, mSize);
                 }
             } else if (mPreviousWeights + lSpanSizep == lSpanCountp) { //last
                 mPreviousWeights = 0;
                 if (mPreviousLine <= spanGroupIndexp) {
-                    outRect.set(0, 0, mSize, mSize);
+                    outRect.set(0, 0, mDecorationParams.bothSides, mSize);
                 } else {
-                    outRect.set(mSize, 0, mSize, mSize);
+                    outRect.set(mDecorationParams.bothSides, 0, mSize, mSize);
                 }
                 mPreviousLine = spanGroupIndexp;
             } else {  // center

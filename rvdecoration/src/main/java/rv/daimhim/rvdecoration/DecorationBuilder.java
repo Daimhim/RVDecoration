@@ -139,5 +139,8 @@ public class DecorationBuilder {
 
         public int orientation = OrientationHelper.VERTICAL;
 
+        @DimenRes
+        public int bothSides;
+
     }
 }

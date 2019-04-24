@@ -21,6 +21,18 @@ dependencies {
     implementation rootProject.ext.dependencies.libTimber
     implementation project(':rvadapter')
 }
+
+
+task makeJar(type: org.gradle.api.tasks.Copy){
+    delete 'build/libs/rvdecoration-release.jar'
+    from('build/intermediates/bundles/release/')
+    into('build/libs/')
+    include('classes.jar')
+    rename('classes.jar','rvdecoration-release.jar')
+}
+makeJar.dependsOn(build)
+
+
 /** 以下开始是将Android Library上传到jcenter的相关配置**/
 
 apply plugin: 'com.github.dcendents.android-maven'

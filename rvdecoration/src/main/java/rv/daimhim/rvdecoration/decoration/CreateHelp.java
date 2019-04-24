@@ -59,7 +59,7 @@ public class CreateHelp {
         if (lLayoutManager instanceof GridLayoutManager){
             AbsGridDecoration lAbsGridDecoration = null;
             if (p.orientation == GridLayoutManager.VERTICAL){
-                lAbsGridDecoration = new GridVerticalDecoration();
+                lAbsGridDecoration = new GridVerticalDecoration(p);
             }
             pLRecycleDecoration.setDrawBeforeTarget(lAbsGridDecoration);
             pLRecycleDecoration.setMeasureTarget(lAbsGridDecoration);
