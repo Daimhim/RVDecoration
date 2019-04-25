@@ -1,4 +1,4 @@
-package rv.daimhim.rvdecoration.decoration;
+package rv.daimhim.rvdecoration.decoration.version100;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,13 +8,14 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import rv.daimhim.rvdecoration.DecorationBuilder;
 import rv.daimhim.rvdecoration.RecycleDecoration;
-import rv.daimhim.rvdecoration.decoration.GridDecoration;
-import rv.daimhim.rvdecoration.decoration.LinearDecoration;
-import rv.daimhim.rvdecoration.decoration.StaggeredGridDecoration;
+import rv.daimhim.rvdecoration.decoration.version100.GridDecoration;
+import rv.daimhim.rvdecoration.decoration.version100.GridVerticalDecoration;
+import rv.daimhim.rvdecoration.decoration.version100.LinearDecoration;
+import rv.daimhim.rvdecoration.decoration.version100.StaggeredGridDecoration;
 import rv.daimhim.rvdecoration.decoration.base.AbsGridDecoration;
 import rv.daimhim.rvdecoration.decoration.base.AbsLinearDecoration;
-import rv.daimhim.rvdecoration.decoration.LinearHorizontalDecoration;
-import rv.daimhim.rvdecoration.decoration.LinearVerticalDecoration;
+import rv.daimhim.rvdecoration.decoration.version100.LinearHorizontalDecoration;
+import rv.daimhim.rvdecoration.decoration.version100.LinearVerticalDecoration;
 
 public class CreateHelp {
     public void createDecorationVersion100(RecycleDecoration pLRecycleDecoration,

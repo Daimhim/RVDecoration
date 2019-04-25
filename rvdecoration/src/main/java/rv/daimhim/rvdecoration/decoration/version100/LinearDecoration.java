@@ -1,4 +1,4 @@
-package rv.daimhim.rvdecoration.decoration;
+package rv.daimhim.rvdecoration.decoration.version100;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -35,7 +35,7 @@ public class LinearDecoration extends AbsLinearDecoration implements RecycleDeco
     private final int mSize;
     private final int mOrientation;
     private Rect mRect;
-    protected LinearDecoration(Context pContext, @ColorRes int color,
+    LinearDecoration(Context pContext, @ColorRes int color,
                                @DimenRes int size, int orientation) {
         mSize = pContext.getResources().getDimensionPixelSize(size);
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

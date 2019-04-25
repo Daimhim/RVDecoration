@@ -1,4 +1,4 @@
-package rv.daimhim.rvdecoration.decoration;
+package rv.daimhim.rvdecoration.decoration.version100;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
