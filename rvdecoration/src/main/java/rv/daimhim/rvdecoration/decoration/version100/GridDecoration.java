@@ -50,7 +50,7 @@ public class GridDecoration extends AbsGridDecoration {
     private int mPreviousLine = -1;
     private DecorationBuilder.DecorationParams mDecorationParams;
 
-    public GridDecoration(DecorationBuilder.DecorationParams pParams) {
+    GridDecoration(DecorationBuilder.DecorationParams pParams) {
         mDecorationParams = pParams;
         mSize = pParams.mContext.getResources().getDimensionPixelSize(pParams.verticalSize);
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

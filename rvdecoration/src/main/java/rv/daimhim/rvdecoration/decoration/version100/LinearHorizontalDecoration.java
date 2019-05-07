@@ -30,18 +30,20 @@ public class LinearHorizontalDecoration extends AbsLinearDecoration implements R
      */
     private Paint mPaint;
     private final int mSize;
-    private boolean isFoot;
-    private boolean isHead;
+    private final int bothSides;
+    private final int mFood;
+    private final int mHead;
     private Rect mRect;
 
     protected LinearHorizontalDecoration(DecorationBuilder.DecorationParams pP) {
-        this.mSize = pP.mContext.getResources().getDimensionPixelSize(pP.horizontalSize);
+        this.mSize = pP.mContext.getResources().getDimensionPixelSize(pP.size);
+        this.mFood = pP.mContext.getResources().getDimensionPixelSize(pP.food);
+        this.mHead = pP.mContext.getResources().getDimensionPixelSize(pP.head);
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.mPaint.setColor(ContextCompat.getColor(pP.mContext, pP.horizontalColor));
+        this.mPaint.setColor(ContextCompat.getColor(pP.mContext, pP.color));
         this.mPaint.setStyle(Paint.Style.STROKE);
         this.mPaint.setStrokeWidth(mSize);
-        this.isFoot = pP.isFood;
-        this.isHead = pP.isHead;
+        this.bothSides = pP.mContext.getResources().getDimensionPixelSize(pP.bothSides);
         this.mRect = new Rect();
     }
 
@@ -61,12 +63,12 @@ public class LinearHorizontalDecoration extends AbsLinearDecoration implements R
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int count = state.getItemCount() - 1; //总长度
         int lChildAdapterPosition = parent.getChildAdapterPosition(view);
-        if (lChildAdapterPosition == 0 && isHead) {
-            outRect.set(mSize, 0, mSize, 0);
-        }else if (lChildAdapterPosition == count && !isFoot){
-            outRect.set(0, 0, 0, 0);
+        if (lChildAdapterPosition == 0) {
+            outRect.set(mHead, bothSides, mSize, bothSides);
+        }else if (lChildAdapterPosition == count){
+            outRect.set(0, bothSides, bothSides, mFood);
         } else {
-            outRect.set(0, 0, mSize, 0);
+            outRect.set(0, bothSides, mSize, bothSides);
         }
     }
 }

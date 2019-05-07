@@ -21,36 +21,49 @@ public class DecorationBuilder {
             P.mContext = pRecyclerView.getContext();
             P.mRecyclerView = pRecyclerView;
         }
+        public RecycleDecoration create() {
+            RecycleDecoration lRecycleDecoration = new RecycleDecoration();
+            if (BuildConfig.VERSION_CODE <= 100) {
+                new CreateHelp().createDecorationVersion100(lRecycleDecoration, P);
+            }
+            P.mRecyclerView.addItemDecoration(lRecycleDecoration);
+            return lRecycleDecoration;
+        }
+
+        public RecycleDecoration create(int versionCode) {
+            RecycleDecoration lRecycleDecoration = new RecycleDecoration();
+            switch (versionCode) {
+                case 100:
+                    new CreateHelp().createDecorationVersion100(lRecycleDecoration, P);
+                    break;
+                case 101:
+                    new CreateHelp().createDecorationVersion101(lRecycleDecoration, P);
+                    break;
+                case 102:
+                    break;
+                default:
+                    new CreateHelp().createDecorationVersion100(lRecycleDecoration, P);
+                    break;
+            }
+            P.mRecyclerView.addItemDecoration(lRecycleDecoration);
+            return lRecycleDecoration;
+        }
 
         public Builder linearlayout(@ColorRes int color, @DimenRes int size) {
             P.orientation = ((LinearLayoutManager) P.mRecyclerView.getLayoutManager()).getOrientation();
-            P.horizontalColor = P.verticalColor = color;
-            P.horizontalSize = P.verticalSize = size;
+            P.color = color;
+            P.size = size;
             return this;
         }
 
         public Builder staggeredGridlayout(@ColorRes int color, @DimenRes int size) {
             P.orientation = ((StaggeredGridLayoutManager) P.mRecyclerView.getLayoutManager()).getOrientation();
-            P.horizontalColor = P.verticalColor = color;
-            P.horizontalSize = P.verticalSize = size;
+            P.color = color;
+            P.size = size;
             return this;
         }
 
-        //垂直间隔颜色
-        public Builder verticalDivider(@ColorRes int color) {
-            P.verticalColor = color;
-            return this;
-        }
 
-        public Builder applyHead(boolean isHead) {
-            P.isHead = isHead;
-            return this;
-        }
-
-        public Builder applyFoot(boolean isFood) {
-            P.isFood = isFood;
-            return this;
-        }
 
         public Builder setBaseCount(int count) {
             P.baseCount = count;
@@ -62,21 +75,25 @@ public class DecorationBuilder {
             return this;
         }
 
-        //水平间隔颜色
-        public Builder horizontalDivider(@ColorRes int color) {
-            P.horizontalColor = color;
+        //间隔
+        public Builder head(@DimenRes int size) {
+            P.head = size;
+            return this;
+        }
+        //间隔
+        public Builder food(@DimenRes int size) {
+            P.food = size;
             return this;
         }
 
-        //垂直间隔
-        public Builder verticalSpacing(@DimenRes int size) {
-            P.verticalSize = size;
+        //间隔颜色
+        public Builder divider(@ColorRes int color) {
+            P.color = color;
             return this;
         }
-
-        //水平间隔
-        public Builder horizontalSpacing(@DimenRes int size) {
-            P.horizontalSize = size;
+        //间隔
+        public Builder spacing(@DimenRes int size) {
+            P.size = size;
             return this;
         }
 
@@ -98,46 +115,71 @@ public class DecorationBuilder {
             return this;
         }
 
-        public RecycleDecoration create() {
-            RecycleDecoration lRecycleDecoration = new RecycleDecoration();
-            if (BuildConfig.VERSION_CODE <= 100) {
-                new CreateHelp().createDecorationVersion100(lRecycleDecoration, P);
-            }
-            P.mRecyclerView.addItemDecoration(lRecycleDecoration);
-            return lRecycleDecoration;
+        /**------------------------------一下是过时方法，不完全兼容---------------------------------------**/
+        //垂直间隔颜色
+        @Deprecated
+        public Builder verticalDivider(@ColorRes int color) {
+            P.color = P.verticalColor = color;
+            return this;
+        }
+        @Deprecated
+        public Builder applyHead(boolean isHead) {
+            P.isHead = isHead;
+            return this;
+        }
+        @Deprecated
+        public Builder applyFoot(boolean isFood) {
+            P.isFood = isFood;
+            return this;
+        }
+        //垂直间隔
+        @Deprecated
+        public Builder verticalSpacing(@DimenRes int size) {
+            P.size = P.verticalSize = size;
+            return this;
         }
 
-        public RecycleDecoration create(int versionCode) {
-            RecycleDecoration lRecycleDecoration = new RecycleDecoration();
-            switch (versionCode) {
-                case 100:
-                    new CreateHelp().createDecorationVersion100(lRecycleDecoration, P);
-                    break;
-                case 101:
-                    new CreateHelp().createDecorationVersion101(lRecycleDecoration, P);
-                    break;
-                default:
-                    new CreateHelp().createDecorationVersion100(lRecycleDecoration, P);
-                    break;
-            }
-            P.mRecyclerView.addItemDecoration(lRecycleDecoration);
-            return lRecycleDecoration;
+
+        //水平间隔
+        @Deprecated
+        public Builder horizontalSpacing(@DimenRes int size) {
+            P.horizontalSize = size;
+            return this;
+        }
+        //水平间隔颜色
+        @Deprecated
+        public Builder horizontalDivider(@ColorRes int color) {
+            P.color = P.horizontalColor = color;
+            return this;
         }
     }
 
     public static class DecorationParams {
+        @Deprecated
+        public int verticalColor = R.color.cl_999999;
+        @Deprecated
+        public int horizontalColor = R.color.cl_999999;
+        @Deprecated
+        public int verticalSize = R.dimen.dimen_size_1;
+        @Deprecated
+        public int horizontalSize = R.dimen.dimen_size_1;
+        @Deprecated
+        public boolean isHead;
+        @Deprecated
+        public boolean isFood;
+
+        public int orientation = OrientationHelper.VERTICAL;
+
+        public int head = R.dimen.dimen_size_0;
+        public int food = R.dimen.dimen_size_0;
+
+        public int size = R.dimen.dimen_size_1;
+        public int color = R.color.cl_999999;
         public Context mContext;
         public RecyclerView mRecyclerView;
-        public int verticalColor = R.color.cl_999999;
-        public int horizontalColor = R.color.cl_999999;
-        public int verticalSize = R.dimen.dimen_size_1;
-        public int horizontalSize = R.dimen.dimen_size_1;
-        public boolean isHead;
-        public boolean isFood;
         public int baseCount = -1;
         public int footCount = -1;
         public RecycleDecoration.MeasureTarget mMeasureTarget;
-        public int orientation = OrientationHelper.VERTICAL;
         public int bothSides;
 
     }

@@ -48,7 +48,7 @@ public class GridVerticalDecoration extends AbsGridDecoration {
     private int mPreviousLine = -1;
     private DecorationBuilder.DecorationParams mDecorationParams;
 
-    public GridVerticalDecoration(DecorationBuilder.DecorationParams pParams) {
+    GridVerticalDecoration(DecorationBuilder.DecorationParams pParams) {
         mDecorationParams = pParams;
         mDecorationParams.bothSides = pParams.mContext.getResources().getDimensionPixelSize(pParams.bothSides);
         mSize = pParams.mContext.getResources().getDimensionPixelSize(pParams.verticalSize);
