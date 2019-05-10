@@ -50,13 +50,13 @@ public class LinearHorizontalDecoration extends AbsLinearDecoration implements R
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         int childCount = parent.getChildCount();
-        View childAt;
-        for (int i = 0; i < childCount; i++) {
-            mRect.set(0, 0, 0, 0);
-            childAt = parent.getChildAt(i);
-            getItemOffsets(mRect, childAt, parent, state);
-            DrawHelp.drawLine(c, mRect, mPaint, childAt);
-        }
+//        View childAt;
+//        for (int i = 0; i < childCount; i++) {
+//            mRect.set(0, 0, 0, 0);
+//            childAt = parent.getChildAt(i);
+//            getItemOffsets(mRect, childAt, parent, state);
+//            DrawHelp.drawLine(c, mRect, mPaint, childAt);
+//        }
     }
 
     @Override
@@ -66,7 +66,7 @@ public class LinearHorizontalDecoration extends AbsLinearDecoration implements R
         if (lChildAdapterPosition == 0) {
             outRect.set(mHead, bothSides, mSize, bothSides);
         }else if (lChildAdapterPosition == count){
-            outRect.set(0, bothSides, bothSides, mFood);
+            outRect.set(0, bothSides, mFood, bothSides);
         } else {
             outRect.set(0, bothSides, mSize, bothSides);
         }
