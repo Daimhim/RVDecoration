@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.ref.SoftReference;
+import java.util.List;
 
 /**
  * 项目名称：org.daimhim.rvadapter
@@ -51,19 +52,21 @@ public interface RecyclerContract {
     interface OnItemClickListener {
         /**
          * 点击事件
-         * @param view View
+         *
+         * @param view     View
          * @param position position
          */
         void onItemClick(View view, int position);
     }
 
     /**
-     *  提供给外部的 接口  传入此接口 监听点击事件
+     * 提供给外部的 接口  传入此接口 监听点击事件
      */
     interface OnItemLongClickListener {
         /**
          * 长点击事件
-         * @param view  view
+         *
+         * @param view     view
          * @param position position
          */
         void onItemLongClick(View view, int position);
@@ -215,13 +218,14 @@ public interface RecyclerContract {
      * @param <C> Child Type
      * @param <T> Child Item Type
      */
-    interface ExpandableContract<G, C, T> {
+    interface ExpandableContract<T,G, C> {
+
         /**
          * 刷新
          *
          * @param ts ts 数据类型
          */
-        void onRefresh(G ts);
+        void onRefresh(T ts);
 
         /**
          * 添加多条
@@ -230,8 +234,9 @@ public interface RecyclerContract {
          * @param groupPosition Group Position
          * @param position      Group position
          */
-        void onLoad(G ts, int groupPosition, int position);
+        default void onLoad(T ts, int groupPosition, int position){
 
+        }
         /**
          * 获取数据
          *
@@ -239,7 +244,9 @@ public interface RecyclerContract {
          * @param childPosition child Position
          * @return Child Data
          */
-        T getChildItem(int groupPosition, int childPosition);
+        default C getChildItem(int groupPosition, int childPosition){
+            return null;
+        }
 
         /**
          * 获取数据
@@ -247,7 +254,17 @@ public interface RecyclerContract {
          * @param groupPosition group Position
          * @return Child List Data
          */
-        C getChild(int groupPosition);
+        default List<C> getChild(int groupPosition){
+            return null;
+        }
+
+        default G getGroupItem(int groupPosition){
+            return null;
+        }
+
+        default T getData(){
+            return null;
+        }
     }
 
     /**
@@ -285,19 +302,18 @@ public interface RecyclerContract {
         private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
         private int mPosition = -1;
 
-
         @Override
         public void onClick(View v) {
-            if (null != mRecyclerViewClickSoftReference.get()) {
+            if (mRecyclerViewClickSoftReference != null && null != mRecyclerViewClickSoftReference.get()) {
                 mRecyclerViewClickSoftReference.get().onItemClick(v, mPosition);
             }
         }
 
         public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
-            if (mRecyclerViewClickSoftReference.get()!=null && mRecyclerViewClickSoftReference.get() == pRecyclerViewClick) {
+            if (mRecyclerViewClickSoftReference == null || mRecyclerViewClickSoftReference.get() == null) {
                 mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
-                mPosition = pPosition;
             }
+            mPosition = pPosition;
         }
     }
 
@@ -307,19 +323,21 @@ public interface RecyclerContract {
 
         @Override
         public boolean onLongClick(View v) {
-            if (null != mRecyclerViewClickSoftReference.get()) {
+            if (mRecyclerViewClickSoftReference != null && null != mRecyclerViewClickSoftReference.get()) {
                 mRecyclerViewClickSoftReference.get().onItemLongClick(v, mPosition);
             }
             return false;
         }
 
         public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
-            if (mRecyclerViewClickSoftReference.get()!=null && mRecyclerViewClickSoftReference.get() == pRecyclerViewClick) {
+            if (mRecyclerViewClickSoftReference == null || mRecyclerViewClickSoftReference.get() == null) {
                 mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
-                mPosition = pPosition;
             }
+            mPosition = pPosition;
         }
     }
 
-
+    interface OnLoadListener{
+        void onLoad();
+    }
 }

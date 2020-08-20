@@ -11,22 +11,13 @@
 		android:supportsRtl="true"
 		android:theme="@style/Theme.AppCompat"
 		tools:ignore="GoogleAppIndexingWarning">
-		<activity android:name=".recyclerviewexpandable.RecyclerViewExpandableClass">
+		<activity android:name=".MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity
-			android:name=".LinearLayoutActivity"
-			android:label="LinearLayoutActivity" />
-		<activity
-			android:name=".GridLayoutActivity"
-			android:label="GridLayoutActivity"/>
-		<activity
-			android:name=".StaggeredGridLayoutActivity"
-			android:label="StaggeredGridLayoutActivity" />
 
 	</application>
 

@@ -157,4 +157,5 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      */
     public abstract int getDataItemCount();
 
+
 }

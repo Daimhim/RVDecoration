@@ -4,8 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
+
+import androidx.core.content.ContextCompat;
 
 public class DrawHelp {
 
@@ -16,7 +17,7 @@ public class DrawHelp {
      * @param pPaint 画笔
      * @param pView 当前Item的View对象
      */
-    protected static void drawLine(Canvas c, Rect pRect, Paint pPaint,View pView) {
+    public static void drawLine(Canvas c, Rect pRect, Paint pPaint, View pView) {
         int startX;
         int startY;
         int stopX;
@@ -59,7 +60,7 @@ public class DrawHelp {
      * @param outRectColor 相对于四边的边距的颜色
      * @param childAt      当前Item的View对象
      */
-    private void drawLine(Context pContext,Canvas c, Rect outRect, Rect outRectColor, Paint pPaint, View childAt) {
+    private void drawLine(Context pContext, Canvas c, Rect outRect, Rect outRectColor, Paint pPaint, View childAt) {
         int startX;
         int startY;
         int stopX;

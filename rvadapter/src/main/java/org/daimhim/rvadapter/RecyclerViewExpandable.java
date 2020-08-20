@@ -257,7 +257,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.Click
     public abstract void onBindChildViewHolder(VHC holder, int groupPosition, int childPosition);
 
     @Override
-    public void onBindEmptyViewHolder(ClickViewHolder holder, int position) {
+    public void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
 
     }
 

@@ -4,6 +4,8 @@ package org.daimhim.rvadapter;
 import android.util.Pair;
 import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 
 /**
@@ -151,11 +153,11 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
         }
         return new android.util.Pair<>(-1, -1);
     }
-
+    AdapterManagementDataObserver homeAdapterDataObserver = null;
     @Override
-    public void registerAdapterDataObserver(android.support.v7.widget.RecyclerView.AdapterDataObserver observer) {
+    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
         super.registerAdapterDataObserver(observer);
-        AdapterManagementDataObserver homeAdapterDataObserver = null;
+
         int total = 0;
         for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
             total += mRecyclerViewClicks.get(i).getItemCount();
@@ -166,10 +168,11 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
     }
 
     @Override
-    public void unregisterAdapterDataObserver(android.support.v7.widget.RecyclerView.AdapterDataObserver observer) {
+    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
         super.unregisterAdapterDataObserver(observer);
-        for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
+        for (int i = mRecyclerViewClicks.size()-1; i >= 0; i--) {
             mRecyclerViewClicks.get(i).unregisterAdapterDataObserver(mHomeAdapterDataObservers.get(i));
+            mHomeAdapterDataObservers.remove(i);
         }
     }
 
@@ -195,7 +198,7 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
     /**
      * 私有订阅
      */
-    static class AdapterManagementDataObserver extends android.support.v7.widget.RecyclerView.AdapterDataObserver {
+    static class AdapterManagementDataObserver extends RecyclerView.AdapterDataObserver {
         private AdapterManagement mRecyclerViewClick;
         /**
          * 当前adapter的起始位置

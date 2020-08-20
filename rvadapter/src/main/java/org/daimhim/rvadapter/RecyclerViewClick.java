@@ -1,20 +1,17 @@
 package org.daimhim.rvadapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.lang.ref.SoftReference;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -30,7 +27,7 @@ import java.lang.ref.SoftReference;
  * @author Daimhim
  */
 @Deprecated
-public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHolder> extends android.support.v7.widget.RecyclerView.Adapter<VH> {
+public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerView.Adapter<VH> {
     /**
      * 扩展属性，用于adapter manager
      */
@@ -54,7 +51,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      *
      * @param onItemClickListener 点击事件监听对象
      */
-    @Deprecated
     public void setOnItemClickListener(RecyclerContract.OnItemClickListener onItemClickListener) {
         pOnItemClickListener = onItemClickListener;
     }
@@ -64,8 +60,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      *
      * @param pOnItemLongClickListener 点击事件监听对象
      */
-    @Deprecated
-    public void setpOnItemLongClickListener(RecyclerContract.OnItemLongClickListener pOnItemLongClickListener) {
+    public void setOnItemLongClickListener(RecyclerContract.OnItemLongClickListener pOnItemLongClickListener) {
         this.pOnItemLongClickListener = pOnItemLongClickListener;
     }
 
@@ -76,7 +71,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * @param position 位置
      */
     public void onItemClick(View view, int position) {
-        position = position-getBaseCount();
         //兼容处理
         if (null != pOnItemClickListener) {
             pOnItemClickListener.onItemClick(view, position - getBaseCount());
@@ -90,7 +84,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
      * @param position 位置
      */
     public void onItemLongClick(View view, int position) {
-        position = position-getBaseCount();
         //兼容处理
         if (null != pOnItemLongClickListener) {
             pOnItemLongClickListener.onItemLongClick(view, position - getBaseCount());
@@ -169,7 +162,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     /**
      * 实现了点击事件
      */
-    public static class ClickViewHolder<T> extends android.support.v7.widget.RecyclerView.ViewHolder {
+    public static class ClickViewHolder<T> extends RecyclerView.ViewHolder {
         RecyclerContract.RecyclerClickListener mRecyclerClickListener;
         RecyclerContract.RecyclerLongClickListener mRecyclerLongClickListener;
         private SparseArray<View> mViews;
@@ -186,7 +179,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * @param recyclerViewClick Adapter对象
          * @return 是否set成功
          */
-        @Deprecated
         public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick) {
             //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
             if (mRecyclerClickListener == null) {
@@ -204,7 +196,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
          * @param recyclerViewClick Adapter对象
          * @return is set success
          */
-        @Deprecated
         public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick) {
             if (mRecyclerLongClickListener == null) {
                 mRecyclerLongClickListener = new RecyclerContract.RecyclerLongClickListener();
@@ -245,6 +236,10 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
 
         public ImageButton getImageButton(int viewId) {
             return (ImageButton) getView(viewId);
+        }
+
+        public CompoundButton getCompoundButton(int viewId){
+            return (CompoundButton)getView(viewId);
         }
 
         public EditText getEditText(int viewId) {

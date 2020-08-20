@@ -1,25 +1,26 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    compileSdkVersion 30
+    buildToolsVersion "30.0.1"
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode 100
-        versionName "1.0.0"
+        minSdkVersion 19
+        targetSdkVersion 30
+        versionCode 104
+        versionName "1.0.4"
     }
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation rootProject.ext.dependencies.libJunit
-    androidTestImplementation rootProject.ext.dependencies.libRunner
-    androidTestImplementation rootProject.ext.dependencies.libEspressoCore
-    implementation rootProject.ext.dependencies.libRecyclerViewV7
-    implementation rootProject.ext.dependencies.libTimber
-    implementation project(':rvadapter')
+    compileOnly 'org.daimhim.rvdecoration:rvadapter:1.2.0_Beta-9'
+    compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
+    compileOnly 'com.jakewharton.timber:timber:4.7.1'
 }
 /** 以下开始是将Android Library上传到jcenter的相关配置**/
 

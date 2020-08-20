@@ -1,5 +1,3 @@
-include ':irregularlayout'
-//include ':app'
+include ':app'
 include ':rvdecoration'
 include ':rvadapter'
-//include ':adapterdemo'
