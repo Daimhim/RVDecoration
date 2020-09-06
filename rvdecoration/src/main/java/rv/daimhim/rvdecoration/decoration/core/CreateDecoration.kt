@@ -1,4 +1,4 @@
-package rv.daimhim.rvdecoration.decoration.base
+package rv.daimhim.rvdecoration.decoration.core
 
 import rv.daimhim.rvdecoration.DecorationBuilder
 import rv.daimhim.rvdecoration.RecycleDecoration

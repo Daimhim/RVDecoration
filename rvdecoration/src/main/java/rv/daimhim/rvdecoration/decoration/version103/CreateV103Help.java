@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import rv.daimhim.rvdecoration.DecorationBuilder;
 import rv.daimhim.rvdecoration.RecycleDecoration;
-import rv.daimhim.rvdecoration.decoration.base.AbsGridDecoration;
-import rv.daimhim.rvdecoration.decoration.base.AbsLinearDecoration;
+import rv.daimhim.rvdecoration.decoration.core.AbsGridDecoration;
+import rv.daimhim.rvdecoration.decoration.core.AbsLinearDecoration;
 
 /**
  * @Classname CreateV103Help

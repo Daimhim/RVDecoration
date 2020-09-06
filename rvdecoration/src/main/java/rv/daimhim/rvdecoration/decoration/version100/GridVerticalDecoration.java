@@ -16,7 +16,7 @@ import org.daimhim.rvadapter.RecyclerViewEmpty;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
 
 import rv.daimhim.rvdecoration.DecorationBuilder;
-import rv.daimhim.rvdecoration.decoration.base.AbsGridDecoration;
+import rv.daimhim.rvdecoration.decoration.core.AbsGridDecoration;
 import timber.log.Timber;
 
 /**
@@ -52,9 +52,9 @@ public class GridVerticalDecoration extends AbsGridDecoration {
     GridVerticalDecoration(DecorationBuilder.DecorationParams pParams) {
         mDecorationParams = pParams;
         mDecorationParams.bothSides = pParams.mContext.getResources().getDimensionPixelSize(pParams.bothSides);
-        mSize = pParams.mContext.getResources().getDimensionPixelSize(pParams.verticalSize);
+        mSize = pParams.mContext.getResources().getDimensionPixelSize(pParams.size);
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.mPaint.setColor(ContextCompat.getColor(pParams.mContext, pParams.verticalColor));
+        this.mPaint.setColor(ContextCompat.getColor(pParams.mContext, pParams.color));
         this.mPaint.setStyle(Paint.Style.STROKE);
         this.mPaint.setStrokeWidth(mSize);
         mLayoutManager = (GridLayoutManager) pParams.mRecyclerView.getLayoutManager();
@@ -119,8 +119,8 @@ public class GridVerticalDecoration extends AbsGridDecoration {
      * @param pSpanGroupIndexl
      */
     private void mortalGridDecoration(Rect outRect, int lChildAdapterPositionp, int pSpanSize, int pSpanCount, int pSpanGroupIndexl) {
-            if (mDecorationParams.isHead && lChildAdapterPositionp < mDecorationParams.baseCount
-                    || (mDecorationParams.isFood && lChildAdapterPositionp >= mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
+            if (lChildAdapterPositionp < mDecorationParams.baseCount
+                    || (lChildAdapterPositionp >= mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
             } else if (pSpanCount == pSpanSize) { //full line
                 outRect.set(mSize, 0, mSize, mSize);
             } else if (mPreviousWeights == 0) { //first
@@ -164,8 +164,8 @@ public class GridVerticalDecoration extends AbsGridDecoration {
                     .indexOfPosition(lChildAdapterPositionp - (mDecorationParams.baseCount == -1 ?
                             pRecyclerViewExpandable.getBaseCount() : mDecorationParams.baseCount));
             if (lPair.second == -1
-                    || (mDecorationParams.isHead && (lChildAdapterPositionp < mDecorationParams.baseCount || lChildAdapterPositionp < pRecyclerViewExpandable.getBaseCount()))
-                    || (mDecorationParams.isFood && lChildAdapterPositionp > mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
+                    || (lChildAdapterPositionp < mDecorationParams.baseCount || lChildAdapterPositionp < pRecyclerViewExpandable.getBaseCount())
+                    || lChildAdapterPositionp > mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount) { //group
             } else if (lSpanCountp == lSpanSizep) { //full line
                 outRect.set(mSize, 0, mSize, mSize);
             } else if (mPreviousWeights == 0) { //first

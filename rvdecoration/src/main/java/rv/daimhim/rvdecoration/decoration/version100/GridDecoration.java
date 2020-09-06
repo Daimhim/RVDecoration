@@ -16,7 +16,7 @@ import org.daimhim.rvadapter.RecyclerViewEmpty;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
 
 import rv.daimhim.rvdecoration.DecorationBuilder;
-import rv.daimhim.rvdecoration.decoration.base.AbsGridDecoration;
+import rv.daimhim.rvdecoration.decoration.core.AbsGridDecoration;
 import timber.log.Timber;
 
 /**

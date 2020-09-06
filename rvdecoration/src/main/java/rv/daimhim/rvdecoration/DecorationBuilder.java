@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import org.daimhim.rvadapter.BuildConfig;
 
-import rv.daimhim.rvdecoration.decoration.base.CreateDecoration;
+import rv.daimhim.rvdecoration.decoration.core.CreateDecoration;
 import rv.daimhim.rvdecoration.decoration.version100.CreateHelp;
 import rv.daimhim.rvdecoration.decoration.version102.CreateV102Help;
 import rv.daimhim.rvdecoration.decoration.version103.CreateV103Help;
@@ -126,59 +126,10 @@ public class DecorationBuilder {
             P.size = size;
             return this;
         }
-        /**------------------------------一下是过时方法，不完全兼容---------------------------------------**/
-        //垂直间隔颜色
-        @Deprecated
-        public Builder verticalDivider(@ColorRes int color) {
-            P.color = P.verticalColor = color;
-            return this;
-        }
-        @Deprecated
-        public Builder applyHead(boolean isHead) {
-            P.isHead = isHead;
-            return this;
-        }
-        @Deprecated
-        public Builder applyFoot(boolean isFood) {
-            P.isFood = isFood;
-            return this;
-        }
-        //垂直间隔
-        @Deprecated
-        public Builder verticalSpacing(@DimenRes int size) {
-            P.size = P.verticalSize = size;
-            return this;
-        }
 
-
-        //水平间隔
-        @Deprecated
-        public Builder horizontalSpacing(@DimenRes int size) {
-            P.horizontalSize = size;
-            return this;
-        }
-        //水平间隔颜色
-        @Deprecated
-        public Builder horizontalDivider(@ColorRes int color) {
-            P.color = P.horizontalColor = color;
-            return this;
-        }
     }
 
     public static class DecorationParams {
-        @Deprecated
-        public int verticalColor = R.color.cl_00000000;
-        @Deprecated
-        public int horizontalColor = R.color.cl_00000000;
-        @Deprecated
-        public int verticalSize = R.dimen.dimen_size_1;
-        @Deprecated
-        public int horizontalSize = R.dimen.dimen_size_1;
-        @Deprecated
-        public boolean isHead;
-        @Deprecated
-        public boolean isFood;
-
 
         public int orientation = OrientationHelper.VERTICAL;
         public int head = R.dimen.dimen_size_0;

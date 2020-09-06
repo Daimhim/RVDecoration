@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
 
 import rv.daimhim.rvdecoration.DecorationBuilder;
-import rv.daimhim.rvdecoration.decoration.base.AbsGridDecoration;
+import rv.daimhim.rvdecoration.decoration.core.AbsGridDecoration;
 import timber.log.Timber;
 
 /**
@@ -154,8 +154,8 @@ public class GridVerticalDecoration103 extends AbsGridDecoration {
                     .indexOfPosition(lChildAdapterPositionp - (mDecorationParams.baseCount == -1 ?
                             pRecyclerViewExpandable.getBaseCount() : mDecorationParams.baseCount));
             if (lPair.second == -1
-                    || (mDecorationParams.isHead && (lChildAdapterPositionp < mDecorationParams.baseCount || lChildAdapterPositionp < pRecyclerViewExpandable.getBaseCount()))
-                    || (mDecorationParams.isFood && lChildAdapterPositionp > mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
+                    || (lChildAdapterPositionp < mDecorationParams.baseCount || lChildAdapterPositionp < pRecyclerViewExpandable.getBaseCount())
+                    || lChildAdapterPositionp > mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount) { //group
             } else if (lSpanCountp == lSpanSizep) { //full line
                 outRect.set(mSize, 0, mSize, mSize);
             } else if (mPreviousWeights == 0) { //first

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import rv.daimhim.rvdecoration.DecorationBuilder;
 import rv.daimhim.rvdecoration.DrawHelp;
 import rv.daimhim.rvdecoration.RecycleDecoration;
-import rv.daimhim.rvdecoration.decoration.base.AbsLinearDecoration;
+import rv.daimhim.rvdecoration.decoration.core.AbsLinearDecoration;
 
 /**
  * 项目名称：rv.daimhim.rvdecoration

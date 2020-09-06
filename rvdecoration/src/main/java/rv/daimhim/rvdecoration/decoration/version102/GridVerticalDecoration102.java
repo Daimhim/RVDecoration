@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import rv.daimhim.rvdecoration.DecorationBuilder;
-import rv.daimhim.rvdecoration.decoration.base.AbsGridDecoration;
+import rv.daimhim.rvdecoration.decoration.core.AbsGridDecoration;
 import timber.log.Timber;
 
 /**
