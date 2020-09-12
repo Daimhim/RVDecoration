@@ -1,6 +1,41 @@
-# RVDecoration
-对RecyclerView Decoration的封装，对usedlibrary中Decoration封装进行升级、优化
+# 版本更新说明
 
-### 特性
-在使用RecyclerView过程中，避免不了使用Decoration对RecyclerView进行间隔，但根据官方的示例中代码中只能满足一些基本的需求，并且布局的不同每次都需要定制性
-的修改代码，使得每次修改布局Decoration也要随之改变，封装后的Decoration根据配置，可以做到布局修改Decoration自动适配布局。目前支持三种基本的布局管理器
+#### 2020-09-13
+> 1. rvadapter:1.4.1
+> 2. rvadapterex:1.0.2
+> 3. rvdecoration:1.1.2
+
+# RVDecoration API文档
+#### 项目简介
+##### rvadapter
+> 1. 封装的RecyclerView.Adapter
+> 2. RecyclerViewClick 封装点击事件
+> 3. RecyclerViewEmpty 空白页+点击事件
+> 4. RecyclerViewExpandable 电话薄 + 点击事件 + 多级空白页
+> 5. AdapterManagement 合并多个adapter，兼并多个数据源
+> 6. SimpleViewHolder 对View简单的操作，点击事件的具体实现
+##### rvadapterex + rvadapter
+> 1. SimpleRvAdapter 简单的数据操作
+> 2. SpecificationRvAdapter 复杂的数据操作
+##### rvdecoration
+> 1. DecorationBuilder  装饰器构造器
+#### 接入指南
+##### 1. 依赖
+
+```
+//代码
+implementation 'org.daimhim.rvdecoration:rvadapter:1.4.1'
+implementation 'org.daimhim.rvdecoration:rvadapterex:1.0.2'
+implementation 'org.daimhim.rvdecoration:rvdecoration:1.1.2'
+```
+##### 2. 注册
+
+```
+//代码
+
+```
+##### 3. 调用
+
+```
+//代码
+```

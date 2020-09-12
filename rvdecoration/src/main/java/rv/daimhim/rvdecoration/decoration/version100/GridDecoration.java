@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.daimhim.rvadapter.AdapterManagement;
-import org.daimhim.rvadapter.RecyclerViewClick;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
+import org.daimhim.rvadapter.SimpleViewHolder;
 
 import rv.daimhim.rvdecoration.DecorationBuilder;
 import rv.daimhim.rvdecoration.decoration.core.AbsGridDecoration;
@@ -113,7 +113,7 @@ public class GridDecoration extends AbsGridDecoration {
         } else if (pAdapter instanceof AdapterManagement) {
             AdapterManagement lAdapter1 = (AdapterManagement) pAdapter;
             Pair<Integer, Integer> lIntegerIntegerPair = lAdapter1.getExpandableHelper().indexOfPosition(pChildAdapterPosition);
-            RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> lItem = lAdapter1.getItem(lIntegerIntegerPair.first);
+            RecyclerViewEmpty<SimpleViewHolder> lItem = lAdapter1.getItem(lIntegerIntegerPair.first);
             lAdapter1.modifyBase();
             taskAssignment(outRect, pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl, lItem);
         } else {

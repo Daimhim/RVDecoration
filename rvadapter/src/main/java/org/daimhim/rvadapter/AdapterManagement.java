@@ -21,14 +21,14 @@ import java.util.ArrayList;
  * @author：Daimhim
  */
 
-public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder>
-        implements RecyclerContract.SimpleContract<ArrayList<RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder>>,
-        RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder>> , RecyclerContract.Expandable{
+public class AdapterManagement extends RecyclerViewEmpty<SimpleViewHolder>
+        implements RecyclerContract.SimpleContract<ArrayList<RecyclerViewEmpty<SimpleViewHolder>>,
+        RecyclerViewEmpty<SimpleViewHolder>> , RecyclerContract.Expandable{
 
     /**
      * adapter manage
      */
-    private ArrayList<RecyclerViewEmpty<EmptyViewHolder>> mRecyclerViewClicks;
+    private ArrayList<RecyclerViewEmpty<SimpleViewHolder>> mRecyclerViewClicks;
     /**
      * adapter 订阅
      */
@@ -50,13 +50,13 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Empty
 
 
     @Override
-    public EmptyViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+    public SimpleViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
         android.util.Pair<Integer, Integer> integerIntegerPair = mExpandableHelper.indexOfPosition(mCurrentPosition);
         return mRecyclerViewClicks.get(integerIntegerPair.first).onCreateViewHolder(parent,viewType);
     }
 
     @Override
-    public void onBindDataViewHolder(EmptyViewHolder holder, int position) {
+    public void onBindDataViewHolder(SimpleViewHolder holder, int position) {
         android.util.Pair<Integer, Integer> integerIntegerPair = mExpandableHelper.indexOfPosition(position);
         mRecyclerViewClicks.get(integerIntegerPair.first).onBindViewHolder(holder, integerIntegerPair.second);
     }
@@ -83,7 +83,7 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Empty
      *
      * @param recyclerViewClick adapter
      */
-    public void addAdapter(RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> recyclerViewClick) {
+    public void addAdapter(RecyclerViewEmpty<SimpleViewHolder> recyclerViewClick) {
         recyclerViewClick.setBaseCount(getItemCount());
         mRecyclerViewClicks.add(recyclerViewClick);
         notifyItemRangeInserted(getItemCount(),recyclerViewClick.getItemCount());
@@ -123,7 +123,7 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Empty
      * @param recyclerViewClick 被查找对象
      * @return 位置 或者 -1
      */
-    public int indexOf(RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> recyclerViewClick) {
+    public int indexOf(RecyclerViewEmpty<SimpleViewHolder> recyclerViewClick) {
         return mRecyclerViewClicks.indexOf(recyclerViewClick);
     }
 
@@ -132,7 +132,7 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Empty
      *
      * @param recyclerViewClick adapter
      */
-    public void removeAdapter(RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> recyclerViewClick) {
+    public void removeAdapter(RecyclerViewEmpty<SimpleViewHolder> recyclerViewClick) {
         mRecyclerViewClicks.remove(recyclerViewClick);
         modifyBase();
     }
@@ -161,19 +161,19 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Empty
     }
 
     @Override
-    public void onRefresh(ArrayList<RecyclerViewEmpty<EmptyViewHolder>> pRecyclerViewEmpties) {
+    public void onRefresh(ArrayList<RecyclerViewEmpty<SimpleViewHolder>> pRecyclerViewEmpties) {
         mRecyclerViewClicks.clear();
         mRecyclerViewClicks.addAll(pRecyclerViewEmpties);
         notifyDataSetChanged();
     }
 
     @Override
-    public RecyclerViewEmpty<EmptyViewHolder> getItem(int position) {
+    public RecyclerViewEmpty<SimpleViewHolder> getItem(int position) {
         return mRecyclerViewClicks.get(position);
     }
 
     @Override
-    public void onLoad(ArrayList<RecyclerViewEmpty<EmptyViewHolder>> pRecyclerViewEmpties) {
+    public void onLoad(ArrayList<RecyclerViewEmpty<SimpleViewHolder>> pRecyclerViewEmpties) {
         mRecyclerViewClicks.addAll(pRecyclerViewEmpties);
         notifyDataSetChanged();
     }

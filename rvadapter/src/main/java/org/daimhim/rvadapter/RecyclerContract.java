@@ -20,31 +20,6 @@ import java.util.List;
  */
 
 public interface RecyclerContract {
-    /**
-     * 提供给外部的 接口  传入此接口 监听点击事件
-     */
-    interface OnItemClickListener2 {
-        /**
-         * 点击事件
-         *
-         * @param view     View
-         * @param position position
-         */
-        void onItemClick(RecyclerViewClick pRecyclerViewClick, View view, int position);
-    }
-
-    /**
-     * 提供给外部的 接口  传入此接口 监听点击事件
-     */
-    interface OnItemLongClickListener2 {
-        /**
-         * 长点击事件
-         *
-         * @param view     view
-         * @param position position
-         */
-        void onItemLongClick(RecyclerViewClick pRecyclerViewClick, View view, int position);
-    }
 
     /**
      * 提供给外部的 接口  传入此接口 监听点击事件
@@ -71,7 +46,6 @@ public interface RecyclerContract {
          */
         void onItemLongClick(View view, int position);
     }
-
 
     /**
      * 空界面
@@ -162,21 +136,7 @@ public interface RecyclerContract {
      * @param <Ts> List
      * @param <T>  Item
      */
-    interface SpecificationContract<Ts, T> {
-        /**
-         * 刷新
-         *
-         * @param ts 数据类型
-         */
-        void onRefresh(Ts ts);
-
-        /**
-         * 添加多条
-         *
-         * @param ts       数据类型
-         * @param position 位置
-         */
-        void onLoad(Ts ts, int position);
+    interface SpecificationContract<Ts, T> extends SimpleContract<Ts,T>{
 
         /**
          * 插入
@@ -202,13 +162,6 @@ public interface RecyclerContract {
          */
         void replaceItem(T t, int position);
 
-        /**
-         * 获取数据
-         *
-         * @param position 位置
-         * @return 数据类型
-         */
-        T getItem(int position);
     }
 
     /**
@@ -266,8 +219,20 @@ public interface RecyclerContract {
             return null;
         }
     }
+
+    /**
+     * 多级扩展
+     */
     interface Expandable {
+        /**
+         * Group count
+         * @return int
+         */
         int getGroupCount();
+        /**
+         * Child count
+         * @return int
+         */
         int getChildrenCount(int groupPosition);
     }
 
@@ -301,9 +266,8 @@ public interface RecyclerContract {
         void onLoad(Ts ts);
     }
 
-
     class RecyclerClickListener implements View.OnClickListener {
-        private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
+        private SoftReference<RecyclerViewEmpty<SimpleViewHolder>> mRecyclerViewClickSoftReference;
         private int mPosition = -1;
 
         @Override
@@ -313,7 +277,7 @@ public interface RecyclerContract {
             }
         }
 
-        public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
+        public void setPositionRecyclerView(RecyclerViewEmpty<SimpleViewHolder> pRecyclerViewClick, int pPosition) {
             if (mRecyclerViewClickSoftReference == null || mRecyclerViewClickSoftReference.get() == null) {
                 mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
             }
@@ -322,7 +286,7 @@ public interface RecyclerContract {
     }
 
     class RecyclerLongClickListener implements View.OnLongClickListener {
-        private SoftReference<RecyclerViewClick> mRecyclerViewClickSoftReference;
+        private SoftReference<RecyclerViewEmpty<SimpleViewHolder>> mRecyclerViewClickSoftReference;
         private int mPosition = -1;
 
         @Override
@@ -333,7 +297,7 @@ public interface RecyclerContract {
             return false;
         }
 
-        public void setPositionRecyclerView(RecyclerViewClick pRecyclerViewClick, int pPosition) {
+        public void setPositionRecyclerView(RecyclerViewEmpty<SimpleViewHolder> pRecyclerViewClick, int pPosition) {
             if (mRecyclerViewClickSoftReference == null || mRecyclerViewClickSoftReference.get() == null) {
                 mRecyclerViewClickSoftReference = new SoftReference<>(pRecyclerViewClick);
             }
@@ -341,7 +305,4 @@ public interface RecyclerContract {
         }
     }
 
-    interface OnLoadListener{
-        void onLoad();
-    }
 }

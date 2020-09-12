@@ -1,17 +1,12 @@
 package org.daimhim.rvadapter;
 
-import android.util.SparseArray;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -26,8 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
  *
  * @author Daimhim
  */
-@Deprecated
-public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerView.Adapter<VH> {
+abstract class RecyclerViewClick<VH extends SimpleViewHolder> extends RecyclerView.Adapter<VH> {
     /**
      * 扩展属性，用于adapter manager
      */
@@ -96,10 +90,10 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     }
 
     @Override
-    public void onViewRecycled(VH holder) {
+    public void onViewRecycled(@NotNull VH holder) {
         super.onViewRecycled(holder);
-        holder.mRecyclerClickListener = null;
-        holder.mRecyclerLongClickListener = null;
+        holder.setMRecyclerClickListener(null);
+        holder.setMRecyclerLongClickListener(null);
     }
 
     /**
@@ -126,7 +120,7 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         RecyclerView.LayoutManager lLayoutManager = recyclerView.getLayoutManager();
         if (lLayoutManager instanceof GridLayoutManager) {
             final GridLayoutManager lLayoutManager1 = (GridLayoutManager) lLayoutManager;
-            lLayoutManager1.setSpanSizeLookup(new BaseSpanSizeLookup(this, lLayoutManager1.getSpanCount()));
+            lLayoutManager1.setSpanSizeLookup(new BaseSpanSizeLookup<VH>(this, lLayoutManager1.getSpanCount()));
         }
     }
 
@@ -144,11 +138,11 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         return defSize;
     }
 
-    class BaseSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
-        private RecyclerViewClick mRecyclerViewClick;
+    static class BaseSpanSizeLookup<VH extends SimpleViewHolder> extends GridLayoutManager.SpanSizeLookup {
+        private RecyclerViewClick<VH> mRecyclerViewClick;
         private int defSize = 0;
 
-        public BaseSpanSizeLookup(RecyclerViewClick pBaseAdapter, int pDefSize) {
+        public BaseSpanSizeLookup(RecyclerViewClick<VH> pBaseAdapter, int pDefSize) {
             mRecyclerViewClick = pBaseAdapter;
             defSize = pDefSize;
         }
@@ -157,52 +151,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
         public int getSpanSize(int position) {
             return mRecyclerViewClick.getSpanSize(defSize, position);
         }
-    }
-
-    /**
-     * 实现了点击事件
-     */
-    public static class ClickViewHolder extends RecyclerView.ViewHolder {
-        RecyclerContract.RecyclerClickListener mRecyclerClickListener;
-        RecyclerContract.RecyclerLongClickListener mRecyclerLongClickListener;
-
-        public ClickViewHolder(View itemView) {
-            super(itemView);
-        }
-
-        /**
-         * 执行点击事件
-         *
-         * @param view              需要设置点击事件的View
-         * @param recyclerViewClick Adapter对象
-         * @return 是否set成功
-         */
-        public boolean performItemClick(View view, RecyclerViewClick recyclerViewClick) {
-            //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
-            if (mRecyclerClickListener == null) {
-                mRecyclerClickListener = new RecyclerContract.RecyclerClickListener();
-            }
-            mRecyclerClickListener.setPositionRecyclerView(recyclerViewClick, getAdapterPosition());
-            view.setOnClickListener(mRecyclerClickListener);
-            return true;
-        }
-
-        /**
-         * 执行点击事件
-         *
-         * @param view              需要设置点击事件的View
-         * @param recyclerViewClick Adapter对象
-         * @return is set success
-         */
-        public boolean performLongItemClick(View view, RecyclerViewClick recyclerViewClick) {
-            if (mRecyclerLongClickListener == null) {
-                mRecyclerLongClickListener = new RecyclerContract.RecyclerLongClickListener();
-            }
-            mRecyclerLongClickListener.setPositionRecyclerView(recyclerViewClick, getAdapterPosition());
-            view.setOnLongClickListener(mRecyclerLongClickListener);
-            return true;
-        }
-
     }
 
 }

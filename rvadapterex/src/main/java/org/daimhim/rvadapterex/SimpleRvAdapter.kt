@@ -6,7 +6,7 @@ import org.daimhim.rvadapter.RecyclerContract
 import org.daimhim.rvadapter.RecyclerViewEmpty
 import org.daimhim.rvadapter.SimpleViewHolder
 
-abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder<T>>(),
+abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
     RecyclerContract.SimpleContract<MutableList<T>,T> {
     val data = mutableListOf<T>()
     override fun onLoad(ts: MutableList<T>?) {
@@ -39,14 +39,14 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder<T>>(),
         return data.isEmpty()
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder<T> {
-        return SimpleViewHolder<T>(LayoutInflater.from(parent.context).inflate(onCreateDataViewHolder(viewType),parent,false))
+    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
+        return SimpleViewHolder(LayoutInflater.from(parent.context).inflate(onCreateDataViewHolder(viewType),parent,false))
     }
 
     abstract fun onCreateDataViewHolder(viewType: Int):Int
 
-    override fun onCreateEmptyViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder<T> {
-        return SimpleViewHolder<T>(LayoutInflater.from(parent.context).inflate(R.layout.empty_view_holder,parent,false))
+    override fun onCreateEmptyViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
+        return SimpleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.empty_view_holder,parent,false))
     }
 
 }
