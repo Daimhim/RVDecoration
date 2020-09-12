@@ -52,7 +52,7 @@ def gitUrl = 'https://github.com/Daimhim/RVDecoration.git' // project git
 //项目讨论区
 def gitissues = 'https://github.com/Daimhim/RVDecoration/issues' // project issues
 //包名
-group = "org.daimhim.rvadapterex"
+group = "org.daimhim.rvdecoration"
 //仓库名
 def maven_repo = "RVDecoration"
 //发布到JCenter上的项目名字，必须填写
