@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.daimhim.rvadapter.AdapterManagement;
-import org.daimhim.rvadapter.RecyclerViewClick;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 import org.daimhim.rvadapter.RecyclerViewExpandable;
 
@@ -101,8 +100,8 @@ public class GridVerticalDecoration extends AbsGridDecoration {
                     pSpanGroupIndexl, (RecyclerViewExpandable) pAdapter);
         } else if (pAdapter instanceof AdapterManagement) {
             AdapterManagement lAdapter1 = (AdapterManagement) pAdapter;
-            Pair<Integer, Integer> lIntegerIntegerPair = lAdapter1.indexOfPosition(pChildAdapterPosition);
-            RecyclerViewEmpty<RecyclerViewClick.ClickViewHolder> lItem = lAdapter1.getItem(lIntegerIntegerPair.first);
+            Pair<Integer, Integer> lIntegerIntegerPair = lAdapter1.getExpandableHelper().indexOfPosition(pChildAdapterPosition);
+            RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> lItem = lAdapter1.getItem(lIntegerIntegerPair.first);
             lAdapter1.modifyBase();
             taskAssignment(outRect, pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl, lItem);
         } else {
@@ -160,7 +159,7 @@ public class GridVerticalDecoration extends AbsGridDecoration {
      */
     private void expandableGridDecoration(Rect outRect, int lChildAdapterPositionp, int lSpanSizep,
                                           int lSpanCountp, int spanGroupIndexp, RecyclerViewExpandable pRecyclerViewExpandable) {
-            Pair<Integer, Integer> lPair = pRecyclerViewExpandable
+            Pair<Integer, Integer> lPair = pRecyclerViewExpandable.getExpandableHelper()
                     .indexOfPosition(lChildAdapterPositionp - (mDecorationParams.baseCount == -1 ?
                             pRecyclerViewExpandable.getBaseCount() : mDecorationParams.baseCount));
             if (lPair.second == -1

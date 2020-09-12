@@ -150,7 +150,7 @@ public class GridVerticalDecoration103 extends AbsGridDecoration {
      */
     private void expandableGridDecoration(Rect outRect, int lChildAdapterPositionp, int lSpanSizep,
                                           int lSpanCountp, int spanGroupIndexp, RecyclerViewExpandable pRecyclerViewExpandable) {
-            Pair<Integer, Integer> lPair = pRecyclerViewExpandable
+            Pair<Integer, Integer> lPair = pRecyclerViewExpandable.getExpandableHelper()
                     .indexOfPosition(lChildAdapterPositionp - (mDecorationParams.baseCount == -1 ?
                             pRecyclerViewExpandable.getBaseCount() : mDecorationParams.baseCount));
             if (lPair.second == -1

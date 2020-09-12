@@ -53,9 +53,9 @@ public class GridDecoration extends AbsGridDecoration {
 
     GridDecoration(DecorationBuilder.DecorationParams pParams) {
         mDecorationParams = pParams;
-        mSize = pParams.mContext.getResources().getDimensionPixelSize(pParams.verticalSize);
+        mSize = pParams.mContext.getResources().getDimensionPixelSize(pParams.size);
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.mPaint.setColor(ContextCompat.getColor(pParams.mContext, pParams.verticalColor));
+        this.mPaint.setColor(ContextCompat.getColor(pParams.mContext, pParams.color));
         this.mPaint.setStyle(Paint.Style.STROKE);
         this.mPaint.setStrokeWidth(mSize);
         mOrientation = pParams.orientation;
@@ -112,8 +112,8 @@ public class GridDecoration extends AbsGridDecoration {
                     pSpanGroupIndexl, (RecyclerViewExpandable) pAdapter);
         } else if (pAdapter instanceof AdapterManagement) {
             AdapterManagement lAdapter1 = (AdapterManagement) pAdapter;
-            Pair<Integer, Integer> lIntegerIntegerPair = lAdapter1.indexOfPosition(pChildAdapterPosition);
-            RecyclerViewEmpty<RecyclerViewClick.ClickViewHolder> lItem = lAdapter1.getItem(lIntegerIntegerPair.first);
+            Pair<Integer, Integer> lIntegerIntegerPair = lAdapter1.getExpandableHelper().indexOfPosition(pChildAdapterPosition);
+            RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> lItem = lAdapter1.getItem(lIntegerIntegerPair.first);
             lAdapter1.modifyBase();
             taskAssignment(outRect, pChildAdapterPosition, pSpanSize, pSpanCount, pSpanGroupIndexl, lItem);
         } else {
@@ -131,8 +131,8 @@ public class GridDecoration extends AbsGridDecoration {
      */
     private void mortalGridDecoration(Rect outRect, int lChildAdapterPositionp, int pSpanSize, int pSpanCount, int pSpanGroupIndexl) {
         if (mOrientation == GridLayoutManager.VERTICAL) {
-            if (mDecorationParams.isHead && lChildAdapterPositionp < mDecorationParams.baseCount
-                    || (mDecorationParams.isFood && lChildAdapterPositionp >= mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
+            if (lChildAdapterPositionp < mDecorationParams.baseCount
+                    || (lChildAdapterPositionp >= mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
             } else if (pSpanCount == pSpanSize) { //full line
                 outRect.set(mSize, 0, mSize, mSize);
             } else if (mPreviousWeights == 0) { //first
@@ -175,12 +175,12 @@ public class GridDecoration extends AbsGridDecoration {
                                           int lSpanCountp, int spanGroupIndexp, RecyclerViewExpandable pRecyclerViewExpandable) {
         if (mOrientation == GridLayoutManager.VERTICAL) {
 
-            Pair<Integer, Integer> lPair = pRecyclerViewExpandable
+            Pair<Integer, Integer> lPair = pRecyclerViewExpandable.getExpandableHelper()
                     .indexOfPosition(lChildAdapterPositionp - (mDecorationParams.baseCount == -1 ?
                             pRecyclerViewExpandable.getBaseCount() : mDecorationParams.baseCount));
             if (lPair.second == -1
-                    || (mDecorationParams.isHead && (lChildAdapterPositionp < mDecorationParams.baseCount || lChildAdapterPositionp < pRecyclerViewExpandable.getBaseCount()))
-                    || (mDecorationParams.isFood && lChildAdapterPositionp > mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
+                    || ((lChildAdapterPositionp < mDecorationParams.baseCount || lChildAdapterPositionp < pRecyclerViewExpandable.getBaseCount()))
+                    || (lChildAdapterPositionp > mRecyclerViewAdapter.getItemCount() - mDecorationParams.footCount)) { //group
             } else if (lSpanCountp == lSpanSizep) { //full line
                 outRect.set(mSize, 0, mSize, mSize);
             } else if (mPreviousWeights == 0) { //first

@@ -25,10 +25,10 @@ public class CreateHelp {
             LinearDecoration lLinearDecoration = null;
             if (p.orientation == OrientationHelper.VERTICAL) {
                 lLinearDecoration = new LinearDecoration(p.mContext,
-                        p.verticalColor, p.verticalSize,p.orientation);
+                        p.color, p.size,p.orientation);
             }else {
                 lLinearDecoration = new LinearDecoration(p.mContext,
-                        p.horizontalColor, p.horizontalSize,p.orientation);
+                        p.color, p.size,p.orientation);
             }
             pLRecycleDecoration.setMeasureTarget(lLinearDecoration);
             pLRecycleDecoration.setDrawBeforeTarget(lLinearDecoration);
@@ -37,10 +37,10 @@ public class CreateHelp {
             int lSpanCount = ((StaggeredGridLayoutManager) lLayoutManager).getSpanCount();
             if (p.orientation == OrientationHelper.VERTICAL) {
                 lStaggeredGridDecoration =  new StaggeredGridDecoration(p.mContext,
-                        p.verticalColor, p.verticalSize,p.orientation,lSpanCount);
+                        p.color, p.size,p.orientation,lSpanCount);
             }else {
                 lStaggeredGridDecoration = new StaggeredGridDecoration(p.mContext,
-                        p.horizontalColor, p.horizontalSize,p.orientation,lSpanCount);
+                        p.color, p.size,p.orientation,lSpanCount);
             }
             pLRecycleDecoration.setDrawBeforeTarget(lStaggeredGridDecoration);
             pLRecycleDecoration.setMeasureTarget(lStaggeredGridDecoration.getMeasureTarget());
@@ -73,10 +73,10 @@ public class CreateHelp {
             int lSpanCount = ((StaggeredGridLayoutManager) lLayoutManager).getSpanCount();
             if (p.orientation == OrientationHelper.VERTICAL) {
                 lStaggeredGridDecoration =  new StaggeredGridDecoration(p.mContext,
-                        p.verticalColor, p.verticalSize,p.orientation,lSpanCount);
+                        p.color, p.size,p.orientation,lSpanCount);
             }else {
                 lStaggeredGridDecoration = new StaggeredGridDecoration(p.mContext,
-                        p.horizontalColor, p.horizontalSize,p.orientation,lSpanCount);
+                        p.color, p.size,p.orientation,lSpanCount);
             }
             pLRecycleDecoration.setDrawBeforeTarget(lStaggeredGridDecoration);
             pLRecycleDecoration.setMeasureTarget(lStaggeredGridDecoration.getMeasureTarget());
