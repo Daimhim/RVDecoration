@@ -162,14 +162,12 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
     /**
      * 实现了点击事件
      */
-    public static class ClickViewHolder<T> extends RecyclerView.ViewHolder {
+    public static class ClickViewHolder extends RecyclerView.ViewHolder {
         RecyclerContract.RecyclerClickListener mRecyclerClickListener;
         RecyclerContract.RecyclerLongClickListener mRecyclerLongClickListener;
-        private SparseArray<View> mViews;
 
         public ClickViewHolder(View itemView) {
             super(itemView);
-            mViews = new SparseArray<>();
         }
 
         /**
@@ -203,65 +201,6 @@ public abstract class RecyclerViewClick<VH extends RecyclerViewClick.ClickViewHo
             mRecyclerLongClickListener.setPositionRecyclerView(recyclerViewClick, getAdapterPosition());
             view.setOnLongClickListener(mRecyclerLongClickListener);
             return true;
-        }
-
-        public void onRefresh(T t) {
-        }
-
-        @SuppressWarnings("unchecked")
-        private <V extends View> V findViewById(int viewId) {
-            View view = mViews.get(viewId);
-            if (view == null) {
-                view = itemView.findViewById(viewId);
-                mViews.put(viewId, view);
-            }
-            return (V) view;
-        }
-
-        public View getView(int viewId) {
-            return findViewById(viewId);
-        }
-
-        public TextView getTextView(int viewId) {
-            return (TextView) getView(viewId);
-        }
-
-        public Button getButton(int viewId) {
-            return (Button) getView(viewId);
-        }
-
-        public ImageView getImageView(int viewId) {
-            return (ImageView) getView(viewId);
-        }
-
-        public ImageButton getImageButton(int viewId) {
-            return (ImageButton) getView(viewId);
-        }
-
-        public CompoundButton getCompoundButton(int viewId){
-            return (CompoundButton)getView(viewId);
-        }
-
-        public EditText getEditText(int viewId) {
-            return (EditText) getView(viewId);
-        }
-
-        public ClickViewHolder setText(int viewId, String value) {
-            TextView view = findViewById(viewId);
-            view.setText(value);
-            return this;
-        }
-
-        public ClickViewHolder setBackground(int viewId, int resId) {
-            View view = findViewById(viewId);
-            view.setBackgroundResource(resId);
-            return this;
-        }
-
-        public ClickViewHolder setClickListener(int viewId, View.OnClickListener listener) {
-            View view = findViewById(viewId);
-            view.setOnClickListener(listener);
-            return this;
         }
 
     }

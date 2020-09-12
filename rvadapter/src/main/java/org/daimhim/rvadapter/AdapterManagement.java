@@ -4,6 +4,7 @@ package org.daimhim.rvadapter;
 import android.util.Pair;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -20,13 +21,14 @@ import java.util.ArrayList;
  * @author：Daimhim
  */
 
-public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder>
-        implements RecyclerContract.SimpleContract<ArrayList<RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder>>, RecyclerViewEmpty> {
+public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder>
+        implements RecyclerContract.SimpleContract<ArrayList<RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder>>,
+        RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder>> , RecyclerContract.Expandable{
 
     /**
      * adapter manage
      */
-    private ArrayList<RecyclerViewEmpty<ClickViewHolder>> mRecyclerViewClicks;
+    private ArrayList<RecyclerViewEmpty<EmptyViewHolder>> mRecyclerViewClicks;
     /**
      * adapter 订阅
      */
@@ -35,6 +37,11 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
      * 当前位置
      */
     private int mCurrentPosition = -1;
+    private ExpandableHelper mExpandableHelper = new ExpandableHelper(this);
+
+    public ExpandableHelper getExpandableHelper() {
+        return mExpandableHelper;
+    }
 
     public AdapterManagement() {
         mRecyclerViewClicks = new ArrayList<>();
@@ -43,22 +50,22 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
 
 
     @Override
-    public ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
-        android.util.Pair<Integer, Integer> integerIntegerPair = indexOfPosition(mCurrentPosition);
+    public EmptyViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+        android.util.Pair<Integer, Integer> integerIntegerPair = mExpandableHelper.indexOfPosition(mCurrentPosition);
         return mRecyclerViewClicks.get(integerIntegerPair.first).onCreateViewHolder(parent,viewType);
     }
 
     @Override
-    public void onBindDataViewHolder(ClickViewHolder holder, int position) {
-        android.util.Pair<Integer, Integer> integerIntegerPair = indexOfPosition(position);
+    public void onBindDataViewHolder(EmptyViewHolder holder, int position) {
+        android.util.Pair<Integer, Integer> integerIntegerPair = mExpandableHelper.indexOfPosition(position);
         mRecyclerViewClicks.get(integerIntegerPair.first).onBindViewHolder(holder, integerIntegerPair.second);
     }
 
     @Override
     public int getDataItemCount() {
         int total = 0;
-        for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
-            total += mRecyclerViewClicks.get(i).getItemCount();
+        for (int i = 0; i < getGroupCount(); i++) {
+            total += getChildrenCount(i);
         }
         return total;
     }
@@ -66,7 +73,7 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
     @Override
     public int getDataItemViewType(int position) {
         mCurrentPosition = position;
-        android.util.Pair<Integer, Integer> integerIntegerPair = indexOfPosition(position);
+        android.util.Pair<Integer, Integer> integerIntegerPair = mExpandableHelper.indexOfPosition(position);
         return mRecyclerViewClicks.get(integerIntegerPair.first).getItemViewType(integerIntegerPair.second);
 
     }
@@ -76,7 +83,7 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
      *
      * @param recyclerViewClick adapter
      */
-    public void addAdapter(RecyclerViewEmpty recyclerViewClick) {
+    public void addAdapter(RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> recyclerViewClick) {
         recyclerViewClick.setBaseCount(getItemCount());
         mRecyclerViewClicks.add(recyclerViewClick);
         notifyItemRangeInserted(getItemCount(),recyclerViewClick.getItemCount());
@@ -85,7 +92,7 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
 
     @Override
     protected int getSpanSize(int defSize, int position) {
-        Pair<Integer, Integer> lIntegerIntegerPair = indexOfPosition(position);
+        Pair<Integer, Integer> lIntegerIntegerPair = mExpandableHelper.indexOfPosition(position);
         return mRecyclerViewClicks.get(lIntegerIntegerPair.first).getSpanSize(defSize,lIntegerIntegerPair.second);
     }
 
@@ -104,7 +111,7 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
      */
     public void modifyBase(){
         int num = 0;
-        for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
+        for (int i = 0; i < getGroupCount(); i++) {
             mRecyclerViewClicks.get(i).setBaseCount(num);
             num += mRecyclerViewClicks.get(i).getItemCount();
         }
@@ -116,7 +123,7 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
      * @param recyclerViewClick 被查找对象
      * @return 位置 或者 -1
      */
-    public int indexOf(RecyclerViewEmpty recyclerViewClick) {
+    public int indexOf(RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> recyclerViewClick) {
         return mRecyclerViewClicks.indexOf(recyclerViewClick);
     }
 
@@ -125,42 +132,19 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
      *
      * @param recyclerViewClick adapter
      */
-    public void removeAdapter(RecyclerViewEmpty recyclerViewClick) {
+    public void removeAdapter(RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> recyclerViewClick) {
         mRecyclerViewClicks.remove(recyclerViewClick);
         modifyBase();
     }
-    /**
-     * 逆序 通过一维向量 查找二维数组
-     *
-     * @param position 一维位置
-     * @return 二维对象
-     */
-    public final android.util.Pair<Integer, Integer> indexOfPosition(int position) {
-        int num = 0;
-        int itemCount = -1;
-        for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
-            itemCount = mRecyclerViewClicks.get(i).getItemCount();
-            num += itemCount;
-            if (num > position) {
-                num -= itemCount;
-                for (int j = 0; j < itemCount; j++) {
-                    if (num == position) {
-                        return new android.util.Pair<>(i, j);
-                    }
-                    num++;
-                }
-            }
-        }
-        return new android.util.Pair<>(-1, -1);
-    }
+
     AdapterManagementDataObserver homeAdapterDataObserver = null;
     @Override
-    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+    public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         super.registerAdapterDataObserver(observer);
 
         int total = 0;
-        for (int i = 0; i < mRecyclerViewClicks.size(); i++) {
-            total += mRecyclerViewClicks.get(i).getItemCount();
+        for (int i = 0; i < getGroupCount(); i++) {
+            total += getChildrenCount(i);
             homeAdapterDataObserver = new AdapterManagementDataObserver(this, total);
             mRecyclerViewClicks.get(i).registerAdapterDataObserver(homeAdapterDataObserver);
             mHomeAdapterDataObservers.add(homeAdapterDataObserver);
@@ -168,30 +152,40 @@ public class AdapterManagement extends RecyclerViewEmpty<RecyclerViewEmpty.Click
     }
 
     @Override
-    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+    public void unregisterAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         super.unregisterAdapterDataObserver(observer);
-        for (int i = mRecyclerViewClicks.size()-1; i >= 0; i--) {
+        for (int i = getGroupCount()-1; i >= 0; i--) {
             mRecyclerViewClicks.get(i).unregisterAdapterDataObserver(mHomeAdapterDataObservers.get(i));
             mHomeAdapterDataObservers.remove(i);
         }
     }
 
     @Override
-    public void onRefresh(ArrayList<RecyclerViewEmpty<ClickViewHolder>> pRecyclerViewEmpties) {
+    public void onRefresh(ArrayList<RecyclerViewEmpty<EmptyViewHolder>> pRecyclerViewEmpties) {
         mRecyclerViewClicks.clear();
         mRecyclerViewClicks.addAll(pRecyclerViewEmpties);
         notifyDataSetChanged();
     }
 
     @Override
-    public RecyclerViewEmpty<ClickViewHolder> getItem(int position) {
+    public RecyclerViewEmpty<EmptyViewHolder> getItem(int position) {
         return mRecyclerViewClicks.get(position);
     }
 
     @Override
-    public void onLoad(ArrayList<RecyclerViewEmpty<ClickViewHolder>> pRecyclerViewEmpties) {
+    public void onLoad(ArrayList<RecyclerViewEmpty<EmptyViewHolder>> pRecyclerViewEmpties) {
         mRecyclerViewClicks.addAll(pRecyclerViewEmpties);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getGroupCount() {
+        return mRecyclerViewClicks.size();
+    }
+
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        return mRecyclerViewClicks.get(groupPosition).getItemCount();
     }
 
 

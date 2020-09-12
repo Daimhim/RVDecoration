@@ -1,5 +1,6 @@
 package org.daimhim.rvadapter;
 
+import android.view.View;
 import android.view.ViewGroup;
 
 /**
@@ -15,8 +16,8 @@ import android.view.ViewGroup;
  * @author Daimhim
  */
 
-public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHolder> extends RecyclerViewClick<RecyclerViewClick.ClickViewHolder>
-        implements RecyclerContract.EmptyContract {
+public abstract class RecyclerViewEmpty<VH extends RecyclerViewEmpty.EmptyViewHolder> extends RecyclerViewClick<RecyclerViewEmpty.EmptyViewHolder>
+        implements RecyclerContract.EmptyContract<VH> {
 
     /**
      * 在manager中使用
@@ -28,7 +29,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     }
 
     @Override
-    public final RecyclerViewClick.ClickViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final RecyclerViewEmpty.EmptyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isEmptyView(parent, viewType)) {
             return onCreateEmptyViewHolder(parent, viewType);
         } else {
@@ -37,7 +38,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
     }
 
     @Override
-    public final void onBindViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
+    public final void onBindViewHolder(RecyclerViewEmpty.EmptyViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         position = getVirtualLocation(position);
         if (isEmptyView(holder, position)) {
@@ -86,7 +87,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
         return isEmptyView();
     }
 
-    public boolean isEmptyView(RecyclerViewClick.ClickViewHolder holder, int position) {
+    public boolean isEmptyView(RecyclerViewEmpty.EmptyViewHolder holder, int position) {
         return isEmptyView();
     }
 
@@ -109,7 +110,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * @param position 位置
      */
     @Override
-    public void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
+    public void onBindEmptyViewHolder(RecyclerViewEmpty.EmptyViewHolder holder, int position) {
 
     }
 
@@ -121,7 +122,7 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      * @return View
      */
     @Override
-    public RecyclerViewClick.ClickViewHolder onCreateEmptyViewHolder(ViewGroup parent, int viewType){
+    public VH onCreateEmptyViewHolder(ViewGroup parent, int viewType){
         return null;
     }
 
@@ -157,5 +158,10 @@ public abstract class RecyclerViewEmpty<VH extends RecyclerViewClick.ClickViewHo
      */
     public abstract int getDataItemCount();
 
+    public static class EmptyViewHolder extends RecyclerViewClick.ClickViewHolder{
 
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
 }

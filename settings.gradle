@@ -1,3 +1,4 @@
+include ':rvadapterex'
 include ':app'
 include ':rvdecoration'
 include ':rvadapter'

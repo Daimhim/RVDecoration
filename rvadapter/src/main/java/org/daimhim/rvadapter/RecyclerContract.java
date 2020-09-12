@@ -76,7 +76,7 @@ public interface RecyclerContract {
     /**
      * 空界面
      */
-    interface EmptyContract {
+    interface EmptyContract<VH> {
         /**
          * 是否空页面
          *
@@ -90,7 +90,7 @@ public interface RecyclerContract {
          * @param holder   一个Item单元
          * @param position 位置
          */
-        void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position);
+        void onBindEmptyViewHolder(VH holder, int position);
 
         /**
          * 设置空页面
@@ -99,7 +99,7 @@ public interface RecyclerContract {
          * @param viewType 类型
          * @return 视图
          */
-        RecyclerViewClick.ClickViewHolder onCreateEmptyViewHolder(ViewGroup parent, int viewType);
+        VH onCreateEmptyViewHolder(ViewGroup parent, int viewType);
     }
 
     /**
@@ -265,6 +265,10 @@ public interface RecyclerContract {
         default T getData(){
             return null;
         }
+    }
+    interface Expandable {
+        int getGroupCount();
+        int getChildrenCount(int groupPosition);
     }
 
     /**

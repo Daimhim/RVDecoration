@@ -18,110 +18,22 @@ import android.view.ViewGroup;
  * @author Daimhim
  */
 
-public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.ClickViewHolder, VHC extends RecyclerViewEmpty.ClickViewHolder>
-        extends RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder> {
+public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.EmptyViewHolder, VHC extends RecyclerViewEmpty.EmptyViewHolder>
+        extends RecyclerViewEmpty<RecyclerViewEmpty.EmptyViewHolder> implements RecyclerContract.Expandable {
     private RecyclerContract.OnGroupItemClickListener mOnGroupItemClickListeners;
     private RecyclerContract.OnGroupItemLongClickListener mOnGroupItemLongClickListener;
 
     private RecyclerContract.OnChildItemClickListener mOnChildItemClickListeners;
     private RecyclerContract.OnChildItemLongClickListener mOnChildItemLongClickListener;
 
-    /**
-     * Key groupPosition
-     * Value group>Position
-     */
-    private SparseIntArray mSparseArray;
+    private ExpandableHelper mExpandableHelper = new ExpandableHelper(this);
 
-    /**
-     * 在数据改变之后调用
-     */
-    public final void notifyPositionChanged() {
-        if (null == mSparseArray) {
-            mSparseArray = new SparseIntArray();
-        } else {
-            mSparseArray.clear();
-        }
-        int num = 0;
-        for (int i = 0; i < getGroupCount(); i++) {
-            mSparseArray.put(i, num);
-            num += getChildrenCount(i);
-            num++;
-        }
-        mSparseArray.put(getGroupCount(), num);
+    public ExpandableHelper getExpandableHelper() {
+        return mExpandableHelper;
     }
-
-    /**
-     * 在数据改变之后调用
-     * @param groupPosition Group位置
-     */
-    public final void notifyGroupPositionChanged(int groupPosition) {
-        int num = 0;
-        for (int i = 0; i < groupPosition; i++) {
-            num += getChildrenCount(i);
-            num++;
-        }
-        mSparseArray.put(getGroupCount(), num);
-    }
-
-    /**
-     * 逆序 通过一维向量 查找二维数组
-     * @param position 一维位置
-     * @return 二维对象
-     */
-    public final Pair<Integer, Integer> indexOfPosition(int position) {
-        int num = 0;
-        for (int i = 0; i < getGroupCount(); i++) {
-            num += getChildrenCount(i);
-            num++;
-            if (num > position) {
-                num -= getChildrenCount(i);
-                num--;
-                if (num == position) {
-                    return new Pair<>(i, -1);
-                }
-                for (int j = 0; j < getChildrenCount(i); j++) {
-                    num++;
-                    if (num == position) {
-                        return new Pair<>(i, j);
-                    }
-                }
-            }
-        }
-        return new Pair<>(-1, -1);
-    }
-
-    /**
-     * 通过起始点查找 二维数组的起始位置
-     * @param groupPosition  起始点
-     * @return 二维数组对象
-     */
-    public final Pair<Integer, Integer> indexOfGroupPosition(int groupPosition) {
-        int num = 0;
-        for (int i = 0; i < groupPosition; i++) {
-            num += getChildrenCount(i);
-            num++;
-        }
-        return new Pair<>(groupPosition, num);
-    }
-
-    /**
-     * 顺序 通过二维数组 查找一维向量
-     * @param groupPosition 二维起始点
-     * @param position 位置
-     * @return 一维位置
-     */
-    public final int indexOfItemInPosition(int groupPosition, int position) {
-        int num = 0;
-        for (int i = 0; i < groupPosition - 1; i++) {
-            num += getChildrenCount(i);
-            num++;
-        }
-        return num + position;
-    }
-
 
     @Override
-    public final RecyclerViewEmpty.ClickViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+    public final RecyclerViewEmpty.EmptyViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
         if (viewType > 0) {
             return onCreateChildViewHolder(parent, viewType);
         } else {
@@ -130,9 +42,9 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.Click
     }
 
     @Override
-    public final void onBindDataViewHolder(RecyclerViewEmpty.ClickViewHolder holder, int position) {
+    public final void onBindDataViewHolder(RecyclerViewEmpty.EmptyViewHolder holder, int position) {
         int lViewType = getItemViewType(position);
-        Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        Pair<Integer, Integer> integerPair = mExpandableHelper.indexOfPosition(position);
         if (holder == null) {return;}
         if (lViewType > 0) {
             onBindChildViewHolder((VHC) holder, integerPair.first, integerPair.second);
@@ -152,7 +64,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.Click
 
     @Override
     public int getDataItemViewType(int position) {
-        Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        Pair<Integer, Integer> integerPair = mExpandableHelper.indexOfPosition(position);
         if (integerPair.second == -1) {
             return checkParameters(-getGroupItemViewType(integerPair.first));
         } else {
@@ -162,7 +74,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.Click
 
     @Override
     public long getItemId(int position) {
-        Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        Pair<Integer, Integer> integerPair = mExpandableHelper.indexOfPosition(position);
         if (getItemViewType(position) > 0) {
             return getChildItemId(integerPair.first, integerPair.second);
         } else {
@@ -214,6 +126,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.Click
      *
      * @return total
      */
+    @Override
     public abstract int getGroupCount();
 
     /**
@@ -221,6 +134,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.Click
      * @param groupPosition Group Position
      * @return total
      */
+    @Override
     public abstract int getChildrenCount(int groupPosition);
 
     /**
@@ -257,7 +171,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.Click
     public abstract void onBindChildViewHolder(VHC holder, int groupPosition, int childPosition);
 
     @Override
-    public void onBindEmptyViewHolder(RecyclerViewClick.ClickViewHolder holder, int position) {
+    public void onBindEmptyViewHolder(RecyclerViewEmpty.EmptyViewHolder holder, int position) {
 
     }
 
@@ -277,7 +191,7 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.Click
      */
     @Override
     public void onItemClick(View view, int position) {
-        Pair<Integer, Integer> integerPair = indexOfPosition(position);
+        Pair<Integer, Integer> integerPair = mExpandableHelper.indexOfPosition(position);
         if (getItemViewType(position) > 0 && mOnChildItemClickListeners != null) {
             mOnChildItemClickListeners.onChildItemClick(view, integerPair.first, integerPair.second);
         } else if (getItemViewType(position) < 0 && mOnGroupItemClickListeners != null) {
@@ -287,9 +201,9 @@ public abstract class RecyclerViewExpandable<VHG extends RecyclerViewEmpty.Click
 
     @Override
     public void onItemLongClick(View view, int position) {
-        int ofValue = mSparseArray.indexOfValue(position);
+        int ofValue = mExpandableHelper.indexOfValue(position);
         if (ofValue < 0 && null != mOnChildItemLongClickListener) {
-            Pair<Integer, Integer> integerPair = indexOfPosition(position);
+            Pair<Integer, Integer> integerPair = mExpandableHelper.indexOfPosition(position);
             mOnChildItemLongClickListener.onChildItemLongClick(view, integerPair.first, integerPair.second);
         } else if (ofValue > 0 && null != mOnGroupItemLongClickListener) {
             mOnGroupItemLongClickListener.onGroupItemLongClick(view, ofValue);
