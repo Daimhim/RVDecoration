@@ -139,7 +139,7 @@ abstract class RecyclerViewClick<VH extends SimpleViewHolder> extends RecyclerVi
     }
 
     static class BaseSpanSizeLookup<VH extends SimpleViewHolder> extends GridLayoutManager.SpanSizeLookup {
-        private RecyclerViewClick<VH> mRecyclerViewClick;
+        private final RecyclerViewClick<VH> mRecyclerViewClick;
         private int defSize = 0;
 
         public BaseSpanSizeLookup(RecyclerViewClick<VH> pBaseAdapter, int pDefSize) {
