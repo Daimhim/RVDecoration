@@ -2,6 +2,8 @@ package org.daimhim.rvadapterex
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import org.daimhim.rvadapter.RecyclerContract
 import org.daimhim.rvadapter.RecyclerViewEmpty
 import org.daimhim.rvadapter.SimpleViewHolder
@@ -16,8 +18,11 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
         }
     }
 
-    override fun getItem(position: Int): T {
-        return data[position]
+    override fun getItem(position: Int): T? {
+        if (data.includeIndex(position)) {
+            return data[position]
+        }
+        return null
     }
 
     override fun onRefresh(ts: MutableList<T>?) {
@@ -40,6 +45,9 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
+        if (isDataBinding(viewType)){
+
+        }
         return SimpleViewHolder(LayoutInflater.from(parent.context).inflate(onCreateDataViewHolder(viewType),parent,false))
     }
 
@@ -48,5 +56,25 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
     override fun onCreateEmptyViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
         return SimpleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.empty_view_holder,parent,false))
     }
+    /**
+     * 是否开启 DataBinding
+     *  默认开启
+     */
+    open fun isDataBinding(viewType: Int):Boolean{
+        return true
+    }
 
+    /**
+     * 扩展方法 获取ViewDataBinding
+     */
+    fun <D : ViewDataBinding> SimpleViewHolder.getDataBinding():D?{
+        return DataBindingUtil.getBinding(itemView)
+    }
+}
+
+fun MutableList<*>.includeIndex(index: Int): Boolean {
+    if (index < 0 || index > size || index == size) {
+        return false
+    }
+    return true
 }

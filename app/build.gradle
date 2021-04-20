@@ -1,27 +1,16 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply from: "${rootProject.rootDir}/build_config.gradle"
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "rv.daimhim.rvdecorationtest"
-        minSdkVersion 19
-        targetSdkVersion 30
         versionCode 100
         versionName "1.0.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

@@ -1,13 +1,8 @@
 package org.daimhim.rvadapter
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.util.SparseArray
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.*
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 open class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -16,9 +11,9 @@ open class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
      */
     private val views: SparseArray<View> = SparseArray()
 
-    var mRecyclerClickListener: RecyclerContract.RecyclerClickListener? = null
-    var mRecyclerLongClickListener: RecyclerContract.RecyclerLongClickListener? = null
-
+    var recyclerClickListener: RecyclerContract.RecyclerClickListener? = null
+    var recyclerLongClickListener: RecyclerContract.RecyclerLongClickListener? = null
+    var bindingPosition = -1
 
     /**
      * 执行点击事件
@@ -27,16 +22,18 @@ open class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
      * @param recyclerViewClick Adapter对象
      * @return 是否set成功
      */
-    fun performItemClick(view: View, recyclerViewClick: RecyclerViewEmpty<SimpleViewHolder>?): Boolean {
+    fun performItemClick(view: View): Boolean {
         //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
-        if (mRecyclerClickListener == null) {
-            mRecyclerClickListener = RecyclerContract.RecyclerClickListener()
+        if (recyclerClickListener == null) {
+            recyclerClickListener = RecyclerContract.RecyclerClickListener()
         }
-        mRecyclerClickListener?.setPositionRecyclerView(recyclerViewClick, adapterPosition)
-        view.setOnClickListener(mRecyclerClickListener)
+//        recyclerClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<*>, bindingPosition)
+        view.setOnClickListener(recyclerClickListener)
         return true
     }
-
+    fun performItemClick(id:Int){
+        performItemClick(itemView.findViewById<View>(id))
+    }
     /**
      * 执行点击事件
      *
@@ -44,14 +41,41 @@ open class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
      * @param recyclerViewClick Adapter对象
      * @return is set success
      */
-    fun performLongItemClick(
-        view: View,recyclerViewClick:RecyclerViewEmpty<SimpleViewHolder>?): Boolean {
-        if (mRecyclerLongClickListener == null) {
-            mRecyclerLongClickListener = RecyclerContract.RecyclerLongClickListener()
+    fun performLongItemClick(view: View): Boolean {
+        if (recyclerLongClickListener == null) {
+            recyclerLongClickListener = RecyclerContract.RecyclerLongClickListener()
         }
-        mRecyclerLongClickListener?.setPositionRecyclerView(recyclerViewClick, adapterPosition)
-        view.setOnLongClickListener(mRecyclerLongClickListener)
+//        recyclerLongClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<*>, bindingPosition)
+        view.setOnLongClickListener(recyclerLongClickListener)
         return true
+    }
+
+    fun performLongItemClick(id:Int){
+        performLongItemClick(itemView.findViewById<View>(id))
+    }
+
+    /**
+     * 清理数据
+     */
+    fun clear(){
+        recyclerClickListener = null
+        recyclerLongClickListener = null
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T : View> getViewOrNull(@IdRes viewId: Int): T? {
+        val view = views.get(viewId)
+        if (view == null) {
+            itemView.findViewById<T>(viewId)?.let {
+                views.put(viewId, it)
+                return it
+            }
+        }
+        return view as? T
+    }
+
+    fun <T : View> Int.findView(): T? {
+        return itemView.findViewById(this)
     }
 
 
@@ -65,9 +89,5 @@ open class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             }
         }
         return view as? T
-    }
-
-    fun <T : ViewDataBinding> getBinding():T? {
-        return DataBindingUtil.getBinding(itemView)
     }
 }
