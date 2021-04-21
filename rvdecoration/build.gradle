@@ -14,5 +14,5 @@ android {
 }
 
 dependencies {
-    compileOnly project(path: localDependencies['rvadapter'])
+    compileOnly project(path: "${parent.path}:rvadapter")
 }
