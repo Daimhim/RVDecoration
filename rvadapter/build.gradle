@@ -4,7 +4,6 @@ android {
     defaultConfig {
         versionCode 141
         versionName "1.4.1"
-
     }
 
     buildTypes {

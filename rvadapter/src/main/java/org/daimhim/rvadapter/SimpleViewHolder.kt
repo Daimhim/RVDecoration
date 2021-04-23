@@ -22,12 +22,13 @@ open class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
      * @param recyclerViewClick Adapter对象
      * @return 是否set成功
      */
+    @Suppress("UNCHECKED_CAST")
     fun performItemClick(view: View): Boolean {
         //保证一个ViewHolder只有一个OnClickListener对象 通过getLayoutPosition（）
         if (recyclerClickListener == null) {
             recyclerClickListener = RecyclerContract.RecyclerClickListener()
         }
-//        recyclerClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<*>, bindingPosition)
+        recyclerClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<SimpleViewHolder>, bindingPosition)
         view.setOnClickListener(recyclerClickListener)
         return true
     }
@@ -41,11 +42,12 @@ open class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
      * @param recyclerViewClick Adapter对象
      * @return is set success
      */
+    @Suppress("UNCHECKED_CAST")
     fun performLongItemClick(view: View): Boolean {
         if (recyclerLongClickListener == null) {
             recyclerLongClickListener = RecyclerContract.RecyclerLongClickListener()
         }
-//        recyclerLongClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<*>, bindingPosition)
+        recyclerLongClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<SimpleViewHolder>, bindingPosition)
         view.setOnLongClickListener(recyclerLongClickListener)
         return true
     }

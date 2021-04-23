@@ -92,8 +92,7 @@ abstract class RecyclerViewClick<VH extends SimpleViewHolder> extends RecyclerVi
     @Override
     public void onViewRecycled(@NotNull VH holder) {
         super.onViewRecycled(holder);
-        holder.setMRecyclerClickListener(null);
-        holder.setMRecyclerLongClickListener(null);
+        holder.clear();
     }
 
     /**
