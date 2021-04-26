@@ -28,9 +28,7 @@ public class DecorationBuilder {
         }
         public RecycleDecoration create() {
             RecycleDecoration lRecycleDecoration = new RecycleDecoration();
-            if (BuildConfig.VERSION_CODE <= 100) {
-                new CreateHelp().createDecorationVersion100(lRecycleDecoration, P);
-            }
+            new CreateHelp().createDecorationVersion100(lRecycleDecoration, P);
             P.mRecyclerView.addItemDecoration(lRecycleDecoration);
             return lRecycleDecoration;
         }
