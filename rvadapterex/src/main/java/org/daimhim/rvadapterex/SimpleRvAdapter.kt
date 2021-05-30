@@ -1,9 +1,11 @@
 package org.daimhim.rvadapterex
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.viewbinding.ViewBinding
 import org.daimhim.rvadapter.RecyclerContract
 import org.daimhim.rvadapter.RecyclerViewEmpty
 import org.daimhim.rvadapter.SimpleViewHolder
@@ -45,10 +47,12 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
+        var itemView = LayoutInflater.from(parent.context)
+            .inflate(onCreateDataViewHolder(viewType), parent, false)
         if (isDataBinding(viewType)){
-
+            itemView = DataBindingUtil.bind<ViewDataBinding>(itemView)?.root
         }
-        return SimpleViewHolder(LayoutInflater.from(parent.context).inflate(onCreateDataViewHolder(viewType),parent,false))
+        return SimpleViewHolder(itemView)
     }
 
     abstract fun onCreateDataViewHolder(viewType: Int):Int
