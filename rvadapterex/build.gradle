@@ -1,4 +1,4 @@
-apply from: "../build_config.gradle"
+apply from: "../../build_config.gradle"
 
 android {
 
@@ -12,10 +12,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-    buildFeatures{
-        dataBinding = true // for data binding
-        viewBinding = true // for view binding
     }
 }
 
