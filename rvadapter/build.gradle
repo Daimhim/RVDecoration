@@ -1,18 +1,17 @@
 apply from: "../../../configurationDev/build_config.gradle"
+apply from: "../../../upload.gradle"
 
 android {
     defaultConfig {
         versionCode 141
         versionName "1.4.1"
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
 }
 dependencies {
 
 }
+group 'org.daimhim.rvdecoration'
+version '1.4.3-SNAPSHOT'
+def artifactId = 'rvadapter'
+//上传脚本   版本号 -SNAPSHOT 代表开发库
+initUpload(group.toString(),version.toString(),artifactId,true)
