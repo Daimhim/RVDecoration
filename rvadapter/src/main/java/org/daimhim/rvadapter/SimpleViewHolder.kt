@@ -28,7 +28,8 @@ open class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         if (recyclerClickListener == null) {
             recyclerClickListener = RecyclerContract.RecyclerClickListener()
         }
-        recyclerClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<SimpleViewHolder>, bindingPosition)
+        val position = if (bindingPosition > 0) bindingPosition else bindingAdapterPosition
+        recyclerClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<SimpleViewHolder>, position)
         view.setOnClickListener(recyclerClickListener)
         return true
     }
@@ -47,7 +48,8 @@ open class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         if (recyclerLongClickListener == null) {
             recyclerLongClickListener = RecyclerContract.RecyclerLongClickListener()
         }
-        recyclerLongClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<SimpleViewHolder>, bindingPosition)
+        val position = if (bindingPosition > 0) bindingPosition else bindingAdapterPosition
+        recyclerLongClickListener?.setPositionRecyclerView(bindingAdapter as RecyclerViewEmpty<SimpleViewHolder>, position)
         view.setOnLongClickListener(recyclerLongClickListener)
         return true
     }

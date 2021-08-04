@@ -18,7 +18,7 @@ dependencies {
 //    compileOnly project(path: outsiderDependencies.rvadapter)
 }
 group 'org.daimhim.rvdecoration'
-version '1.0.4-SNAPSHOT'
+version '1.0.5-SNAPSHOT'
 def artifactId = 'rvadapterex'
 //上传脚本   版本号 -SNAPSHOT 代表开发库
 initUpload(group.toString(),version.toString(),artifactId,true)

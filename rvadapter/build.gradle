@@ -11,7 +11,7 @@ dependencies {
 
 }
 group 'org.daimhim.rvdecoration'
-version '1.4.3-SNAPSHOT'
+version '1.4.4-SNAPSHOT'
 def artifactId = 'rvadapter'
 //上传脚本   版本号 -SNAPSHOT 代表开发库
 initUpload(group.toString(),version.toString(),artifactId,true)

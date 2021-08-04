@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 
 /**
  * 项目名称：org.daimhim.rvadapter
@@ -86,7 +88,14 @@ abstract class RecyclerViewClick<VH extends SimpleViewHolder> extends RecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
+        holder.setBindingPosition(position);
 //        Log.d("TAG:" + getClass().getName(), "position:" + position);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull VH holder, int position, @NonNull List<Object> payloads) {
+        holder.setBindingPosition(position);
+        super.onBindViewHolder(holder, position, payloads);
     }
 
     @Override

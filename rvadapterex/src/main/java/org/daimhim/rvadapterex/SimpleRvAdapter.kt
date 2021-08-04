@@ -12,6 +12,12 @@ import org.daimhim.rvadapter.SimpleViewHolder
 
 abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
     RecyclerContract.SimpleContract<MutableList<T>,T> {
+    /**
+     * 空布局资源 可set设置
+     */
+    var emptyLayout : Int = -1
+    protected val EMPTY_LAYOUT = Int.MAX_VALUE;
+
     val data = mutableListOf<T>()
     override fun onLoad(ts: MutableList<T>?) {
         ts?.let {
@@ -43,7 +49,8 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
         return Int.MAX_VALUE
     }
     override fun isEmptyView(): Boolean {
-        return data.isEmpty()
+        val b = getEmptyLayoutResId(EMPTY_LAYOUT) != -1 && getDataItemCount() == 0
+        return b
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
@@ -73,6 +80,13 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
      */
     fun <D : ViewDataBinding> SimpleViewHolder.getDataBinding():D?{
         return DataBindingUtil.getBinding(itemView)
+    }
+
+    /**
+     * 空布局资源
+     */
+    open fun getEmptyLayoutResId(viewType: Int):Int{
+        return emptyLayout
     }
 }
 
