@@ -1,5 +1,6 @@
 package org.daimhim.rvadapterex
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
         return null
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onRefresh(ts: MutableList<T>?) {
         ts?.let {
             data.clear()
@@ -49,7 +51,7 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
         return Int.MAX_VALUE
     }
     override fun isEmptyView(): Boolean {
-        val b = getEmptyLayoutResId(EMPTY_LAYOUT) != -1 && getDataItemCount() == 0
+        val b = getEmptyLayoutResId(EMPTY_LAYOUT) != -1 && dataItemCount == 0
         return b
     }
 
@@ -65,7 +67,15 @@ abstract class SimpleRvAdapter<T> : RecyclerViewEmpty<SimpleViewHolder>(),
     abstract fun onCreateDataViewHolder(viewType: Int):Int
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
-        return SimpleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.empty_view_holder,parent,false))
+        var emptyId = getEmptyLayoutResId(viewType)
+        if (emptyId == -1){
+            emptyId = R.layout.empty_view_holder;
+        }
+        var inflate = LayoutInflater.from(parent.context).inflate(emptyId, parent, false)
+        if (isDataBinding(viewType)){
+            inflate = DataBindingUtil.bind<ViewDataBinding>(inflate)?.root
+        }
+        return SimpleViewHolder(inflate)
     }
     /**
      * 是否开启 DataBinding
