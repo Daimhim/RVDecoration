@@ -15,7 +15,8 @@ android {
 
 dependencies {
     compileOnly project(path: "${parent.path}:rvadapter")
-//    compileOnly project(path: outsiderDependencies.rvadapter)
+    compileOnly androidxDependencies.recyclerview
+    compileOnly globalDependencies.timber
 }
 
 group 'org.daimhim.rvdecoration'
