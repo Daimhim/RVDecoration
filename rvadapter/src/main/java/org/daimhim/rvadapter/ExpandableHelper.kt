@@ -98,7 +98,7 @@ class ExpandableHelper(private val expandable: RecyclerContract.Expandable) {
      */
     fun indexOfItemInPosition(groupPosition: Int, position: Int): Int {
         var num = 0
-        for (i in 0 until groupPosition - 1) {
+        for (i in 0 until groupPosition) {
             num += expandable.getChildrenCount(i)
             num++
         }
